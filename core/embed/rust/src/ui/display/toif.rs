@@ -1,9 +1,6 @@
 use crate::{
     error::Error,
-    trezorhal::{
-        display::ToifFormat,
-        uzlib::{UzlibContext, UZLIB_WINDOW_SIZE},
-    },
+    trezorhal::uzlib::{UzlibContext, UZLIB_WINDOW_SIZE},
     ui::{
         component::image::Image,
         constant,
@@ -31,6 +28,14 @@ use crate::trezorhal::{buffers::BufferLine4bpp, dma2d::dma2d_setup_4bpp};
 use super::Color;
 
 const TOIF_HEADER_LENGTH: usize = 12;
+
+#[derive(PartialEq, Debug, Eq, FromPrimitive, Clone, Copy)]
+pub enum ToifFormat {
+    FullColorBE = 0, // big endian
+    GrayScaleOH = 1, // odd hi
+    FullColorLE = 2, // little endian
+    GrayScaleEH = 3, // even hi
+}
 
 pub fn render_icon(icon: &Icon, center: Point, fg_color: Color, bg_color: Color) {
     render_toif(&icon.toif, center, fg_color, bg_color);
