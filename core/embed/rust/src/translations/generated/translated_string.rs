@@ -1316,6 +1316,7 @@ pub enum TranslatedString {
     words__operation_cancelled = 922,  // "Operation cancelled"
     words__settings = 923,  // "Settings"
     words__try_again = 924,  // "Try again."
+    brightness__title = 925,  // "Set brightness"
 }
 
 impl TranslatedString {
@@ -2627,6 +2628,7 @@ impl TranslatedString {
             Self::words__operation_cancelled => "Operation cancelled",
             Self::words__settings => "Settings",
             Self::words__try_again => "Try again.",
+            Self::brightness__title => "Set brightness",
         }
     }
 
@@ -3939,6 +3941,7 @@ impl TranslatedString {
             Qstr::MP_QSTR_words__operation_cancelled => Some(Self::words__operation_cancelled),
             Qstr::MP_QSTR_words__settings => Some(Self::words__settings),
             Qstr::MP_QSTR_words__try_again => Some(Self::words__try_again),
+            Qstr::MP_QSTR_brightness__title => Some(Self::brightness__title),
             _ => None,
         }
     }
