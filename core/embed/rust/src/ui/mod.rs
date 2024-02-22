@@ -21,3 +21,9 @@ pub mod layout;
 pub mod model_tr;
 #[cfg(feature = "model_tt")]
 pub mod model_tt;
+
+#[cfg(feature = "model_tt")]
+pub mod drawlib_demo_t; // !!! REMOVE
+
+#[cfg(feature = "model_tr")]
+pub mod drawlib_demo_r; // !!! REMOVE

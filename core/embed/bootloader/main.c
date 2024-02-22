@@ -652,6 +652,8 @@ int bootloader_main(void) {
     firmware_jump_fn = real_jump_to_firmware;
   }
 
+  drawlib_demo();
+
   firmware_jump_fn();
 
   return 0;
