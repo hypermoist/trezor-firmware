@@ -710,6 +710,8 @@ int bootloader_main(void) {
   }
 #endif
 
+  drawlib_demo();
+
   firmware_jump_fn();
 
   return 0;
