@@ -98,6 +98,7 @@ pub fn get_fb_addr() -> FrameBuffer {
 
 #[inline(always)]
 #[cfg(all(not(feature = "framebuffer"), feature = "disp_i8080_8bit_dw"))]
+#[allow(unused_variables)]
 pub fn pixeldata(c: u16) {
     #[cfg(not(feature = "new_rendering"))]
     unsafe {

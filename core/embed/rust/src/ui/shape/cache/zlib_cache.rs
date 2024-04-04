@@ -163,4 +163,11 @@ impl<'a> ZlibCache<'a> {
         self.uncompress(toif.zdata(), from_offset, dest_buf)?;
         Ok(())
     }
+
+    pub const fn get_bump_size(slot_count: usize) -> usize {
+        (core::mem::size_of::<ZlibCacheSlot>()
+            + core::mem::size_of::<UnsafeCell<[u8; UZLIB_WINDOW_SIZE]>>()
+            + 16)
+            * slot_count
+    }
 }

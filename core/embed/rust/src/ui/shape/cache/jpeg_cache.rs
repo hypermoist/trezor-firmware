@@ -361,4 +361,11 @@ impl<'a> JpegCache<'a> {
             Err(tjpgd::Error::MemoryPool)
         }
     }
+
+    pub const fn get_bump_size(slot_count: usize) -> usize {
+        (core::mem::size_of::<JpegCacheSlot>()
+            + core::mem::size_of::<UnsafeCell<[u8; JPEG_SCRATCHPAD_SIZE]>>()
+            + core::mem::size_of::<UnsafeCell<[u8; JPEG_BUFF_SIZE]>>())
+            * slot_count
+    }
 }

@@ -11,15 +11,19 @@ use super::super::{
 
 use static_alloc::Bump;
 
+const SHAPE_MEM_SIZE: usize = 5 * 1024;
+const BUMP_A_SIZE: usize = DrawingCache::get_bump_a_size() + SHAPE_MEM_SIZE;
+const BUMP_B_SIZE: usize = DrawingCache::get_bump_b_size();
+
 pub fn render_on_display<'a, F>(clip: Option<Rect>, bg_color: Option<Color>, func: F)
 where
-    F: FnOnce(&mut ProgressiveRenderer<'_, 'a, Bump<[u8; 40 * 1024]>, DisplayCanvas>),
+    F: FnOnce(&mut ProgressiveRenderer<'_, 'a, Bump<[u8; BUMP_A_SIZE]>, DisplayCanvas>),
 {
     #[link_section = ".no_dma_buffers"]
-    static mut BUMP_A: Bump<[u8; 40 * 1024]> = Bump::uninit();
+    static mut BUMP_A: Bump<[u8; BUMP_A_SIZE]> = Bump::uninit();
 
     #[link_section = ".buf"]
-    static mut BUMP_B: Bump<[u8; 16 * 1024]> = Bump::uninit();
+    static mut BUMP_B: Bump<[u8; BUMP_B_SIZE]> = Bump::uninit();
 
     let bump_a = unsafe { &mut *core::ptr::addr_of_mut!(BUMP_A) };
     let bump_b = unsafe { &mut *core::ptr::addr_of_mut!(BUMP_B) };

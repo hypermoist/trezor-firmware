@@ -52,4 +52,8 @@ impl<'a> BlurCache<'a> {
 
         Ok((unwrap!(self.algo.as_mut()), self.tag))
     }
+
+    pub const fn get_bump_size() -> usize {
+        core::mem::size_of::<UnsafeCell<BlurBuff>>()
+    }
 }

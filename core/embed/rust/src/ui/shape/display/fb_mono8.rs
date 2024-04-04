@@ -12,7 +12,9 @@ pub fn render_on_display<'a, F>(clip: Option<Rect>, bg_color: Option<Color>, fun
 where
     F: FnOnce(&mut DirectRenderer<'_, 'a, Mono8Canvas<'a>>),
 {
-    static mut BUMP: Bump<[u8; 40 * 1024]> = Bump::uninit();
+    const BUMP_SIZE: usize = DrawingCache::get_bump_a_size() + DrawingCache::get_bump_b_size();
+
+    static mut BUMP: Bump<[u8; BUMP_SIZE]> = Bump::uninit();
 
     let bump = unsafe { &mut *core::ptr::addr_of_mut!(BUMP) };
     {

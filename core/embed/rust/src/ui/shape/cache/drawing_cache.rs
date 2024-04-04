@@ -11,7 +11,11 @@ use without_alloc::alloc::LocalAllocLeakExt;
 
 const ALIGN_PAD: usize = 8;
 
-const ZLIB_CACHE_SLOTS: usize = 4;
+#[cfg(feature = "xframebuff")]
+const ZLIB_CACHE_SLOTS: usize = 1;
+#[cfg(not(feature = "xframebuff"))]
+const ZLIB_CACHE_SLOTS: usize = 3;
+
 const JPEG_CACHE_SLOTS: usize = 1;
 const RENDER_BUFF_SIZE: usize = (240 * 2 * 16) + ALIGN_PAD;
 const IMAGE_BUFF_SIZE: usize = 2048 + ALIGN_PAD;
@@ -31,6 +35,7 @@ pub struct DrawingCache<'a> {
     #[cfg(feature = "ui_blurring")]
     blur_cache: RefCell<BlurCache<'a>>,
 
+    #[cfg(not(feature = "xframebuff"))]
     render_buff: &'a RefCell<RenderBuff>,
     image_buff: &'a RefCell<ImageBuff>,
 }
@@ -64,6 +69,8 @@ impl<'a> DrawingCache<'a> {
             )),
             #[cfg(feature = "ui_blurring")]
             blur_cache: RefCell::new(unwrap!(BlurCache::new(bump_a), "Blur cache alloc")),
+
+            #[cfg(not(feature = "xframebuff"))]
             render_buff: unwrap!(alloc_buf(bump_b), "Render buff alloc"),
             image_buff: unwrap!(alloc_buf(bump_b), "Toif buff alloc"),
         }
@@ -87,6 +94,7 @@ impl<'a> DrawingCache<'a> {
     }
 
     /// Returns a buffer used for ProgressiveRenderer slice
+    #[cfg(not(feature = "xframebuff"))]
     pub fn render_buff(&self) -> Option<RenderBuffRef<'a>> {
         self.render_buff.try_borrow_mut().ok()
     }
@@ -95,5 +103,36 @@ impl<'a> DrawingCache<'a> {
     /// QrCode or ToifImage
     pub fn image_buff(&self) -> Option<ImageBuffRef<'a>> {
         self.image_buff.try_borrow_mut().ok()
+    }
+
+    pub const fn get_bump_a_size() -> usize {
+        let mut size = 0;
+
+        size += ZlibCache::get_bump_size(ZLIB_CACHE_SLOTS);
+
+        #[cfg(feature = "ui_jpeg_decoder")]
+        {
+            size += JpegCache::get_bump_size(JPEG_CACHE_SLOTS);
+        }
+
+        #[cfg(feature = "ui_blurring")]
+        {
+            size += BlurCache::get_bump_size();
+        }
+
+        size
+    }
+
+    pub const fn get_bump_b_size() -> usize {
+        let mut size = 0;
+
+        #[cfg(not(feature = "xframebuff"))]
+        {
+            size += core::mem::size_of::<RefCell<RenderBuff>>();
+        }
+
+        size += core::mem::size_of::<RefCell<ImageBuff>>();
+
+        size
     }
 }
