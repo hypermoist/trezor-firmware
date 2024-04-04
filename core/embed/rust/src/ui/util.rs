@@ -179,6 +179,10 @@ macro_rules! include_icon {
     };
 }
 
+pub fn version_split(version: u32) -> [u8; 4] {
+    version.to_le_bytes()
+}
+
 #[cfg(test)]
 mod tests {
     use crate::strutil;
