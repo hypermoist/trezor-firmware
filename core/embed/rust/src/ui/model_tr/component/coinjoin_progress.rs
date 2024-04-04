@@ -12,7 +12,7 @@ use crate::{
             Component, Event, EventCtx,
         },
         display::{self, Font},
-        geometry::{Alignment, Insets, Offset, Rect},
+        geometry::{Alignment, Alignment2D, Insets, Offset, Rect},
         model_tr::cshape,
         shape,
         shape::Renderer,
@@ -152,6 +152,7 @@ impl Component for CoinJoinProgress {
                 .with_color(theme::FG)
                 .render(target);
             shape::ToifImage::new(center, theme::ICON_TICK_FAT.toif)
+                .with_align(Alignment2D::CENTER)
                 .with_fg(theme::FG)
                 .render(target);
         }

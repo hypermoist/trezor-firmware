@@ -16,7 +16,7 @@ const ICON_TOP_MARGIN: i16 = 48;
 #[cfg(not(feature = "bootloader"))]
 const MODEL_NAME_FONT: display::Font = display::Font::DEMIBOLD;
 #[cfg(not(feature = "bootloader"))]
-use crate::{trezorhal::model, ui::display};
+use crate::{trezorhal::model, ui::{display, geometry::Alignment}};
 
 pub struct WelcomeScreen {
     area: Rect,
@@ -93,6 +93,7 @@ impl Component for WelcomeScreen {
             self.area.bottom_center() - Offset::y(TEXT_BOTTOM_MARGIN),
             model::FULL_NAME,
         )
+        .with_align(Alignment::Center)
         .with_font(MODEL_NAME_FONT)
         .with_fg(theme::FG)
         .render(target);
