@@ -26,7 +26,6 @@
 #include "display_panel.h"
 
 #include "backlight_pwm.h"
-
 #include "supervise.h"
 
 #ifndef BOARDLOADER
@@ -151,10 +150,6 @@ void display_wait_for_sync(void) {
 #endif
 }
 
-const char* display_save(const char* prefix) { return NULL; }
-
-void display_clear_save(void) {}
-
 void display_set_compatible_settings(void) { display_panel_set_big_endian(); }
 
 static inline void set_window(const dma2d_params_t* dp) {
@@ -162,7 +157,6 @@ static inline void set_window(const dma2d_params_t* dp) {
                            dp->dst_y + dp->height + 1);
 }
 
-// Fills a rectangle with a specified color
 void display_fill(const dma2d_params_t* dp) {
   set_window(dp);
 
@@ -175,7 +169,6 @@ void display_fill(const dma2d_params_t* dp) {
   }
 }
 
-// Copies an RGB565 bitmap to specified rectangle
 void display_copy_rgb565(const dma2d_params_t* dp) {
   set_window(dp);
 
@@ -190,5 +183,37 @@ void display_copy_rgb565(const dma2d_params_t* dp) {
   }
 }
 
-// Copies a MONO4 bitmap to specified rectangle
-// void display_copy_mono4(gdc_dma2d_t *dp);
+void display_copy_mono1p(const dma2d_params_t* dp) {
+  set_window(dp);
+
+  uint8_t* src = (uint8_t*)dp->src_row;
+  uint16_t src_ofs = dp->src_stride * dp->src_y + dp->src_x;
+  uint16_t height = dp->height;
+
+  while (height-- > 0) {
+    for (int x = 0; x < dp->width; x++) {
+      uint8_t mask = 1 << (7 - ((src_ofs + x) & 7));
+      uint8_t data = src[(src_ofs + x) / 8];
+      ISSUE_PIXEL_DATA((data & mask) ? dp->src_fg : dp->src_bg);
+    }
+    src_ofs += dp->src_stride;
+  }
+}
+
+void display_copy_mono4(const dma2d_params_t* dp) {
+  set_window(dp);
+
+  const gl_color16_t* gradient = gl_color16_gradient_a4(dp->src_fg, dp->src_bg);
+
+  uint8_t* src_row = (uint8_t*)dp->src_row;
+  uint16_t height = dp->height;
+
+  while (height-- > 0) {
+    for (int x = 0; x < dp->width; x++) {
+      uint8_t fg_data = src_row[(x + dp->src_x) / 2];
+      uint8_t fg_lum = (x + dp->src_x) & 1 ? fg_data >> 4 : fg_data & 0xF;
+      ISSUE_PIXEL_DATA(gradient[fg_lum]);
+    }
+    src_row += dp->src_stride / sizeof(*src_row);
+  }
+}

@@ -97,10 +97,14 @@ static inline gl_color16_t gl_color32_to_color16(gl_color32_t color) {
 }
 
 // Converts 16-bit color into luminance (ranging from 0 to 255)
-static inline uint8_t gl_color_lum(gl_color16_t color) {
-  uint16_t r = (color & 0x00F80000) >> 8;
-  uint16_t g = (color & 0x0000FC00) >> 5;
-  uint16_t b = (color & 0x000000F8) >> 3;
+static inline uint8_t gl_color16_lum(gl_color16_t color) {
+  uint32_t r = (color & 0xF800) >> 8;
+  uint32_t g = (color & 0x07E0) >> 3;
+  uint32_t b = (color & 0x001F) << 3;
+
+  r |= (r >> 5);
+  g |= (g >> 6);
+  b |= (b >> 5);
 
   return (r + g + b) / 3;
 }

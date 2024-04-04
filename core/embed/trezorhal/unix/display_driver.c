@@ -286,13 +286,13 @@ void display_wait_for_sync(void) {
 #ifdef DISPLAY_MONO
 // Copies driver's monochromatic framebuffer into the RGB framebuffer used by
 // SDL
-void copy_mono_framebuf(display_driver_t *drv) {
+static void copy_mono_framebuf(display_driver_t *drv) {
   for (int y = 0; y < DISPLAY_RESY; y++) {
     uint16_t *dst =
         (uint16_t *)((uint8_t *)drv->buffer->pixels + drv->buffer->pitch * y);
     uint8_t *src = &drv->mono_framebuf[y * DISPLAY_RESX];
     for (int x = 0; x < DISPLAY_RESX; x++) {
-      uint8_t lum = src[x];
+      uint8_t lum = src[x] > 40 ? 255 : 0;
       dst[x] = gl_color16_rgb(lum, lum, lum);
     }
   }
@@ -340,6 +340,8 @@ void display_set_compatible_settings(void) {
   // not used
 }
 
+#ifndef DISPLAY_MONO
+
 void display_fill(const dma2d_params_t *dp) {
   display_driver_t *drv = &g_display_driver;
 
@@ -363,12 +365,43 @@ void display_copy_rgb565(const dma2d_params_t *dp) {
 }
 
 void display_copy_mono4(const dma2d_params_t *dp) {
-  // !@# TODO
+  display_driver_t *drv = &g_display_driver;
+
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row =
+      (uint8_t *)drv->buffer->pixels + (drv->buffer->pitch * dp_new.dst_y);
+  dp_new.dst_stride = drv->buffer->pitch;
+
+  rgb565_copy_mono4(&dp_new);
 }
 
 void display_copy_mono1p(const dma2d_params_t *dp) {
-  // !@# TODO
+  // !@# proc to tu musi byt?????
 }
+
+#else  // DISPLAY_MONO
+
+void display_fill(const dma2d_params_t *dp) {
+  display_driver_t *drv = &g_display_driver;
+
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = drv->mono_framebuf + (DISPLAY_RESX * dp_new.dst_y);
+  dp_new.dst_stride = DISPLAY_RESX;
+
+  mono8_fill(&dp_new);
+}
+
+void display_copy_mono1p(const dma2d_params_t *dp) {
+  display_driver_t *drv = &g_display_driver;
+
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = drv->mono_framebuf + (DISPLAY_RESX * dp_new.dst_y);
+  dp_new.dst_stride = DISPLAY_RESX;
+
+  mono8_copy_mono1p(&dp_new);
+}
+
+#endif
 
 const char *display_save(const char *prefix) {
   display_driver_t *drv = &g_display_driver;

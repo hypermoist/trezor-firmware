@@ -856,10 +856,8 @@ if ARGUMENTS.get('TREZOR_EMULATOR_DEBUGGABLE', '0') == '1':
     RUST_PROFILE = 'dev'
     RUST_LIBDIR = f'build/unix/rust/{TARGET}/debug'
 else:
-    RUST_PROFILE = 'dev'
-    RUST_LIBDIR = f'build/unix/rust/{TARGET}/debug'
-#    RUST_PROFILE = 'release'
-#    RUST_LIBDIR = f'build/unix/rust/{TARGET}/release'
+    RUST_PROFILE = 'release'
+    RUST_LIBDIR = f'build/unix/rust/{TARGET}/release'
 RUST_LIB = 'trezor_lib'
 RUST_LIBPATH = f'{RUST_LIBDIR}/lib{RUST_LIB}.a'
 

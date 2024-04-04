@@ -44,7 +44,5 @@ void display_offset(int set_xy[2], int *get_x, int *get_y) {
   *get_y = 0;
 }
 
-void display_clear(void) {}
-
 void display_text_render_buffer(const char *text, int textlen, int font,
                                 buffer_text_t *buffer, int text_offset) {}

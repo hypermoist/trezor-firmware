@@ -1,4 +1,4 @@
-use crate::trezorhal::dma2d_new::Dma2d;
+use crate::trezorhal::{display, dma2d_new::Dma2d};
 
 use crate::ui::{
     display::Color,
@@ -43,6 +43,8 @@ where
         func(&mut target);
 
         target.render(16);
+
+        display::refresh();
     }
 }
 

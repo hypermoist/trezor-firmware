@@ -62,12 +62,12 @@ typedef struct {
 } gl_offset_t;
 
 static inline gl_offset_t gl_offset(int16_t x, int16_t y) {
-  gl_offset_t size = {
+  gl_offset_t offset = {
       .x = x,
       .y = y,
   };
 
-  return size;
+  return offset;
 }
 
 // 2D size in pixels
@@ -129,7 +129,7 @@ void gl_draw_bar(gl_rect_t rect, gl_color_t color);
 void gl_draw_bitmap(gl_rect_t rect, const gl_bitmap_t* bitmap);
 
 // !@# TODO
-void gl_draw_text(gl_rect_t rect, const char* text, size_t maxlen,
+void gl_draw_text(gl_offset_t offset, const char* text, size_t maxlen,
                   const gl_text_attr_t* attr);
 
 #endif  // GL_DRAW_H

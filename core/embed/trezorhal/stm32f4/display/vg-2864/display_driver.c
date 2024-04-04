@@ -330,22 +330,24 @@ void display_refresh(void) {
   display_sync_with_fb(drv);
 }
 
-const char *display_save(const char *prefix) { return NULL; }
-
-void display_clear_save(void) {}
-
 void display_set_compatible_settings() {}
 
-/*
+void display_fill(const dma2d_params_t *dp) {
+  display_driver_t *drv = &g_display_driver;
 
-// Fills a rectangle with a specified color
-void display_fill(dma2d_params_t *dp) {
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = &drv->framebuf[DISPLAY_RESX * dp_new.dst_y];
+  dp_new.dst_stride = DISPLAY_RESX;
 
+  mono8_fill(&dp_new);
 }
 
-// Copies a MONO1P bitmap to specified rectangle
-void display_copy_mono1p(dma2d_params_t *dp) {
+void display_copy_mono1p(const dma2d_params_t *dp) {
+  display_driver_t *drv = &g_display_driver;
 
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = &drv->framebuf[DISPLAY_RESX * dp_new.dst_y];
+  dp_new.dst_stride = DISPLAY_RESX;
+
+  mono8_copy_mono1p(&dp_new);
 }
-
-*/

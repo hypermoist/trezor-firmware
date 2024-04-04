@@ -79,7 +79,7 @@ uint32_t display_panel_identify(void) {
   return id;
 }
 #else
-uint32_t display_panbel_identify(void) { return DISPLAY_ID_ST7789V; }
+uint32_t display_panel_identify(void) { return DISPLAY_ID_ST7789V; }
 #endif
 
 bool display_panel_is_inverted() {
@@ -176,7 +176,7 @@ void display_panel_set_big_endian(void) {
   }
 }
 
-void display_panal_init(void) {
+void display_panel_init(void) {
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_RESET);  // LCD_RST/PC14
   // wait 10 milliseconds. only needs to be low for 10 microseconds.
   // my dev display module ties display reset and touch panel reset together.

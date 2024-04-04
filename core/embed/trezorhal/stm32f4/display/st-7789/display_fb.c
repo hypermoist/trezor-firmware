@@ -54,7 +54,9 @@ ALIGN_32BYTES(uint8_t physical_frame_buffer_1[PHYSICAL_FRAME_BUFFER_SIZE]);
 __attribute__((section(".framebuffer_select"))) uint32_t current_frame_buffer =
     0;
 
+#ifndef BOARDLOADER
 static bool pending_fb_switch = false;
+#endif
 
 #ifndef BOARDLOADER
 void DISPLAY_TE_INTERRUPT_HANDLER(void) {

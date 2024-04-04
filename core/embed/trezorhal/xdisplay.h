@@ -111,7 +111,6 @@ void display_refresh(void);
 //
 void display_set_compatible_settings(void);
 
-// Functions for drawing on the display
 // Fills a rectangle with a specified color
 void display_fill(const dma2d_params_t *dp);
 
@@ -124,11 +123,12 @@ void display_copy_mono4(const dma2d_params_t *dp);
 // Copies a MONO1P bitmap to a specified rectangle
 void display_copy_mono1p(const dma2d_params_t *dp);
 
+#ifdef TREZOR_EMULATOR
 // Save the screen content to a file.
-//
-// The function is available only on the emulator
+// The function is available only on the emulator.
 const char *display_save(const char *prefix);
 void display_clear_save(void);
+#endif
 
 #include "xdisplay_legacy.h"
 

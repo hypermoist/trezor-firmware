@@ -112,24 +112,17 @@ int display_get_orientation(void) {
   return drv->orientation_angle;
 }
 
-const char* display_save(const char* prefix) { return NULL; }
-
-void display_clear_save(void) {}
-
 void display_set_compatible_settings() {}
 
-// Functions for drawing on display
-/*
+/*void display_fill(dma2d_params_t *dp) {
 
-// Fills a rectangle with a specified color
-void display_fill(gdc_dma2d_t *dp);
+}
 
-// Copies an RGB565 bitmap to specified rectangle
-void display_copy_rgb565(gdc_dma2d_t *dp);
+void display_copy_rgb565(dma2d_params_t *dp) {
 
-// Copies a MONO4 bitmap to specified rectangle
-void display_copy_mono4(gdc_dma2d_t *dp);
+}
 
-// Copies a MONO1P bitmap to specified rectangle
-void display_copy_mono1p(gdc_dma2d_t *dp);
+void display_copy_mono4(dma2d_params_t *dp) {
+
+}
 */

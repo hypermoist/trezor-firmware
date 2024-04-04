@@ -88,6 +88,24 @@ static inline gl_clip_t gl_clip(gl_rect_t dst, const gl_bitmap_t* bitmap) {
   return clip;
 }
 
+void gl_clear(void) {
+  dma2d_params_t dp = {
+      // Destination bitmap
+      .height = DISPLAY_RESX,
+      .width = DISPLAY_RESY,
+      .dst_row = NULL,
+      .dst_x = 0,
+      .dst_y = 0,
+      .dst_stride = 0,
+
+      // Source bitmap
+      .src_fg = 0,
+      .src_alpha = 255,
+  };
+
+  display_fill(&dp);
+}
+
 void gl_draw_bar(gl_rect_t rect, gl_color_t color) {
   gl_clip_t clip = gl_clip(rect, NULL);
 
@@ -175,7 +193,7 @@ void gl_draw_bitmap(gl_rect_t rect, const gl_bitmap_t* bitmap) {
 #define GLYPH_BEARING_Y(g) ((g)[4])
 #define GLYPH_DATA(g) ((void*)&(g)[5])
 
-void gl_draw_text(gl_rect_t rect, const char* text, size_t maxlen,
+void gl_draw_text(gl_offset_t pos, const char* text, size_t maxlen,
                   const gl_text_attr_t* attr) {
   if (text == NULL) {
     return;
@@ -193,7 +211,7 @@ void gl_draw_text(gl_rect_t rect, const char* text, size_t maxlen,
   for (int i = 0; i < maxlen; i++) {
     uint8_t ch = (uint8_t)text[i];
 
-    if (ch == 0 || rect.x0 >= rect.x1) {
+    if (ch == 0 || pos.x >= DISPLAY_RESX) {
       break;
     }
 
@@ -211,16 +229,40 @@ void gl_draw_text(gl_rect_t rect, const char* text, size_t maxlen,
     bitmap.offset.x = -GLYPH_BEARING_X(glyph);
     bitmap.offset.y = -(max_height - baseline - GLYPH_BEARING_Y(glyph));
 
-    gl_draw_bitmap(rect, &bitmap);
+    gl_draw_bitmap(gl_rect(pos.x, pos.y, DISPLAY_RESX, DISPLAY_RESY), &bitmap);
 
-    rect.x0 += GLYPH_ADVANCE(glyph);
+    pos.x += GLYPH_ADVANCE(glyph);
   }
 }
 
 // ===============================================================
 // emulation of legacy functions
 
-void display_bar(int x, int y, int w, int h, uint16_t c) {}
+void display_clear(void) { gl_clear(); }
+
+void display_bar(int x, int y, int w, int h, uint16_t c) {
+  gl_draw_bar(gl_rect_wh(x, y, w, h), c);
+}
 
 void display_text(int x, int y, const char* text, int textlen, int font,
-                  uint16_t fgcolor, uint16_t bgcolor) {}
+                  uint16_t fg_color, uint16_t bg_color) {
+  gl_text_attr_t attr = {
+      .font = font,
+      .fg_color = fg_color,
+      .bg_color = bg_color,
+  };
+
+  gl_draw_text(gl_offset(x, y), text, textlen, &attr);
+}
+
+void display_text_center(int x, int y, const char* text, int textlen, int font,
+                         uint16_t fg_color, uint16_t bg_color) {
+  gl_text_attr_t attr = {
+      .font = font,
+      .fg_color = fg_color,
+      .bg_color = bg_color,
+  };
+
+  int w = font_text_width(font, text, textlen);
+  gl_draw_text(gl_offset(x - w / 2, y), text, textlen, &attr);
+}

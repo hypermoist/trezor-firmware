@@ -33,6 +33,8 @@
 
 // Display driver context.
 typedef struct {
+  // Pointer to the frame buffer
+  uint16_t *framebuf;
   // Current display orientation (0, 90, 180, 270)
   int orientation_angle;
   // Current backlight level ranging from 0 to 255
@@ -45,6 +47,7 @@ static display_driver_t g_display_driver;
 void display_init(void) {
   display_driver_t *drv = &g_display_driver;
   memset(drv, 0, sizeof(display_driver_t));
+  drv->framebuf = (uint16_t *)FRAME_BUFFER_ADDR;
 
   // Initialize LTDC controller
   BSP_LCD_Init();
@@ -55,6 +58,7 @@ void display_init(void) {
 void display_reinit(void) {
   display_driver_t *drv = &g_display_driver;
   memset(drv, 0, sizeof(display_driver_t));
+  drv->framebuf = (uint16_t *)FRAME_BUFFER_ADDR;
 }
 
 void display_finish_actions(void) {
@@ -92,30 +96,44 @@ int display_get_orientation(void) {
   return drv->orientation_angle;
 }
 
-void *display_get_frame_addr(void) { return (void *)FRAME_BUFFER_ADDR; }
+void *display_get_frame_addr(void) {
+  display_driver_t *drv = &g_display_driver;
+
+  return (void *)drv->framebuf;
+}
 
 void display_refresh(void) {
   // Do nothing as using just a single frame buffer
 }
 
-const char *display_save(const char *prefix) { return NULL; }
-
-void display_clear_save(void) {}
-
 void display_set_compatible_settings() {}
 
-// Functions for drawing on display
-/*
+void display_fill(const dma2d_params_t *dp) {
+  display_driver_t *drv = &g_display_driver;
 
-// Fills a rectangle with a specified color
-void display_fill(gdc_dma2d_t *dp);
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = drv->framebuf + (DISPLAY_RESX * dp_new.dst_y);
+  dp_new.dst_stride = DISPLAY_RESX * 2;
 
-// Copies an RGB565 bitmap to specified rectangle
-void display_copy_rgb565(gdc_dma2d_t *dp);
+  rgb565_fill(&dp_new);
+}
 
-// Copies a MONO4 bitmap to specified rectangle
-void display_copy_mono4(gdc_dma2d_t *dp);
+void display_copy_rgb565(const dma2d_params_t *dp) {
+  display_driver_t *drv = &g_display_driver;
 
-// Copies a MONO1P bitmap to specified rectangle
-void display_copy_mono1p(gdc_dma2d_t *dp);
-*/
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = drv->framebuf + (DISPLAY_RESX * dp_new.dst_y);
+  dp_new.dst_stride = DISPLAY_RESX * 2;
+
+  rgb565_copy_rgb565(&dp_new);
+}
+
+void display_copy_mono4(const dma2d_params_t *dp) {
+  display_driver_t *drv = &g_display_driver;
+
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = drv->framebuf + (DISPLAY_RESX * dp_new.dst_y);
+  dp_new.dst_stride = DISPLAY_RESX * 2;
+
+  rgb565_copy_mono4(&dp_new);
+}
