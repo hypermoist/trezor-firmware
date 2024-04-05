@@ -19,10 +19,10 @@ pub fn render_on_display<'a, F>(clip: Option<Rect>, bg_color: Option<Color>, fun
 where
     F: FnOnce(&mut ProgressiveRenderer<'_, 'a, Bump<[u8; BUMP_A_SIZE]>, DisplayCanvas>),
 {
-    #[link_section = ".no_dma_buffers"]
+    #[cfg_attr(not(target_os = "macos"), link_section = ".no_dma_buffers")]
     static mut BUMP_A: Bump<[u8; BUMP_A_SIZE]> = Bump::uninit();
 
-    #[link_section = ".buf"]
+    #[cfg_attr(not(target_os = "macos"), link_section = ".buf")]
     static mut BUMP_B: Bump<[u8; BUMP_B_SIZE]> = Bump::uninit();
 
     let bump_a = unsafe { &mut *core::ptr::addr_of_mut!(BUMP_A) };

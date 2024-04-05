@@ -15,10 +15,10 @@ where
     const BUMP_A_SIZE: usize = DrawingCache::get_bump_a_size();
     const BUMP_B_SIZE: usize = DrawingCache::get_bump_b_size();
 
-    #[link_section = ".no_dma_buffers"]
+    #[cfg_attr(not(target_os = "macos"), link_section = ".no_dma_buffers")]
     static mut BUMP_A: Bump<[u8; BUMP_A_SIZE]> = Bump::uninit();
 
-    #[link_section = ".buf"]
+    #[cfg_attr(not(target_os = "macos"), link_section = ".buf")]
     static mut BUMP_B: Bump<[u8; BUMP_B_SIZE]> = Bump::uninit();
 
     let bump_a = unsafe { &mut *core::ptr::addr_of_mut!(BUMP_A) };
