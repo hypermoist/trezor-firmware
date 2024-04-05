@@ -165,7 +165,7 @@ void display_init(void) {
 #ifdef __APPLE__
   // macOS Mojave SDL black screen workaround
   SDL_PumpEvents();
-  SDL_SetWindowSize(WINDOW, WINDOW_WIDTH, WINDOW_HEIGHT);
+  SDL_SetWindowSize(drv->window, WINDOW_WIDTH, WINDOW_HEIGHT);
 #endif
 #ifdef TREZOR_EMULATOR_RASPI
 #include "background_raspi.h"
