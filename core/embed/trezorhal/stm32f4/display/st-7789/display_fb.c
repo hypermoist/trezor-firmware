@@ -136,12 +136,21 @@ static void switch_fb_in_backround(void) {
 }
 #endif
 
-void *display_get_frame_addr(void) {
+display_fb_info_t display_get_frame_buffer(void) {
+  void *addr;
+
   if (current_frame_buffer == 0) {
-    return (void *)physical_frame_buffer_1;
+    addr = (void *)physical_frame_buffer_1;
   } else {
-    return (void *)physical_frame_buffer_0;
+    addr = (void *)physical_frame_buffer_0;
   }
+
+  display_fb_info_t fb = {
+      .ptr = addr,
+      .stride = DISPLAY_RESX * sizeof(uint16_t),
+  };
+
+  return fb;
 }
 
 void display_refresh(void) {

@@ -32,14 +32,14 @@ where
 
         let cache = DrawingCache::new(bump_a, bump_b);
 
-        let fb = unsafe {
-            core::slice::from_raw_parts_mut(
-                display::get_frame_addr() as *mut u8,
-                width as usize * height as usize * core::mem::size_of::<u16>(),
-            )
-        };
+        let (fb, fb_stride) = display::get_frame_buffer();
 
-        let mut canvas = unwrap!(Rgb565Canvas::new(Offset::new(width, height), None, fb));
+        let mut canvas = unwrap!(Rgb565Canvas::new(
+            Offset::new(width, height),
+            Some(fb_stride),
+            None,
+            fb
+        ));
 
         if let Some(clip) = clip {
             canvas.set_viewport(Viewport::new(clip));

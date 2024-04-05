@@ -50,6 +50,12 @@ bool dma2d_rgb565_copy_mono4(const dma2d_params_t* dp);
 bool dma2d_rgb565_copy_rgb565(const dma2d_params_t* dp);
 bool dma2d_rgb565_blend_mono4(const dma2d_params_t* dp);
 
+bool dma2d_rgba8888_fill(const dma2d_params_t* dp);
+bool dma2d_rgba8888_copy_mono4(const dma2d_params_t* dp);
+bool dma2d_rgba8888_copy_rgb565(const dma2d_params_t* dp);
+bool dma2d_rgba8888_copy_rgba8888(const dma2d_params_t* dp);
+bool dma2d_rgba8888_blend_mono4(const dma2d_params_t* dp);
+
 bool dma2d_accessible(const void* ptr);
 
 #endif  // TREZORHAL_DMA2D_H

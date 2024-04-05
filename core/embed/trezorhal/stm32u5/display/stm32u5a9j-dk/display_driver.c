@@ -26,7 +26,7 @@
 #include "display_internal.h"
 #include "xdisplay.h"
 
-#if (DISPLAY_RESX != 480) || (DISPLAY_RESY != 480)
+#if (DISPLAY_RESX != 240) || (DISPLAY_RESY != 240)
 #error "Incompatible display resolution"
 #endif
 
@@ -71,9 +71,9 @@ void display_init(void) {
 void display_reinit(void) {
   BSP_LCD_Reinit(0);
   if (current_frame_buffer == 0) {
-    BSP_LCD_SetFrameBuffer(0, GFXMMU_VIRTUAL_BUFFER0_BASE_S);
-  } else {
     BSP_LCD_SetFrameBuffer(0, GFXMMU_VIRTUAL_BUFFER1_BASE_S);
+  } else {
+    BSP_LCD_SetFrameBuffer(0, GFXMMU_VIRTUAL_BUFFER0_BASE_S);
   }
 }
 
@@ -82,7 +82,7 @@ void display_finish_actions(void) {
 }
 
 int display_set_backlight(int level) {
-  display_driver_t* drv = &g_display_driver;
+  display_driver_t *drv = &g_display_driver;
 
   // Just emulation, not doing anything
   drv->backlight_level = level;
@@ -90,13 +90,13 @@ int display_set_backlight(int level) {
 }
 
 int display_get_backlight(void) {
-  display_driver_t* drv = &g_display_driver;
+  display_driver_t *drv = &g_display_driver;
 
   return drv->orientation_angle;
 }
 
 int display_set_orientation(int angle) {
-  display_driver_t* drv = &g_display_driver;
+  display_driver_t *drv = &g_display_driver;
 
   if (angle == 0 || angle == 90 || angle == 180 || angle == 270) {
     // Just emulation, not doing anything
@@ -107,22 +107,39 @@ int display_set_orientation(int angle) {
 }
 
 int display_get_orientation(void) {
-  display_driver_t* drv = &g_display_driver;
+  display_driver_t *drv = &g_display_driver;
 
   return drv->orientation_angle;
 }
 
 void display_set_compatible_settings() {}
 
-/*void display_fill(dma2d_params_t *dp) {
+void display_fill(const dma2d_params_t *dp) {
+  display_fb_info_t fb = display_get_frame_buffer();
 
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = (uint8_t *)fb.ptr + (fb.stride * dp_new.dst_y);
+  dp_new.dst_stride = fb.stride;
+
+  rgba8888_fill(&dp_new);
 }
 
-void display_copy_rgb565(dma2d_params_t *dp) {
+void display_copy_rgb565(const dma2d_params_t *dp) {
+  display_fb_info_t fb = display_get_frame_buffer();
 
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = (uint8_t *)fb.ptr + (fb.stride * dp_new.dst_y);
+  dp_new.dst_stride = fb.stride;
+
+  rgba8888_copy_rgb565(&dp_new);
 }
 
-void display_copy_mono4(dma2d_params_t *dp) {
+void display_copy_mono4(const dma2d_params_t *dp) {
+  display_fb_info_t fb = display_get_frame_buffer();
 
+  dma2d_params_t dp_new = *dp;
+  dp_new.dst_row = (uint8_t *)fb.ptr + (fb.stride * dp_new.dst_y);
+  dp_new.dst_stride = fb.stride;
+
+  rgba8888_copy_mono4(&dp_new);
 }
-*/

@@ -33,7 +33,8 @@ void display_pixeldata(uint16_t c) {}
 
 uint32_t *display_get_fb_addr(void) {
 #ifdef XFRAMEBUFFER
-  return (uint32_t *)display_get_frame_addr();
+  display_fb_info_t fb = display_get_frame_buffer();
+  return (uint32_t *)fb.ptr;
 #else
   return (uint32_t *)0;
 #endif

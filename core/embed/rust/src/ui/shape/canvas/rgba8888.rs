@@ -24,8 +24,13 @@ impl<'a> Rgba8888Canvas<'a> {
     /// of the new bitmap is adjusted to the buffer size.
     ///
     /// Returns None if the buffer is not big enough.
-    pub fn new(size: Offset, min_height: Option<i16>, buff: &'a mut [u8]) -> Option<Self> {
-        let bitmap = Bitmap::new_mut(BitmapFormat::RGBA8888, None, size, min_height, buff)?;
+    pub fn new(
+        size: Offset,
+        stride: Option<usize>,
+        min_height: Option<i16>,
+        buff: &'a mut [u8],
+    ) -> Option<Self> {
+        let bitmap = Bitmap::new_mut(BitmapFormat::RGBA8888, stride, size, min_height, buff)?;
         let viewport = Viewport::from_size(bitmap.size());
         Some(Self { bitmap, viewport })
     }
@@ -72,13 +77,35 @@ impl<'a> Canvas for Rgba8888Canvas<'a> {
         let pt = pt + self.viewport.origin;
         if self.viewport.clip.contains(pt) {
             if let Some(row) = self.row_mut(pt.y) {
-                row[pt.x as usize] = color.into();
+                row[pt.x as usize] = color.to_u32();
             }
         }
     }
 
-    fn blend_pixel(&mut self, _pt: Point, _color: Color, _alpha: u8) {
-        // TODO: not implemented yet, requires 32-bit color blending routines
+    fn blend_pixel(&mut self, pt: Point, color: Color, alpha: u8) {
+        let pt = pt + self.viewport.origin;
+        if self.viewport.clip.contains(pt) {
+            if let Some(row) = self.row_mut(pt.y) {
+                let bg = row[pt.x as usize];
+
+                let bg_r = ((bg & 0x00FF0000) >> 16) as u16;
+                let bg_g = ((bg & 0x0000FF00) >> 8) as u16;
+                let bg_b = ((bg & 0x000000FF) >> 0) as u16;
+
+                let fg_r = color.r() as u16;
+                let fg_g = color.g() as u16;
+                let fg_b = color.b() as u16;
+
+                let fg_mul = alpha as u16;
+                let bg_mul = (255 - alpha) as u16;
+
+                let r = ((fg_r * fg_mul + bg_r * bg_mul) / 255) as u32;
+                let g = ((fg_g * fg_mul + bg_g * bg_mul) / 255) as u32;
+                let b = ((fg_b * fg_mul + bg_b * bg_mul) / 255) as u32;
+
+                row[pt.x as usize] = (0xFF << 24) | (r << 16) | (g << 8) | b;
+            }
+        }
     }
 
     fn blend_bitmap(&mut self, r: Rect, src: BitmapView) {

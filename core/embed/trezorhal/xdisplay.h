@@ -20,6 +20,7 @@
 #ifndef TREZORHAL_XDISPLAY_H
 #define TREZORHAL_XDISPLAY_H
 
+#include <stddef.h>
 #include <stdint.h>
 #include "gl_dma2d.h"
 
@@ -87,11 +88,20 @@ int display_set_orientation(int angle);
 int display_get_orientation(void);
 
 #ifdef XFRAMEBUFFER
+
+typedef struct {
+  // Pointer to the top-left pixel
+  void *ptr;
+  // Stride in bytes
+  size_t stride;
+
+} display_fb_info_t;
+
 // Provides pointer to the inactive (writeable) framebuffer.
 //
 // If framebuffer is not available yet due to display refreshing etc.,
 // the function may block until the buffer is ready to write.
-void *display_get_frame_addr(void);
+display_fb_info_t display_get_frame_buffer(void);
 
 #else  // XFRAMEBUFFER
 

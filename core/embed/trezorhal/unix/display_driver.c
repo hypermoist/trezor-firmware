@@ -265,15 +265,22 @@ int display_get_orientation(void) {
 }
 
 #ifdef XFRAMEBUFFER
-void *display_get_frame_addr(void) {
+display_fb_info_t display_get_frame_buffer(void) {
   display_driver_t *drv = &g_display_driver;
 
 #ifdef DISPLAY_MONO
-  return drv->mono_framebuf;
+  display_fb_info_t fb = {
+      .ptr = drv->mono_framebuf,
+      .stride = DISPLAY_RESX,
+  };
 #else
-  // !@# pitch???
-  return drv->buffer->pixels;
+  display_fb_info_t fb = {
+      .ptr = drv->buffer->pixels,
+      .stride = DISPLAY_RESX * sizeof(uint16_t),
+  };
 #endif
+
+  return fb;
 }
 
 #else  // XFRAMEBUFFER

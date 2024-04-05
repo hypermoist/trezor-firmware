@@ -348,7 +348,8 @@ fn generate_trezorhal_bindings() {
         .allowlist_var("DISPLAY_FRAMEBUFFER_OFFSET_Y")
         .allowlist_var("DISPLAY_RESX")
         .allowlist_var("DISPLAY_RESY")
-        .allowlist_function("display_get_frame_addr")
+        .allowlist_type("display_fb_info_t")
+        .allowlist_function("display_get_frame_buffer")
         .allowlist_function("display_fill")
         .allowlist_function("display_copy_rgb565")
         // dma2d

@@ -177,6 +177,7 @@ where
         let mut slice = unwrap!(
             Rgb565Canvas::new(
                 Offset::new(canvas_clip.width(), lines as i16),
+                None,
                 Some(1),
                 &mut buff[..],
             ),

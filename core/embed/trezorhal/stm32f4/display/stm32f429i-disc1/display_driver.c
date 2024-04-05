@@ -96,10 +96,15 @@ int display_get_orientation(void) {
   return drv->orientation_angle;
 }
 
-void *display_get_frame_addr(void) {
+display_fb_info_t display_get_frame_buffer(void) {
   display_driver_t *drv = &g_display_driver;
 
-  return (void *)drv->framebuf;
+  display_fb_info_t fb = {
+      .ptr = (void *)drv->framebuf,
+      .stride = DISPLAY_RESX * sizeof(uint16_t),
+  };
+
+  return fb;
 }
 
 void display_refresh(void) {
@@ -113,7 +118,7 @@ void display_fill(const dma2d_params_t *dp) {
 
   dma2d_params_t dp_new = *dp;
   dp_new.dst_row = drv->framebuf + (DISPLAY_RESX * dp_new.dst_y);
-  dp_new.dst_stride = DISPLAY_RESX * 2;
+  dp_new.dst_stride = DISPLAY_RESX * sizeof(uint16_t);
 
   rgb565_fill(&dp_new);
 }
@@ -123,7 +128,7 @@ void display_copy_rgb565(const dma2d_params_t *dp) {
 
   dma2d_params_t dp_new = *dp;
   dp_new.dst_row = drv->framebuf + (DISPLAY_RESX * dp_new.dst_y);
-  dp_new.dst_stride = DISPLAY_RESX * 2;
+  dp_new.dst_stride = DISPLAY_RESX * sizeof(uint16_t);
 
   rgb565_copy_rgb565(&dp_new);
 }
@@ -133,7 +138,7 @@ void display_copy_mono4(const dma2d_params_t *dp) {
 
   dma2d_params_t dp_new = *dp;
   dp_new.dst_row = drv->framebuf + (DISPLAY_RESX * dp_new.dst_y);
-  dp_new.dst_stride = DISPLAY_RESX * 2;
+  dp_new.dst_stride = DISPLAY_RESX * sizeof(uint16_t);
 
   rgb565_copy_mono4(&dp_new);
 }

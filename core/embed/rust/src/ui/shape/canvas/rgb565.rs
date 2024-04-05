@@ -24,8 +24,13 @@ impl<'a> Rgb565Canvas<'a> {
     /// of the new bitmap is adjusted to the buffer size.
     ///
     /// Returns None if the buffer is not big enough.
-    pub fn new(size: Offset, min_height: Option<i16>, buff: &'a mut [u8]) -> Option<Self> {
-        let bitmap = Bitmap::new_mut(BitmapFormat::RGB565, None, size, min_height, buff)?;
+    pub fn new(
+        size: Offset,
+        stride: Option<usize>,
+        min_height: Option<i16>,
+        buff: &'a mut [u8],
+    ) -> Option<Self> {
+        let bitmap = Bitmap::new_mut(BitmapFormat::RGB565, stride, size, min_height, buff)?;
         let viewport = Viewport::from_size(bitmap.size());
         Some(Self { bitmap, viewport })
     }

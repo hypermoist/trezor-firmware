@@ -22,7 +22,10 @@
 
 #include "gl_color.h"
 
-// 2D rectangle coordinates (x1, y1 point is not included)
+// 2D rectangle coordinates
+//
+// `x0`, `y0` - top-left coordinates
+// `x1`, `y1` - bottom-right coordinates point (not included)
 typedef struct {
   int16_t x0;
   int16_t y0;
@@ -30,7 +33,7 @@ typedef struct {
   int16_t y1;
 } gl_rect_t;
 
-// Creates a rectangle from top-left coordinates and dimensions
+// Builds a rectangle (`gl_rect_t`) from top-left coordinates and dimensions
 static inline gl_rect_t gl_rect_wh(int16_t x, int16_t y, int16_t w, int16_t h) {
   gl_rect_t rect = {
       .x0 = x,
@@ -42,7 +45,7 @@ static inline gl_rect_t gl_rect_wh(int16_t x, int16_t y, int16_t w, int16_t h) {
   return rect;
 }
 
-// Creates a rectangle from top-left and bottom-right coordinates
+// Builds a rectangle (`gl_rect_t`) from top-left and bottom-right coordinates
 static inline gl_rect_t gl_rect(int16_t x0, int16_t y0, int16_t x1,
                                 int16_t y1) {
   gl_rect_t rect = {
@@ -61,6 +64,7 @@ typedef struct {
   int16_t y;
 } gl_offset_t;
 
+// Builds a `gl_offset_t` structure
 static inline gl_offset_t gl_offset(int16_t x, int16_t y) {
   gl_offset_t offset = {
       .x = x,
@@ -76,6 +80,7 @@ typedef struct {
   int16_t y;
 } gl_size_t;
 
+// Builds a `gl_size_t` structure
 static inline gl_size_t gl_size(int16_t x, int16_t y) {
   gl_size_t size = {
       .x = x,
@@ -85,7 +90,7 @@ static inline gl_size_t gl_size(int16_t x, int16_t y) {
   return size;
 }
 
-// Bitmap pixel format
+// Format of pixels in a bitmap
 typedef enum {
   GL_FORMAT_UNKNOWN,   //
   GL_FORMAT_MONO1P,    // 1-bpp per pixel (packed)
@@ -94,7 +99,7 @@ typedef enum {
   GL_FORMAT_RGBA8888,  // 32-bpp
 } gl_format_t;
 
-// 2D bitmap references
+// 2D bitmap reference
 typedef struct {
   // pointer to top-left pixel
   void* ptr;
@@ -112,23 +117,32 @@ typedef struct {
   gl_color_t bg_color;
 } gl_bitmap_t;
 
-// Text attributes
+// Text attributes (font and color)
 typedef struct {
+  // Font identifier
   int font;
+  // Foreground color
   gl_color_t fg_color;
+  // Background color
   gl_color_t bg_color;
 } gl_text_attr_t;
 
-// Fills a rectangle with a specified color
+// Fills a rectangle with a specified color.
 void gl_draw_bar(gl_rect_t rect, gl_color_t color);
 
-// Draws a bitmap into the specified rectangle
+// Draws a bitmap into the specified rectangle.
+//
 // The destination rectangle may not be fully filled if the source bitmap
 // is smaller then destination rectangle or if the bitmap is translated by
 // an offset partially or completely outside the destination rectangle.
 void gl_draw_bitmap(gl_rect_t rect, const gl_bitmap_t* bitmap);
 
-// !@# TODO
+// Draws a text to the specified position.
+//
+// `offset` - the most left point on the font baseline
+// `text` - utf-8 text
+// `maxlen` - maximum number of characters displayed (use SIZE_MAX when not
+// specified) `attr` - font & text color
 void gl_draw_text(gl_offset_t offset, const char* text, size_t maxlen,
                   const gl_text_attr_t* attr);
 

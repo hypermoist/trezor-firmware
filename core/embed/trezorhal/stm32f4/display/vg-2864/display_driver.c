@@ -311,10 +311,15 @@ int display_get_orientation(void) {
   return drv->orientation_angle;
 }
 
-void *display_get_frame_addr(void) {
+display_fb_info_t display_get_frame_buffer(void) {
   display_driver_t *drv = &g_display_driver;
 
-  return &drv->framebuf[0];
+  display_fb_info_t fb = {
+      .ptr = &drv->framebuf[0],
+      .stride = DISPLAY_RESX,
+  };
+
+  return fb;
 }
 
 void display_refresh(void) {

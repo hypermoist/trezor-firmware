@@ -209,6 +209,7 @@ impl<'a> JpegCacheSlot<'a> {
                 Rgb565Canvas::new(
                     Offset::new(decoder.width() / divisor, decoder.mcu_height() / divisor),
                     None,
+                    None,
                     canvas_buff
                 ),
                 "Buffer too small"

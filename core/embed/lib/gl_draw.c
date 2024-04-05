@@ -252,7 +252,8 @@ void display_text(int x, int y, const char* text, int textlen, int font,
       .bg_color = bg_color,
   };
 
-  gl_draw_text(gl_offset(x, y), text, textlen, &attr);
+  size_t maxlen = textlen < 0 ? UINT32_MAX : textlen;
+  gl_draw_text(gl_offset(x, y), text, maxlen, &attr);
 }
 
 void display_text_center(int x, int y, const char* text, int textlen, int font,
@@ -263,6 +264,7 @@ void display_text_center(int x, int y, const char* text, int textlen, int font,
       .bg_color = bg_color,
   };
 
+  size_t maxlen = textlen < 0 ? UINT32_MAX : textlen;
   int w = font_text_width(font, text, textlen);
-  gl_draw_text(gl_offset(x - w / 2, y), text, textlen, &attr);
+  gl_draw_text(gl_offset(x - w / 2, y), text, maxlen, &attr);
 }

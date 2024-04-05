@@ -101,6 +101,7 @@ def configure(
     features_available.append("framebuffer32bit")
 
     if "new_rendering" in features_wanted:
+        defines += ["XFRAMEBUFFER"]
         features_available.append("xframebuffer")
         features_available.append("display_rgba8888")
 

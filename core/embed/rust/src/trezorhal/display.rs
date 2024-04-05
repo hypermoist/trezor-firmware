@@ -182,6 +182,15 @@ pub fn clear() {
 }
 
 #[cfg(feature = "xframebuffer")]
-pub fn get_frame_addr() -> *mut cty::c_void {
-    unsafe { ffi::display_get_frame_addr() }
+pub fn get_frame_buffer() -> (&'static mut [u8], usize) {
+    let fb_info = unsafe { ffi::display_get_frame_buffer() };
+
+    let fb = unsafe {
+        core::slice::from_raw_parts_mut(
+            fb_info.ptr as *mut u8,
+            DISPLAY_RESY as usize * fb_info.stride as usize,
+        )
+    };
+
+    (fb, fb_info.stride)
 }

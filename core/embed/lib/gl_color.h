@@ -114,8 +114,8 @@ static inline uint8_t gl_color16_lum(gl_color16_t color) {
 //
 // Returns a color in 16-bit format
 //
-// If alpha is 0, the function returns the background color
-// If alpha is 15, the function returns the foreground color
+// If `alpha` is 0, the function returns the background color
+// If `alpha` is 15, the function returns the foreground color
 static inline gl_color16_t gl_color16_blend_a4(gl_color16_t fg, gl_color16_t bg,
                                                uint8_t alpha) {
   uint16_t fg_r = (fg & 0xF800) >> 11;
@@ -138,8 +138,8 @@ static inline gl_color16_t gl_color16_blend_a4(gl_color16_t fg, gl_color16_t bg,
 //
 // Returns a color in 16-bit format
 //
-// If alpha is 0, the function returns the background color
-// If alpha is 15, the function returns the foreground color
+// If `alpha` is 0, the function returns the background color
+// If `alpha` is 15, the function returns the foreground color
 static inline gl_color16_t gl_color16_blend_a8(gl_color16_t fg, gl_color16_t bg,
                                                uint8_t alpha) {
   uint16_t fg_r = (fg & 0xF800) >> 11;
@@ -173,9 +173,9 @@ static inline gl_color32_t gl_color32_blend_a4(gl_color16_t fg, gl_color16_t bg,
 
   uint16_t r = (fg_r * alpha + (bg_r * (15 - alpha))) / 15;
 
-  uint16_t fg_g = (fg & 0x07E0) >> 2;
+  uint16_t fg_g = (fg & 0x07E0) >> 3;
   fg_g |= fg_g >> 6;
-  uint16_t bg_g = (bg & 0x07E0) >> 2;
+  uint16_t bg_g = (bg & 0x07E0) >> 3;
   bg_g |= bg_g >> 6;
   uint16_t g = (fg_g * alpha + (bg_g * (15 - alpha))) / 15;
 
@@ -188,14 +188,44 @@ static inline gl_color32_t gl_color32_blend_a4(gl_color16_t fg, gl_color16_t bg,
   return (0xFFU << 24) | ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
 }
 
+// Blends foreground and background colors with 8-bit alpha
+//
+// Returns a color in 32-bit format
+//
+// If `alpha` is 0, the function returns the background color
+// If `alpha` is 255, the function returns the foreground color
+static inline gl_color32_t gl_color32_blend_a8(gl_color16_t fg, gl_color16_t bg,
+                                               uint8_t alpha) {
+  uint16_t fg_r = (fg & 0xF800) >> 8;
+  fg_r |= fg_r >> 5;
+  uint16_t bg_r = (bg & 0xF800) >> 8;
+  bg_r |= bg_r >> 5;
+
+  uint16_t r = (fg_r * alpha + (bg_r * (255 - alpha))) / 255;
+
+  uint16_t fg_g = (fg & 0x07E0) >> 3;
+  fg_g |= fg_g >> 6;
+  uint16_t bg_g = (bg & 0x07E0) >> 3;
+  bg_g |= bg_g >> 6;
+  uint16_t g = (fg_g * alpha + (bg_g * (255 - alpha))) / 255;
+
+  uint16_t fg_b = (fg & 0x001F) << 3;
+  fg_b |= fg_b >> 5;
+  uint16_t bg_b = (bg & 0x001F) << 3;
+  bg_b |= bg_b >> 5;
+  uint16_t b = (fg_b * alpha + (bg_b * (255 - alpha))) / 255;
+
+  return (0xFFU << 24) | ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
+}
+
 #elif GL_COLOR_32BIT
 
 // Blends foreground and background colors with 4-bit alpha
 //
 // Returns a color in 16-bit format
 //
-// If alpha is 0, the function returns the background color
-// If alpha is 15, the function returns the foreground color
+// If `alpha` is 0, the function returns the background color
+// If `alpha` is 15, the function returns the foreground color
 static inline gl_color16_t gl_color16_blend_a4(gl_color32_t fg, gl_color32_t bg,
                                                uint8_t alpha) {
   uint16_t fg_r = (fg & 0x00FF0000) >> 16;
@@ -217,8 +247,8 @@ static inline gl_color16_t gl_color16_blend_a4(gl_color32_t fg, gl_color32_t bg,
 //
 // Returns a color in 16-bit format
 //
-// If alpha is 0, the function returns the background color
-// If alpha is 255, the function returns the foreground color
+// If `alpha` is 0, the function returns the background color
+// If `alpha` is 255, the function returns the foreground color
 static inline gl_color16_t gl_color16_blend_a8(gl_color32_t fg, gl_color32_t bg,
                                                uint8_t alpha) {
   uint16_t fg_r = (fg & 0x00FF0000) >> 16;
@@ -240,8 +270,8 @@ static inline gl_color16_t gl_color16_blend_a8(gl_color32_t fg, gl_color32_t bg,
 //
 // Returns a color in 32-bit format
 //
-// If alpha is 0, the function returns the background color
-// If alpha is 15, the function returns the foreground color
+// If `alpha` is 0, the function returns the background color
+// If `alpha` is 15, the function returns the foreground color
 static inline gl_color32_t gl_color32_blend_a4(gl_color32_t fg, gl_color32_t bg,
                                                uint8_t alpha) {
   uint16_t fg_r = (fg & 0x00FF0000) >> 16;
@@ -265,14 +295,14 @@ static inline gl_color32_t gl_color32_blend_a4(gl_color32_t fg, gl_color32_t bg,
 
 // Returns a gradient as an array of 16 consecutive 16-bit colors
 //
-// Each element in the array represents a color, with retval[0] being
-// the background (bg) color and retval[15] the foreground (fg) color
+// Each element in the array represents a color, with `retval[0]` being
+// the background (`bg`) color and `retval[15]` the foreground (`fg`) color
 const gl_color16_t* gl_color16_gradient_a4(gl_color_t fg, gl_color_t bg);
 
 // Returns a gradient as an array of 16 consecutive 32-bit colors
 //
-// Each element in the array represents a color, with retval[0] being
-// the background (bg) color and retval[15] the foreground (fg) color
+// Each element in the array represents a color, with `retval[0]` being
+// the background (`bg`) color and `retval[15]` the foreground (`fg`) color
 const gl_color32_t* gl_color32_gradient_a4(gl_color_t fg, gl_color_t bg);
 
 #endif  // TREZORHAL_GL_COLOR_H

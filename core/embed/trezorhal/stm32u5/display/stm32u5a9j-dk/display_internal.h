@@ -24,9 +24,12 @@
 
 // Size of the physical frame buffer in bytes
 //
-// It's smaller than size of the virtual framebuffer
+// It's smaller than size of the virtual frame buffer
 // due to used GFXMMU settings
 #define PHYSICAL_FRAME_BUFFER_SIZE 184320
+
+// Pitch (in pixels) of the virtual frame buffer
+#define FRAME_BUFFER_PIXELS_PER_LINE 768
 
 // Physical frame buffers in internal SRAM memory
 //

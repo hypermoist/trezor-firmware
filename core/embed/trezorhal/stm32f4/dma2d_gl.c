@@ -29,10 +29,13 @@ static DMA2D_HandleTypeDef dma2d_handle = {
 };
 
 bool dma2d_accessible(const void* ptr) {
-  // TODO:: valid only for STM32F42x
+#ifdef STM32F4
   const void* ccm_start = (const void*)0x10000000;
   const void* ccm_end = (const void*)0x1000FFFF;
   return !(ptr >= ccm_start && ptr <= ccm_end);
+#else
+  return true;
+#endif
 }
 
 void dma2d_wait(void) {
@@ -67,16 +70,44 @@ bool dma2d_rgb565_fill(const dma2d_params_t* dp) {
          ((dma2d_handle).Instance->CR |= DMA2D_CR_START);
     */
   } else {
+#ifdef STM32U5
+    dma2d_handle.Init.ColorMode = DMA2D_OUTPUT_RGB565;
+    dma2d_handle.Init.Mode = DMA2D_M2M_BLEND_FG;
+    dma2d_handle.Init.OutputOffset =
+        dp->dst_stride / sizeof(uint16_t) - dp->width;
+    HAL_DMA2D_Init(&dma2d_handle);
+
+    dma2d_handle.LayerCfg[1].InputColorMode = DMA2D_INPUT_RGB565;
+    dma2d_handle.LayerCfg[1].InputOffset = 0;
+    dma2d_handle.LayerCfg[1].AlphaMode = DMA2D_REPLACE_ALPHA;
+    dma2d_handle.LayerCfg[1].InputAlpha = dp->src_alpha;
+    HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
+
+    dma2d_handle.LayerCfg[0].InputColorMode = DMA2D_INPUT_RGB565;
+    dma2d_handle.LayerCfg[0].InputOffset =
+        dp->dst_stride / sizeof(uint16_t) - dp->width;
+    dma2d_handle.LayerCfg[0].AlphaMode = 0;
+    dma2d_handle.LayerCfg[0].InputAlpha = 0;
+    HAL_DMA2D_ConfigLayer(&dma2d_handle, 0);
+
+    HAL_DMA2D_BlendingStart(
+        &dma2d_handle, gl_color_to_color32(dp->src_fg),
+        (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint16_t),
+        (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint16_t), dp->width,
+        dp->height);
+#else
     // STM32F4 can not accelerate blending with the fixed color
     uint16_t* dst_ptr = (uint16_t*)dp->dst_row + dp->dst_x;
     uint16_t height = dp->height;
     uint8_t alpha = dp->src_alpha;
     while (height-- > 0) {
       for (int x = 0; x < dp->width; x++) {
-        dst_ptr[x] = gl_color16_blend_a8(dp->src_fg, dst_ptr[x], alpha);
+        dst_ptr[x] = gl_color16_blend_a8(
+            dp->src_fg, gl_color16_to_color(dst_ptr[x]), alpha);
       }
       dst_ptr += dp->dst_stride / sizeof(*dst_ptr);
     }
+#endif
   }
 
   return true;
@@ -332,6 +363,272 @@ bool dma2d_rgb565_blend_mono4(const dma2d_params_t* params) {
         (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint16_t), dp->width,
         dp->height);
   }
+
+  return true;
+}
+
+bool dma2d_rgba8888_fill(const dma2d_params_t* dp) {
+  dma2d_wait();
+
+  if (dp->src_alpha == 255) {
+    dma2d_handle.Init.ColorMode = DMA2D_OUTPUT_ARGB8888;
+    dma2d_handle.Init.Mode = DMA2D_R2M;
+    dma2d_handle.Init.OutputOffset =
+        dp->dst_stride / sizeof(uint32_t) - dp->width;
+    HAL_DMA2D_Init(&dma2d_handle);
+
+    HAL_DMA2D_Start(&dma2d_handle, gl_color_to_color32(dp->src_fg),
+                    (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint32_t),
+                    dp->width, dp->height);
+  } else {
+#ifdef STM32U5
+    dma2d_handle.Init.ColorMode = DMA2D_OUTPUT_ARGB8888;
+    dma2d_handle.Init.Mode = DMA2D_M2M_BLEND_FG;
+    dma2d_handle.Init.OutputOffset =
+        dp->dst_stride / sizeof(uint32_t) - dp->width;
+    HAL_DMA2D_Init(&dma2d_handle);
+
+    dma2d_handle.LayerCfg[1].InputColorMode = DMA2D_INPUT_ARGB8888;
+    dma2d_handle.LayerCfg[1].InputOffset = 0;
+    dma2d_handle.LayerCfg[1].AlphaMode = DMA2D_REPLACE_ALPHA;
+    dma2d_handle.LayerCfg[1].InputAlpha = dp->src_alpha;
+    HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
+
+    dma2d_handle.LayerCfg[0].InputColorMode = DMA2D_INPUT_ARGB8888;
+    dma2d_handle.LayerCfg[0].InputOffset =
+        dp->dst_stride / sizeof(uint32_t) - dp->width;
+    dma2d_handle.LayerCfg[0].AlphaMode = 0;
+    dma2d_handle.LayerCfg[0].InputAlpha = 0;
+    HAL_DMA2D_ConfigLayer(&dma2d_handle, 0);
+
+    HAL_DMA2D_BlendingStart(
+        &dma2d_handle, gl_color_to_color32(dp->src_fg),
+        (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint32_t),
+        (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint32_t), dp->width,
+        dp->height);
+#else
+    // STM32F4 can not accelerate blending with the fixed color
+    uint32_t* dst_ptr = (uint32_t*)dp->dst_row + dp->dst_x;
+    uint16_t height = dp->height;
+    uint8_t alpha = dp->src_alpha;
+    while (height-- > 0) {
+      for (int x = 0; x < dp->width; x++) {
+        dst_ptr[x] = gl_color32_blend_a8(
+            dp->src_fg, gl_color32_to_color(dst_ptr[x]), alpha);
+      }
+      dst_ptr += dp->dst_stride / sizeof(*dst_ptr);
+    }
+#endif
+  }
+
+  return true;
+}
+
+static void dma2d_rgba8888_copy_mono4_first_col(dma2d_params_t* dp,
+                                                const gl_color32_t* gradient) {
+  uint32_t* dst_ptr = (uint32_t*)dp->dst_row + dp->dst_x;
+  uint8_t* src_ptr = (uint8_t*)dp->src_row + dp->src_x / 2;
+
+  int height = dp->height;
+
+  while (height-- > 0) {
+    uint8_t fg_lum = src_ptr[0] >> 4;
+    dst_ptr[0] = gradient[fg_lum];
+    dst_ptr += dp->dst_stride / sizeof(*dst_ptr);
+    src_ptr += dp->src_stride / sizeof(*src_ptr);
+  }
+}
+
+static void dma2d_rgba8888_copy_mono4_last_col(dma2d_params_t* dp,
+                                               const gl_color32_t* gradient) {
+  uint32_t* dst_ptr = (uint32_t*)dp->dst_row + (dp->dst_x + dp->width - 1);
+  uint8_t* src_ptr = (uint8_t*)dp->src_row + (dp->src_x + dp->width - 1) / 2;
+
+  int height = dp->height;
+
+  while (height-- > 0) {
+    uint8_t fg_lum = src_ptr[0] & 0x0F;
+    dst_ptr[0] = gradient[fg_lum];
+    dst_ptr += dp->dst_stride / sizeof(*dst_ptr);
+    src_ptr += dp->src_stride / sizeof(*src_ptr);
+  }
+}
+
+bool dma2d_rgba8888_copy_mono4(const dma2d_params_t* params) {
+  const gl_color32_t* src_gradient = NULL;
+
+  dma2d_params_t dp_copy = *params;
+  dma2d_params_t* dp = &dp_copy;
+
+  dma2d_wait();
+
+  if (dp->src_x & 1) {
+    // First column of mono4 bitmap is odd
+    // Use the CPU to draw the first column
+    src_gradient = gl_color32_gradient_a4(dp->src_fg, dp->src_bg);
+    dma2d_rgba8888_copy_mono4_first_col(dp, src_gradient);
+    dp->dst_x += 1;
+    dp->src_x += 1;
+    dp->width -= 1;
+  }
+
+  if (dp->width > 0 && dp->width & 1) {
+    // The width is odd
+    // Use the CPU to draw the last column
+    if (src_gradient == NULL) {
+      src_gradient = gl_color32_gradient_a4(dp->src_fg, dp->src_bg);
+    }
+    dma2d_rgba8888_copy_mono4_last_col(dp, src_gradient);
+    dp->width -= 1;
+  }
+
+  dma2d_handle.Init.ColorMode = DMA2D_OUTPUT_ARGB8888;
+  dma2d_handle.Init.Mode = DMA2D_M2M_PFC;
+  dma2d_handle.Init.OutputOffset =
+      dp->dst_stride / sizeof(uint32_t) - dp->width;
+  HAL_DMA2D_Init(&dma2d_handle);
+
+  dma2d_handle.LayerCfg[1].InputColorMode = DMA2D_INPUT_L4;
+  dma2d_handle.LayerCfg[1].InputOffset = dp->src_stride * 2 - dp->width;
+  dma2d_handle.LayerCfg[1].AlphaMode = 0;
+  dma2d_handle.LayerCfg[1].InputAlpha = 0;
+  HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
+
+  dma2d_config_clut(1, dp->src_fg, dp->src_bg);
+
+  HAL_DMA2D_Start(&dma2d_handle, (uint32_t)dp->src_row + dp->src_x / 2,
+                  (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint32_t),
+                  dp->width, dp->height);
+
+  return true;
+}
+
+bool dma2d_rgba8888_copy_rgb565(const dma2d_params_t* dp) {
+  dma2d_wait();
+
+  dma2d_handle.Init.ColorMode = DMA2D_OUTPUT_ARGB8888;
+  dma2d_handle.Init.Mode = DMA2D_M2M_PFC;
+  dma2d_handle.Init.OutputOffset =
+      dp->dst_stride / sizeof(uint32_t) - dp->width;
+  HAL_DMA2D_Init(&dma2d_handle);
+
+  dma2d_handle.LayerCfg[1].InputColorMode = DMA2D_INPUT_RGB565;
+  dma2d_handle.LayerCfg[1].InputOffset =
+      dp->src_stride / sizeof(uint16_t) - dp->width;
+  dma2d_handle.LayerCfg[1].AlphaMode = 0;
+  dma2d_handle.LayerCfg[1].InputAlpha = 0;
+  HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
+
+  HAL_DMA2D_Start(&dma2d_handle,
+                  (uint32_t)dp->src_row + dp->src_x * sizeof(uint16_t),
+                  (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint32_t),
+                  dp->width, dp->height);
+
+  return true;
+}
+
+static void dma2d_rgba8888_blend_mono4_first_col(const dma2d_params_t* dp) {
+  uint32_t* dst_ptr = (uint32_t*)dp->dst_row + dp->dst_x;
+  uint8_t* src_ptr = (uint8_t*)dp->src_row + dp->src_x / 2;
+
+  int height = dp->height;
+
+  while (height-- > 0) {
+    uint8_t fg_alpha = src_ptr[0] >> 4;
+    dst_ptr[0] = gl_color32_blend_a4(dp->src_fg,
+                                     gl_color32_to_color(dst_ptr[0]), fg_alpha);
+    dst_ptr += dp->dst_stride / sizeof(*dst_ptr);
+    src_ptr += dp->src_stride / sizeof(*src_ptr);
+  }
+}
+
+static void dma2d_rgba8888_blend_mono4_last_col(const dma2d_params_t* dp) {
+  uint32_t* dst_ptr = (uint32_t*)dp->dst_row + (dp->dst_x + dp->width - 1);
+  uint8_t* src_ptr = (uint8_t*)dp->src_row + (dp->src_x + dp->width - 1) / 2;
+
+  int height = dp->height;
+
+  while (height-- > 0) {
+    uint8_t fg_alpha = src_ptr[0] & 0x0F;
+    dst_ptr[0] = gl_color32_blend_a4(dp->src_fg,
+                                     gl_color32_to_color(dst_ptr[0]), fg_alpha);
+    dst_ptr += dp->dst_stride / sizeof(*dst_ptr);
+    src_ptr += dp->src_stride / sizeof(*src_ptr);
+  }
+}
+
+bool dma2d_rgba8888_blend_mono4(const dma2d_params_t* params) {
+  dma2d_wait();
+
+  dma2d_params_t dp_copy = *params;
+  dma2d_params_t* dp = &dp_copy;
+
+  if (dp->src_x & 1) {
+    // First column of mono4 bitmap is odd
+    // Use the CPU to draw the first column
+    dma2d_rgba8888_blend_mono4_first_col(dp);
+    dp->dst_x += 1;
+    dp->src_x += 1;
+    dp->width -= 1;
+  }
+
+  if (dp->width > 0 && dp->width & 1) {
+    // The width is odd
+    // Use the CPU to draw the last column
+    dma2d_rgba8888_blend_mono4_last_col(dp);
+    dp->width -= 1;
+  }
+
+  if (dp->width > 0) {
+    dma2d_handle.Init.ColorMode = DMA2D_OUTPUT_ARGB8888;
+    dma2d_handle.Init.Mode = DMA2D_M2M_BLEND;
+    dma2d_handle.Init.OutputOffset =
+        dp->dst_stride / sizeof(uint32_t) - dp->width;
+    HAL_DMA2D_Init(&dma2d_handle);
+
+    dma2d_handle.LayerCfg[1].InputColorMode = DMA2D_INPUT_A4;
+    dma2d_handle.LayerCfg[1].InputOffset = dp->src_stride * 2 - dp->width;
+    dma2d_handle.LayerCfg[1].AlphaMode = 0;
+    dma2d_handle.LayerCfg[1].InputAlpha = gl_color_to_color32(dp->src_fg);
+    HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
+
+    dma2d_handle.LayerCfg[0].InputColorMode = DMA2D_INPUT_ARGB8888;
+    dma2d_handle.LayerCfg[0].InputOffset =
+        dp->dst_stride / sizeof(uint32_t) - dp->width;
+    dma2d_handle.LayerCfg[0].AlphaMode = 0;
+    dma2d_handle.LayerCfg[0].InputAlpha = 0;
+    HAL_DMA2D_ConfigLayer(&dma2d_handle, 0);
+
+    HAL_DMA2D_BlendingStart(
+        &dma2d_handle, (uint32_t)dp->src_row + dp->src_x / 2,
+        (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint32_t),
+        (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint32_t), dp->width,
+        dp->height);
+  }
+
+  return true;
+}
+
+bool dma2d_rgba8888_copy_rgba8888(const dma2d_params_t* dp) {
+  dma2d_wait();
+
+  dma2d_handle.Init.ColorMode = DMA2D_OUTPUT_ARGB8888;
+  dma2d_handle.Init.Mode = DMA2D_M2M_PFC;
+  dma2d_handle.Init.OutputOffset =
+      dp->dst_stride / sizeof(uint32_t) - dp->width;
+  HAL_DMA2D_Init(&dma2d_handle);
+
+  dma2d_handle.LayerCfg[1].InputColorMode = DMA2D_INPUT_ARGB8888;
+  dma2d_handle.LayerCfg[1].InputOffset =
+      dp->src_stride / sizeof(uint32_t) - dp->width;
+  dma2d_handle.LayerCfg[1].AlphaMode = 0;
+  dma2d_handle.LayerCfg[1].InputAlpha = 0;
+  HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
+
+  HAL_DMA2D_Start(&dma2d_handle,
+                  (uint32_t)dp->src_row + dp->src_x * sizeof(uint32_t),
+                  (uint32_t)dp->dst_row + dp->dst_x * sizeof(uint32_t),
+                  dp->width, dp->height);
 
   return true;
 }

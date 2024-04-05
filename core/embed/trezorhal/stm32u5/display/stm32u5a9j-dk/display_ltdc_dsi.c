@@ -130,7 +130,6 @@
 #define HACT 480
 #define LCD_WIDTH 480
 #define LCD_HEIGHT 480
-#define PIXEL_PER_LINE 768U
 
 #include "display_gfxmmu_lut.h"
 
@@ -518,11 +517,11 @@ __weak HAL_StatusTypeDef MX_LTDC_Init(LTDC_HandleTypeDef *hltdc) {
 //  LayerCfg.BlendingFactor1 = LTDC_BLENDING_FACTOR1_PAxCA; /* Not Used: default
 //  value */ LayerCfg.BlendingFactor2 = LTDC_BLENDING_FACTOR2_PAxCA; /* Not
 //  Used: default value */ LayerCfg.FBStartAdress   =
-//  GFXMMU_VIRTUAL_BUFFER0_BASE; LayerCfg.ImageWidth      = PIXEL_PER_LINE; /*
-//  Number of pixels per line in virtual frame buffer */ LayerCfg.ImageHeight =
-//  LCD_HEIGHT; LayerCfg.Backcolor.Red   = 0; /* Not Used: default value */
-//  LayerCfg.Backcolor.Green = 0; /* Not Used: default value */
-//  LayerCfg.Backcolor.Blue  = 0; /* Not Used: default value */
+//  GFXMMU_VIRTUAL_BUFFER0_BASE; LayerCfg.ImageWidth      =
+//  FRAME_BUFFER_PIXELS_PER_LINE; /* Number of pixels per line in virtual frame
+//  buffer */ LayerCfg.ImageHeight = LCD_HEIGHT; LayerCfg.Backcolor.Red   = 0;
+//  /* Not Used: default value */ LayerCfg.Backcolor.Green = 0; /* Not Used:
+//  default value */ LayerCfg.Backcolor.Blue  = 0; /* Not Used: default value */
 //  LayerCfg.Bac
 //  return HAL_LTDC_ConfigLayer(hltdc, &LayerCfg, LayerIndex);kcolor.Reserved =
 //  0xFF;
@@ -553,7 +552,8 @@ __weak HAL_StatusTypeDef MX_LTDC_ConfigLayer(LTDC_HandleTypeDef *hltdc,
       LTDC_BLENDING_FACTOR2_PAxCA; /* Not Used: default value */
   LayerCfg.FBStartAdress = fb_addr;
   LayerCfg.ImageWidth =
-      PIXEL_PER_LINE; /* Number of pixels per line in virtual frame buffer */
+      FRAME_BUFFER_PIXELS_PER_LINE; /* Number of pixels per line in virtual
+                                       frame buffer */
   LayerCfg.ImageHeight = LCD_HEIGHT;
   LayerCfg.Backcolor.Red = 0;   /* Not Used: default value */
   LayerCfg.Backcolor.Green = 0; /* Not Used: default value */
