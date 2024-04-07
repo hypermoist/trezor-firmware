@@ -221,7 +221,7 @@ impl Component for Confirm<'_> {
     fn render<'s>(&'s self, target: &mut impl Renderer<'s>) {
         self.bg.render(target);
 
-        let mut display_top_left = |text: TString<'static>| {
+        let mut display_top_left = |text: TString| {
             text.map(|t| {
                 shape::Text::new(Point::zero(), t)
                     .with_font(Font::BOLD)

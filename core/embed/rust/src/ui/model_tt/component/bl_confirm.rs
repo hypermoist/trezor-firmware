@@ -18,9 +18,9 @@ use crate::{
                 WHITE,
             },
         },
+        shape,
+        shape::Renderer,
     },
-    shape,
-    shape::Renderer,
 };
 
 const ICON_TOP: i16 = 17;

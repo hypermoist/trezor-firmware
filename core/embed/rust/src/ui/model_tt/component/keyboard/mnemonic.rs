@@ -7,8 +7,8 @@ use crate::{
             component::{Button, ButtonMsg, Swipe, SwipeDirection},
             theme,
         },
+        shape::Renderer,
     },
-    shape::Renderer,
 };
 
 pub const MNEMONIC_KEY_COUNT: usize = 9;

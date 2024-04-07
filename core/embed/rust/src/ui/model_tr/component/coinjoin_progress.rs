@@ -170,7 +170,7 @@ impl Component for CoinJoinProgress {
             text_multiline_bottom2(
                 target,
                 rest.inset(Insets::bottom(FOOTER_TEXT_MARGIN)),
-                self.text.as_ref().into(),
+                self.text,
                 Font::NORMAL,
                 theme::FG,
                 theme::BG,

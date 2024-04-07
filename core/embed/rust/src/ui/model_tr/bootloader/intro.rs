@@ -6,7 +6,7 @@ use crate::{
         layout::simplified::ReturnToC,
         shape,
         shape::Renderer,
-        },
+    },
 };
 
 use super::super::{

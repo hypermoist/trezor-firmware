@@ -241,7 +241,7 @@ impl Component for NumberInput {
 
         if let Some(text) = strutil::format_i64(self.value as i64, &mut buf) {
             let digit_font = Font::DEMIBOLD;
-            let y_offset = digit_font.text_height() / 2 + Button::<&str>::BASELINE_OFFSET;
+            let y_offset = digit_font.text_height() / 2 + Button::BASELINE_OFFSET;
 
             shape::Bar::new(self.area).with_bg(theme::BG).render(target);
             shape::Text::new(self.area.center() + Offset::y(y_offset), text)

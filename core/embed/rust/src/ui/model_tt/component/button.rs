@@ -240,21 +240,21 @@ impl Button {
         }
     }
 
-    pub fn render_content<'s>(&self, target: &mut impl Renderer<'s>, style: &ButtonStyle)
-    {
+    pub fn render_content<'s>(&self, target: &mut impl Renderer<'s>, style: &ButtonStyle) {
         match &self.content {
             ButtonContent::Empty => {}
             ButtonContent::Text(text) => {
-                let text = text.as_ref();
-                let width = style.font.text_width(text);
+                let width = text.map(|c| style.font.text_width(c));
                 let height = style.font.text_height();
                 let start_of_baseline = self.area.center()
                     + Offset::new(-width / 2, height / 2)
                     + Offset::y(Self::BASELINE_OFFSET);
-                shape::Text::new(start_of_baseline, text)
-                    .with_font(style.font)
-                    .with_fg(style.text_color)
-                    .render(target);
+                text.map(|text| {
+                    shape::Text::new(start_of_baseline, text)
+                        .with_font(style.font)
+                        .with_fg(style.text_color)
+                        .render(target);
+                });
             }
             ButtonContent::Icon(icon) => {
                 shape::ToifImage::new(self.area.center(), icon.toif)

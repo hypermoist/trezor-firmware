@@ -128,10 +128,12 @@ impl Marquee {
         target.in_window(self.area, &mut |target| {
             let text_height = self.font.text_height();
             let pos = self.area.top_left() + Offset::new(offset, text_height - 1);
-            shape::Text::new(pos, self.text.as_ref())
-                .with_font(self.font)
-                .with_fg(self.fg)
-                .render(target);
+            self.text.map(|t| {
+                shape::Text::new(pos, t)
+                    .with_font(self.font)
+                    .with_fg(self.fg)
+                    .render(target);
+            });
         });
     }
 }

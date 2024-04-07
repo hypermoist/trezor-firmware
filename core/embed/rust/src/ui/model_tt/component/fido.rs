@@ -9,9 +9,9 @@ use crate::{
             swipe::{Swipe, SwipeDirection},
             theme, ScrollBar,
         },
+        shape,
+        shape::Renderer,
     },
-    shape,
-    shape::Renderer,
 };
 
 use super::CancelConfirmMsg;
@@ -231,8 +231,8 @@ where
         // Account name is optional.
         // Showing it only if it differs from app name.
         // (Dummy requests usually have some text as both app_name and account_name.)
-        let account_name = self.account_name.text().as_ref();
-        let app_name = self.app_name.text().as_ref();
+        let account_name = self.account_name.text();
+        let app_name = self.app_name.text();
         if !account_name.is_empty() && account_name != app_name {
             self.account_name.render(target);
         }

@@ -8,7 +8,7 @@ use crate::{
         model_tr::cshape,
         shape,
         shape::Renderer,
-        },
+    },
 };
 
 use super::super::{

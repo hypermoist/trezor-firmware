@@ -181,11 +181,12 @@ impl Homescreen {
                 .with_bg(theme::BG)
                 .render(target);
 
-            notification.map(|c| shape::Text::new(baseline, c)
+            notification.map(|c| {
+                shape::Text::new(baseline, c)
                 .with_align(Alignment::Center)
                 .with_font(NOTIFICATION_FONT)
                 .render(target)
-            );
+            });
 
             // Painting warning icons in top corners when the text is short enough not to
             // collide with them
@@ -433,8 +434,7 @@ pub struct ConfirmHomescreen {
     buttons: Child<ButtonController>,
 }
 
-impl ConfirmHomescreen
-{
+impl ConfirmHomescreen {
     pub fn new(title: TString<'static>, image: Obj) -> Self {
         let btn_layout = ButtonLayout::cancel_none_text(TR::buttons__change.into());
         ConfirmHomescreen {
@@ -445,8 +445,7 @@ impl ConfirmHomescreen
     }
 }
 
-impl<'a> Component for ConfirmHomescreen
-{
+impl<'a> Component for ConfirmHomescreen {
     type Msg = CancelConfirmMsg;
 
     fn place(&mut self, bounds: Rect) -> Rect {

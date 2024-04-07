@@ -62,13 +62,19 @@ impl Title {
     }
 
     /// Display title/header at the top left of the given area.
-    pub fn render_header_left<'s>(target: &mut impl Renderer<'s>, title: &T, area: Rect) {
+    pub fn render_header_left<'s>(
+        target: &mut impl Renderer<'s>,
+        title: &TString<'static>,
+        area: Rect,
+    ) {
         let text_height = theme::FONT_HEADER.text_height();
         let title_baseline = area.top_left() + Offset::y(text_height - 1);
-        shape::Text::new(title_baseline, title.as_ref())
-            .with_font(theme::FONT_HEADER)
-            .with_fg(theme::FG)
-            .render(target);
+        title.map(|s| {
+            shape::Text::new(title_baseline, s)
+                .with_font(theme::FONT_HEADER)
+                .with_fg(theme::FG)
+                .render(target);
+        });
     }
 
     /// Display title/header centered at the top of the given area.
@@ -81,14 +87,20 @@ impl Title {
     }
 
     /// Display title/header centered at the top of the given area.
-    pub fn render_header_centered<'s>(target: &mut impl Renderer<'s>, title: &T, area: Rect) {
+    pub fn render_header_centered<'s>(
+        target: &mut impl Renderer<'s>,
+        title: &TString<'static>,
+        area: Rect,
+    ) {
         let text_height = theme::FONT_HEADER.text_height();
         let title_baseline = area.top_center() + Offset::y(text_height - 1);
-        shape::Text::new(title_baseline, title.as_ref())
-            .with_align(Alignment::Center)
-            .with_font(theme::FONT_HEADER)
-            .with_fg(theme::FG)
-            .render(target);
+        title.map(|s| {
+            shape::Text::new(title_baseline, s)
+                .with_align(Alignment::Center)
+                .with_font(theme::FONT_HEADER)
+                .with_fg(theme::FG)
+                .render(target);
+        });
     }
 }
 

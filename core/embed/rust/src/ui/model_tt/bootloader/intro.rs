@@ -13,8 +13,8 @@ use crate::{
                 CONTENT_PADDING, CORNER_BUTTON_AREA, MENU32, TEXT_NORMAL, TEXT_WARNING, TITLE_AREA,
             },
         },
+        shape::Renderer,
     },
-    shape::Renderer,
 };
 
 #[repr(u32)]
