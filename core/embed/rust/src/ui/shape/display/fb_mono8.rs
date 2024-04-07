@@ -28,7 +28,7 @@ where
         let fb = unsafe {
             core::slice::from_raw_parts_mut(
                 display::get_frame_addr() as *mut u8,
-                width as usize * height as usize * core::mem::size_of::<u8>(),
+                width as usize * height as usize,
             )
         };
 

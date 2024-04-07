@@ -11,7 +11,7 @@ pub const PI4: i16 = 45;
 /// Angle must be in range <0..PI4>.
 /// This function provides an error within +-1 for multiplier up to 500
 pub fn sin_i16(angle: i16, mult: i16) -> i16 {
-    assert!(angle >= 0 && angle <= PI4);
+    assert!((0..=PI4).contains(&angle));
     assert!(mult <= 2500);
 
     type T = i32;

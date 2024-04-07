@@ -778,15 +778,11 @@ fn fill_octant(
     // Intersection of the p1 line and the circle
     let mut p2_start = p1_start;
 
-    loop {
-        if let Some(p) = iter.next() {
-            if p.u > u2 {
-                break;
-            }
-            p2_start = p;
-        } else {
+    for p in iter.by_ref() {
+        if p.u > u2 {
             break;
         }
+        p2_start = p;
     }
 
     // Flag if we draw section up to 45degs

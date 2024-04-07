@@ -51,6 +51,8 @@ test = [
     "micropython",
     "protobuf",
     "ui",
+    "ui_jpeg_decoder",
+    "ui_blurring",
     "dma2d",
     "touch",
     "backlight",

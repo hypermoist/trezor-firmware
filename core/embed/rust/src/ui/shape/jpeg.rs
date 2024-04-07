@@ -137,7 +137,7 @@ impl<'a> Shape<'a> for JpegImage<'a> {
                     None,
                     Offset::new(jpeg_size.x, 1),
                     None,
-                    &mut buff[..]
+                    &buff[..]
                 ),
                 "Too small buffer"
             );

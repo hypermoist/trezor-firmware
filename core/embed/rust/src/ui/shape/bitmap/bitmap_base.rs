@@ -129,7 +129,7 @@ impl<'a> Bitmap<'a> {
     ) -> Option<Self> {
         let mut bitmap = Self::new(format, stride, size, min_height, buff)?;
         bitmap.mutable = true;
-        return Some(bitmap);
+        Some(bitmap)
     }
 
     /// Returns bitmap width in pixels.
@@ -158,7 +158,7 @@ impl<'a> Bitmap<'a> {
     }
 
     pub fn view(&self) -> BitmapView {
-        BitmapView::new(&self)
+        BitmapView::new(self)
     }
 
     /// Returns the specified row as an immutable slice.
@@ -221,6 +221,8 @@ impl<'a> Bitmap<'a> {
 
     /// Return raw mut pointer to the specified bitmap row.
     ///
+    /// # Safety
+    ///
     /// `y` must be in range <0; self.height() - 1>.
     pub unsafe fn row_ptr(&self, y: u16) -> *mut cty::c_void {
         unsafe { self.ptr.add(self.stride() * y as usize) as *mut cty::c_void }
@@ -267,25 +269,19 @@ impl<'a> BitmapView<'a> {
     /// Builds a new structure with offset set to the specified value
     pub fn with_offset(self, offset: Offset) -> Self {
         Self {
-            offset: (offset + self.offset.into()).into(),
+            offset: offset + self.offset,
             ..self
         }
     }
 
     /// Builds a new structure with foreground color set to the specified value
     pub fn with_fg(self, fg_color: Color) -> Self {
-        Self {
-            fg_color: fg_color.into(),
-            ..self
-        }
+        Self { fg_color, ..self }
     }
 
     /// Builds a new structure with background color set to the specified value
     pub fn with_bg(self, bg_color: Color) -> Self {
-        Self {
-            bg_color: bg_color.into(),
-            ..self
-        }
+        Self { bg_color, ..self }
     }
 
     /// Returns the bitmap width and height in pixels
