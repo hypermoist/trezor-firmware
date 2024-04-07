@@ -125,7 +125,7 @@ impl Marquee {
     }
 
     pub fn render_anim<'s>(&'s self, target: &mut impl Renderer<'s>, offset: i16) {
-        target.in_window(self.area, &mut |target| {
+        target.in_window(self.area, &|target| {
             let text_height = self.font.text_height();
             let pos = self.area.top_left() + Offset::new(offset, text_height - 1);
             self.text.map(|t| {

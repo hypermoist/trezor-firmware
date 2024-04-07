@@ -453,5 +453,4 @@ impl UIFeaturesBootloader for ModelTRFeatures {
             }
         });
     }
-
 }

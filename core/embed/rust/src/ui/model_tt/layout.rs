@@ -624,7 +624,7 @@ extern "C" fn new_confirm_homescreen(n_args: usize, args: *const Obj, kwargs: *m
             jpeg = ImageBuffer::from_slice(theme::IMAGE_HOMESCREEN);
         }
 
-        if let None = jpeg_info(jpeg.data()) {
+        if jpeg_info(jpeg.data()).is_none() {
             return Err(value_error!("Invalid image."));
         };
 

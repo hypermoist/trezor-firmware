@@ -472,5 +472,4 @@ impl UIFeaturesBootloader for ModelTTFeatures {
             }
         });
     }
-
 }

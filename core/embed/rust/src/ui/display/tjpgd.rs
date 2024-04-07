@@ -56,8 +56,7 @@ pub fn jpeg_info(data: &[u8]) -> Option<(Offset, i16)> {
 
     let read_u16 = |ofs| -> Option<u16> {
         if ofs + 1 < data.len() {
-            let result = Some(((data[ofs] as u16) << 8) + data[ofs + 1] as u16);
-            result
+            Some(((data[ofs] as u16) << 8) + data[ofs + 1] as u16)
         } else {
             None
         }
@@ -65,8 +64,7 @@ pub fn jpeg_info(data: &[u8]) -> Option<(Offset, i16)> {
 
     let read_u8 = |ofs| -> Option<u8> {
         if ofs < data.len() {
-            let result = Some(data[ofs]);
-            result
+            Some(data[ofs])
         } else {
             None
         }

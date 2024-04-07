@@ -113,7 +113,7 @@ where
 
     fn render_left<'s>(&'s self, target: &mut impl Renderer<'s>) {
         let baseline = Point::new(self.pad.area.x0, self.y_baseline());
-        shape::Text::new(baseline, &self.text.as_ref())
+        shape::Text::new(baseline, self.text.as_ref())
             .with_font(self.font)
             .render(target);
     }
@@ -125,7 +125,7 @@ where
 
     fn render_center<'s>(&'s self, target: &mut impl Renderer<'s>) {
         let baseline = Point::new(self.pad.area.bottom_center().x, self.y_baseline());
-        shape::Text::new(baseline, &self.text.as_ref())
+        shape::Text::new(baseline, self.text.as_ref())
             .with_align(Alignment::Center)
             .with_font(self.font)
             .render(target);
@@ -138,7 +138,7 @@ where
 
     fn render_right<'s>(&'s self, target: &mut impl Renderer<'s>) {
         let baseline = Point::new(self.pad.area.x1, self.y_baseline());
-        shape::Text::new(baseline, &self.text.as_ref())
+        shape::Text::new(baseline, self.text.as_ref())
             .with_align(Alignment::End)
             .with_font(self.font)
             .render(target);

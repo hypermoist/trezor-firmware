@@ -216,10 +216,7 @@ impl<'a> ComponentMsgObj for Lockscreen<'a> {
     }
 }
 
-impl<'a, F> ComponentMsgObj for ConfirmHomescreen<F>
-where
-    F: Fn() -> &'a [u8],
-{
+impl<'a> ComponentMsgObj for ConfirmHomescreen {
     fn msg_try_into_obj(&self, msg: Self::Msg) -> Result<Obj, Error> {
         match msg {
             CancelConfirmMsg::Confirmed => Ok(CONFIRMED.as_obj()),
