@@ -43,7 +43,7 @@ elif TREZOR_MODEL in ('T',):
     FONT_BIG=None
     FONT_SUB=None
 elif TREZOR_MODEL in ('T3T1',):
-    FONT_NORMAL='Font_TTSatoshi_Medium_21'
+    FONT_NORMAL='Font_TTSatoshi_DemiBold_21'
     FONT_DEMIBOLD=None
     FONT_BOLD=None
     FONT_MONO='Font_RobotoMono_Medium_21'

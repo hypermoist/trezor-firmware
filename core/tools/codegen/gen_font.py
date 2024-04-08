@@ -440,7 +440,7 @@ if __name__ == "__main__":
     # NOTE: Unifont Bold does not seem to have czech characters
     FaceProcessor("Unifont", "Bold", 16, bpp=1, shaveX=1, ext="otf").write_files()
 
-    FaceProcessor("TTSatoshi", "Medium", 42, ext="otf").write_files()
-    FaceProcessor("TTSatoshi", "Medium", 21, ext="otf").write_files()
-    FaceProcessor("TTSatoshi", "Medium", 18, ext="otf").write_files()
+    FaceProcessor("TTSatoshi", "DemiBold", 42, ext="otf").write_files()
+    FaceProcessor("TTSatoshi", "DemiBold", 21, ext="otf").write_files()
+    FaceProcessor("TTSatoshi", "DemiBold", 18, ext="otf").write_files()
     FaceProcessor("RobotoMono", "Medium", 21).write_files()
