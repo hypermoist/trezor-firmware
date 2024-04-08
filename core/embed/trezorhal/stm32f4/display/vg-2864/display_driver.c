@@ -337,22 +337,22 @@ void display_refresh(void) {
 
 void display_set_compatible_settings() {}
 
-void display_fill(const dma2d_params_t *dp) {
+void display_fill(const gl_bitblt_t *bb) {
   display_driver_t *drv = &g_display_driver;
 
-  dma2d_params_t dp_new = *dp;
-  dp_new.dst_row = &drv->framebuf[DISPLAY_RESX * dp_new.dst_y];
-  dp_new.dst_stride = DISPLAY_RESX;
+  gl_bitblt_t bb_new = *bb;
+  bb_new.dst_row = &drv->framebuf[DISPLAY_RESX * bb_new.dst_y];
+  bb_new.dst_stride = DISPLAY_RESX;
 
-  mono8_fill(&dp_new);
+  gl_mono8_fill(&bb_new);
 }
 
-void display_copy_mono1p(const dma2d_params_t *dp) {
+void display_copy_mono1p(const gl_bitblt_t *bb) {
   display_driver_t *drv = &g_display_driver;
 
-  dma2d_params_t dp_new = *dp;
-  dp_new.dst_row = &drv->framebuf[DISPLAY_RESX * dp_new.dst_y];
-  dp_new.dst_stride = DISPLAY_RESX;
+  gl_bitblt_t bb_new = *bb;
+  bb_new.dst_row = &drv->framebuf[DISPLAY_RESX * bb_new.dst_y];
+  bb_new.dst_stride = DISPLAY_RESX;
 
-  mono8_copy_mono1p(&dp_new);
+  gl_mono8_copy_mono1p(&bb_new);
 }

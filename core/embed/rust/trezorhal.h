@@ -8,7 +8,7 @@
 #include "dma2d.h"
 #include "flash.h"
 #include "fonts/fonts.h"
-#include "gl_dma2d.h"
+#include "gl_bitblt.h"
 #include "haptic.h"
 #include "model.h"
 #include "rgb_led.h"

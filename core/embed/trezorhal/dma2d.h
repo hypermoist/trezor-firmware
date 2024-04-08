@@ -24,7 +24,7 @@
 #include <stdint.h>
 #include "common.h"
 
-#include "gl_dma2d.h"
+#include "gl_bitblt.h"
 
 void dma2d_init(void);
 
@@ -45,16 +45,16 @@ void dma2d_start_blend(uint8_t* overlay_addr, uint8_t* bg_addr,
 void dma2d_wait_for_transfer(void);
 
 void dma2d_wait(void);
-bool dma2d_rgb565_fill(const dma2d_params_t* dp);
-bool dma2d_rgb565_copy_mono4(const dma2d_params_t* dp);
-bool dma2d_rgb565_copy_rgb565(const dma2d_params_t* dp);
-bool dma2d_rgb565_blend_mono4(const dma2d_params_t* dp);
+void dma2d_rgb565_fill(const gl_bitblt_t* bb);
+void dma2d_rgb565_copy_mono4(const gl_bitblt_t* bb);
+void dma2d_rgb565_copy_rgb565(const gl_bitblt_t* bb);
+void dma2d_rgb565_blend_mono4(const gl_bitblt_t* bb);
 
-bool dma2d_rgba8888_fill(const dma2d_params_t* dp);
-bool dma2d_rgba8888_copy_mono4(const dma2d_params_t* dp);
-bool dma2d_rgba8888_copy_rgb565(const dma2d_params_t* dp);
-bool dma2d_rgba8888_copy_rgba8888(const dma2d_params_t* dp);
-bool dma2d_rgba8888_blend_mono4(const dma2d_params_t* dp);
+void dma2d_rgba8888_fill(const gl_bitblt_t* bb);
+void dma2d_rgba8888_copy_mono4(const gl_bitblt_t* bb);
+void dma2d_rgba8888_copy_rgb565(const gl_bitblt_t* bb);
+void dma2d_rgba8888_copy_rgba8888(const gl_bitblt_t* bb);
+void dma2d_rgba8888_blend_mono4(const gl_bitblt_t* bb);
 
 bool dma2d_accessible(const void* ptr);
 

@@ -22,7 +22,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include "gl_dma2d.h"
+#include "gl_bitblt.h"
 
 #include TREZOR_BOARD
 
@@ -122,16 +122,16 @@ void display_refresh(void);
 void display_set_compatible_settings(void);
 
 // Fills a rectangle with a specified color
-void display_fill(const dma2d_params_t *dp);
+void display_fill(const gl_bitblt_t *bb);
 
 // Copies an RGB565 bitmap to a specified rectangle
-void display_copy_rgb565(const dma2d_params_t *dp);
+void display_copy_rgb565(const gl_bitblt_t *bb);
 
 // Copies a MONO4 bitmap to a specified rectangle
-void display_copy_mono4(const dma2d_params_t *dp);
+void display_copy_mono4(const gl_bitblt_t *bb);
 
 // Copies a MONO1P bitmap to a specified rectangle
-void display_copy_mono1p(const dma2d_params_t *dp);
+void display_copy_mono1p(const gl_bitblt_t *bb);
 
 #ifdef TREZOR_EMULATOR
 // Save the screen content to a file.

@@ -111,7 +111,7 @@ def configure(
     if "dma2d" in features_wanted:
         defines += ["USE_DMA2D"]
         sources += ["embed/trezorhal/stm32f4/dma2d.c"]
-        sources += ["embed/trezorhal/stm32f4/dma2d_gl.c"]
+        sources += ["embed/trezorhal/stm32f4/dma2d_bitblt.c"]
         sources += [
             "vendor/micropython/lib/stm32lib/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma2d.c"
         ]

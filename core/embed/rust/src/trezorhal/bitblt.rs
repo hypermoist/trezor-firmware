@@ -6,9 +6,9 @@ use crate::ui::{
     shape::{Bitmap, BitmapFormat, BitmapView},
 };
 
-pub type Dma2d = ffi::dma2d_params_t;
+pub type BitBlt = ffi::gl_bitblt_t;
 
-impl Default for Dma2d {
+impl Default for BitBlt {
     fn default() -> Self {
         Self {
             width: 0,
@@ -28,7 +28,7 @@ impl Default for Dma2d {
     }
 }
 
-impl Dma2d {
+impl BitBlt {
     pub fn new_fill(r: Rect, clip: Rect, color: Color, alpha: u8) -> Option<Self> {
         let r = r.clamp(clip);
         if !r.is_empty() {
@@ -76,7 +76,7 @@ impl Dma2d {
 
         if !r.is_empty() {
             Some(
-                Dma2d::default()
+                BitBlt::default()
                     .with_rect(r)
                     .with_src(src.bitmap, offset.x, offset.y)
                     .with_bg(src.bg_color)
@@ -149,59 +149,59 @@ impl Dma2d {
     }
 
     pub unsafe fn rgb565_fill(&self) {
-        unsafe { ffi::rgb565_fill(self) };
+        unsafe { ffi::gl_rgb565_fill(self) };
     }
 
     pub unsafe fn rgb565_copy_mono4(&self) {
-        unsafe { ffi::rgb565_copy_mono4(self) };
+        unsafe { ffi::gl_rgb565_copy_mono4(self) };
     }
 
     pub unsafe fn rgb565_copy_rgb565(&self) {
-        unsafe { ffi::rgb565_copy_rgb565(self) };
+        unsafe { ffi::gl_rgb565_copy_rgb565(self) };
     }
 
     pub unsafe fn rgb565_blend_mono4(&self) {
-        unsafe { ffi::rgb565_blend_mono4(self) };
+        unsafe { ffi::gl_rgb565_blend_mono4(self) };
     }
 
     pub unsafe fn rgba8888_fill(&self) {
-        unsafe { ffi::rgba8888_fill(self) };
+        unsafe { ffi::gl_rgba8888_fill(self) };
     }
 
     pub unsafe fn rgba8888_copy_mono4(&self) {
-        unsafe { ffi::rgba8888_copy_mono4(self) };
+        unsafe { ffi::gl_rgba8888_copy_mono4(self) };
     }
 
     pub unsafe fn rgba8888_copy_rgb565(&self) {
-        unsafe { ffi::rgba8888_copy_rgb565(self) };
+        unsafe { ffi::gl_rgba8888_copy_rgb565(self) };
     }
 
     pub unsafe fn rgba8888_copy_rgba8888(&self) {
-        unsafe { ffi::rgba8888_copy_rgba8888(self) };
+        unsafe { ffi::gl_rgba8888_copy_rgba8888(self) };
     }
 
     pub unsafe fn rgba8888_blend_mono4(&self) {
-        unsafe { ffi::rgba8888_blend_mono4(self) };
+        unsafe { ffi::gl_rgba8888_blend_mono4(self) };
     }
 
     pub unsafe fn mono8_fill(&self) {
-        unsafe { ffi::mono8_fill(self) };
+        unsafe { ffi::gl_mono8_fill(self) };
     }
 
     pub unsafe fn mono8_copy_mono1p(&self) {
-        unsafe { ffi::mono8_copy_mono1p(self) };
+        unsafe { ffi::gl_mono8_copy_mono1p(self) };
     }
 
     pub unsafe fn mono8_copy_mono4(&self) {
-        unsafe { ffi::mono8_copy_mono4(self) };
+        unsafe { ffi::gl_mono8_copy_mono4(self) };
     }
 
     pub unsafe fn mono8_blend_mono1p(&self) {
-        unsafe { ffi::mono8_blend_mono1p(self) };
+        unsafe { ffi::gl_mono8_blend_mono1p(self) };
     }
 
     pub unsafe fn mono8_blend_mono4(&self) {
-        unsafe { ffi::mono8_blend_mono4(self) };
+        unsafe { ffi::gl_mono8_blend_mono4(self) };
     }
 
     #[cfg(feature = "new_rendering")]

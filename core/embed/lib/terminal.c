@@ -69,7 +69,7 @@ static uint64_t term_glyph_bits(char ch) {
 // Redraws specified rows to the display
 static void term_redraw_rows(int start_row, int row_count) {
   uint64_t glyph_bits = 0;
-  dma2d_params_t dp = {
+  gl_bitblt_t bb = {
       .height = 8,
       .width = 6,
       .dst_row = NULL,
@@ -86,11 +86,11 @@ static void term_redraw_rows(int start_row, int row_count) {
   };
 
   for (int y = start_row; y < start_row + row_count; y++) {
-    dp.dst_y = y * 8;
+    bb.dst_y = y * 8;
     for (int x = 0; x < TERMINAL_COLS; x++) {
       glyph_bits = term_glyph_bits(terminal_fb[y][x]);
-      dp.dst_x = x * 6;
-      display_copy_mono1p(&dp);
+      bb.dst_x = x * 6;
+      display_copy_mono1p(&bb);
     }
   }
 }

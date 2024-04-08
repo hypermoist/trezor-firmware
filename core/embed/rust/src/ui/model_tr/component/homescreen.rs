@@ -184,9 +184,9 @@ impl Homescreen {
 
             notification.map(|c| {
                 shape::Text::new(baseline, c)
-                .with_align(Alignment::Center)
-                .with_font(NOTIFICATION_FONT)
-                .render(target)
+                    .with_align(Alignment::Center)
+                    .with_font(NOTIFICATION_FONT)
+                    .render(target)
             });
 
             // Painting warning icons in top corners when the text is short enough not to

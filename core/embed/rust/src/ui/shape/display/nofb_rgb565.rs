@@ -1,4 +1,4 @@
-use crate::trezorhal::{display, dma2d_new::Dma2d};
+use crate::trezorhal::{display, bitblt::BitBlt};
 
 use crate::ui::{
     display::Color,
@@ -76,16 +76,16 @@ impl BasicCanvas for DisplayCanvas {
 
     fn fill_rect(&mut self, r: Rect, color: Color, _alpha: u8) {
         let r = r.translate(self.viewport.origin);
-        if let Some(dma2d) = Dma2d::new_fill(r, self.viewport.clip, color, 255) {
-            unsafe { dma2d.display_fill() };
+        if let Some(bitblt) = BitBlt::new_fill(r, self.viewport.clip, color, 255) {
+            unsafe { bitblt.display_fill() };
         }
     }
 
     fn draw_bitmap(&mut self, r: Rect, bitmap: BitmapView) {
         let r = r.translate(self.viewport.origin);
-        if let Some(dma2d) = Dma2d::new_copy(r, self.viewport.clip, &bitmap) {
+        if let Some(bitblt) = BitBlt::new_copy(r, self.viewport.clip, &bitmap) {
             match bitmap.format() {
-                BitmapFormat::RGB565 => unsafe { dma2d.display_copy_rgb565() },
+                BitmapFormat::RGB565 => unsafe { bitblt.display_copy_rgb565() },
                 _ => panic!("Unsupported DMA operation"),
             }
             bitmap.bitmap.mark_dma_pending();

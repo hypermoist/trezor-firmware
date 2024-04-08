@@ -114,32 +114,32 @@ int display_get_orientation(void) {
 
 void display_set_compatible_settings() {}
 
-void display_fill(const dma2d_params_t *dp) {
+void display_fill(const gl_bitblt_t *bb) {
   display_fb_info_t fb = display_get_frame_buffer();
 
-  dma2d_params_t dp_new = *dp;
-  dp_new.dst_row = (uint8_t *)fb.ptr + (fb.stride * dp_new.dst_y);
-  dp_new.dst_stride = fb.stride;
+  gl_bitblt_t bb_new = *bb;
+  bb_new.dst_row = (uint8_t *)fb.ptr + (fb.stride * bb_new.dst_y);
+  bb_new.dst_stride = fb.stride;
 
-  rgba8888_fill(&dp_new);
+  rgba8888_fill(&bb_new);
 }
 
-void display_copy_rgb565(const dma2d_params_t *dp) {
+void display_copy_rgb565(const gl_bitblt_t *bb) {
   display_fb_info_t fb = display_get_frame_buffer();
 
-  dma2d_params_t dp_new = *dp;
-  dp_new.dst_row = (uint8_t *)fb.ptr + (fb.stride * dp_new.dst_y);
-  dp_new.dst_stride = fb.stride;
+  gl_bitblt_t bb_new = *bb;
+  bb_new.dst_row = (uint8_t *)fb.ptr + (fb.stride * bb_new.dst_y);
+  bb_new.dst_stride = fb.stride;
 
-  rgba8888_copy_rgb565(&dp_new);
+  rgba8888_copy_rgb565(&bb_new);
 }
 
-void display_copy_mono4(const dma2d_params_t *dp) {
+void display_copy_mono4(const gl_bitblt_t *bb) {
   display_fb_info_t fb = display_get_frame_buffer();
 
-  dma2d_params_t dp_new = *dp;
-  dp_new.dst_row = (uint8_t *)fb.ptr + (fb.stride * dp_new.dst_y);
-  dp_new.dst_stride = fb.stride;
+  gl_bitblt_t bb_new = *bb;
+  bb_new.dst_row = (uint8_t *)fb.ptr + (fb.stride * bb_new.dst_y);
+  bb_new.dst_stride = fb.stride;
 
-  rgba8888_copy_mono4(&dp_new);
+  rgba8888_copy_mono4(&bb_new);
 }

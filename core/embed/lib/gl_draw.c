@@ -89,7 +89,7 @@ static inline gl_clip_t gl_clip(gl_rect_t dst, const gl_bitmap_t* bitmap) {
 }
 
 void gl_clear(void) {
-  dma2d_params_t dp = {
+  gl_bitblt_t bb = {
       // Destination bitmap
       .height = DISPLAY_RESX,
       .width = DISPLAY_RESY,
@@ -103,7 +103,7 @@ void gl_clear(void) {
       .src_alpha = 255,
   };
 
-  display_fill(&dp);
+  display_fill(&bb);
 }
 
 void gl_draw_bar(gl_rect_t rect, gl_color_t color) {
@@ -113,7 +113,7 @@ void gl_draw_bar(gl_rect_t rect, gl_color_t color) {
     return;
   }
 
-  dma2d_params_t dp = {
+  gl_bitblt_t bb = {
       // Destination bitmap
       .height = clip.height,
       .width = clip.width,
@@ -127,7 +127,7 @@ void gl_draw_bar(gl_rect_t rect, gl_color_t color) {
       .src_alpha = 255,
   };
 
-  display_fill(&dp);
+  display_fill(&bb);
 }
 
 void gl_draw_bitmap(gl_rect_t rect, const gl_bitmap_t* bitmap) {
@@ -137,7 +137,7 @@ void gl_draw_bitmap(gl_rect_t rect, const gl_bitmap_t* bitmap) {
     return;
   }
 
-  dma2d_params_t dp = {
+  gl_bitblt_t bb = {
       // Destination bitmap
       .height = clip.height,
       .width = clip.width,
@@ -158,12 +158,12 @@ void gl_draw_bitmap(gl_rect_t rect, const gl_bitmap_t* bitmap) {
 
 #if TREZOR_FONT_BPP == 1
   if (bitmap->format == GL_FORMAT_MONO1P) {
-    display_copy_mono1p(&dp);
+    display_copy_mono1p(&bb);
   }
 #endif
 #if TREZOR_FONT_BPP == 4
   if (bitmap->format == GL_FORMAT_MONO4) {
-    display_copy_mono4(&dp);
+    display_copy_mono4(&bb);
   }
 #endif
 }

@@ -24,10 +24,10 @@
 #include TREZOR_BOARD
 #include STM32_HAL_H
 
-#include "xdisplay.h"
 #include "display_fb.h"
 #include "display_io.h"
 #include "display_panel.h"
+#include "xdisplay.h"
 
 #include "irq.h"
 #include "supervise.h"

@@ -94,7 +94,7 @@ def configure(
     defines += ["USE_DMA2D", "FRAMEBUFFER", "FRAMEBUFFER32BIT"]
     sources += [
         "embed/trezorhal/stm32u5/dma2d.c",
-        "embed/trezorhal/stm32u5/dma2d_gl.c",
+        "embed/trezorhal/stm32u5/dma2d_bitblt.c",
     ]
     features_available.append("dma2d")
     features_available.append("framebuffer")

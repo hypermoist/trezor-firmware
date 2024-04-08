@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GL_DMA2D_H
-#define GL_DMA2D_H
+#ifndef GL_BITBLT_H
+#define GL_BITBLT_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -46,23 +46,23 @@ typedef struct {
   gl_color_t src_bg;
   uint8_t src_alpha;
 
-} dma2d_params_t;
+} gl_bitblt_t;
 
-bool rgb565_fill(const dma2d_params_t* dp);
-bool rgb565_copy_mono4(const dma2d_params_t* dp);
-bool rgb565_copy_rgb565(const dma2d_params_t* dp);
-bool rgb565_blend_mono4(const dma2d_params_t* dp);
+void gl_rgb565_fill(const gl_bitblt_t* bb);
+void gl_rgb565_copy_mono4(const gl_bitblt_t* bb);
+void gl_rgb565_copy_rgb565(const gl_bitblt_t* bb);
+void gl_rgb565_blend_mono4(const gl_bitblt_t* bb);
 
-bool rgba8888_fill(const dma2d_params_t* dp);
-bool rgba8888_copy_mono4(const dma2d_params_t* dp);
-bool rgba8888_copy_rgb565(const dma2d_params_t* dp);
-bool rgba8888_copy_rgba8888(const dma2d_params_t* dp);
-bool rgba8888_blend_mono4(const dma2d_params_t* dp);
+void gl_rgba8888_fill(const gl_bitblt_t* bb);
+void gl_rgba8888_copy_mono4(const gl_bitblt_t* bb);
+void gl_rgba8888_copy_rgb565(const gl_bitblt_t* bb);
+void gl_rgba8888_copy_rgba8888(const gl_bitblt_t* bb);
+void gl_rgba8888_blend_mono4(const gl_bitblt_t* bb);
 
-bool mono8_fill(const dma2d_params_t* dp);
-bool mono8_copy_mono1p(const dma2d_params_t* dp);
-bool mono8_copy_mono4(const dma2d_params_t* dp);
-bool mono8_blend_mono1p(const dma2d_params_t* dp);
-bool mono8_blend_mono4(const dma2d_params_t* dp);
+void gl_mono8_fill(const gl_bitblt_t* bb);
+void gl_mono8_copy_mono1p(const gl_bitblt_t* bb);
+void gl_mono8_copy_mono4(const gl_bitblt_t* bb);
+void gl_mono8_blend_mono1p(const gl_bitblt_t* bb);
+void gl_mono8_blend_mono4(const gl_bitblt_t* bb);
 
-#endif  // GL_DMA2D_H
+#endif  // GL_BITBLT_H
