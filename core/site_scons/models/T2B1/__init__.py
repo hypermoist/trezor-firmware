@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Optional
 
+from .emulator import configure as emul
 from .trezor_r_v3 import configure as configure_r3
 from .trezor_r_v4 import configure as configure_r4
 from .trezor_r_v6 import configure as configure_r6
@@ -18,7 +19,9 @@ def configure_board(
 ):
     if revision is None:
         revision = 10
-    if revision == 3:
+    if revision == "emulator":
+        return emul(env, features_wanted, defines, sources, paths)
+    elif revision == 3:
         return configure_r3(env, features_wanted, defines, sources, paths)
     elif revision == 4:
         return configure_r4(env, features_wanted, defines, sources, paths)
