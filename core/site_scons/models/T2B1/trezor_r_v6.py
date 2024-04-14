@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from . import get_hw_model_as_number
-from .stm32f4_common import stm32f4_common_files
+from .. import get_hw_model_as_number
+from ..stm32f4_common import stm32f4_common_files
 
 
 def configure(
@@ -13,8 +13,8 @@ def configure(
 ) -> list[str]:
     features_available: list[str] = []
     hw_model = get_hw_model_as_number("T2B1")
-    hw_revision = 4
-    board = "trezor_r_v4.h"
+    hw_revision = 6
+    board = "trezor_r_v6.h"
     display = "vg-2864ksweg01.c"
 
     mcu = "STM32F427xx"

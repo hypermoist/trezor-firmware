@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from . import get_hw_model_as_number
-from .stm32f4_common import stm32f4_common_files
+from .. import get_hw_model_as_number
+from ..stm32f4_common import stm32f4_common_files
 
 
 def configure(
@@ -13,9 +13,9 @@ def configure(
 ) -> list[str]:
     features_available: list[str] = []
     hw_model = get_hw_model_as_number("T2B1")
-    hw_revision = 6
-    board = "trezor_r_v6.h"
-    display = "vg-2864ksweg01.c"
+    hw_revision = 3
+    board = "trezor_r_v3.h"
+    display = "ug-2828tswig01.c"
 
     mcu = "STM32F427xx"
 
@@ -41,6 +41,10 @@ def configure(
     if "input" in features_wanted:
         sources += ["embed/trezorhal/stm32f4/button.c"]
         features_available.append("button")
+
+    if "rgb_led" in features_wanted:
+        sources += ["embed/trezorhal/stm32f4/rgb_led.c"]
+        features_available.append("rgb_led")
 
     if "sbu" in features_wanted:
         sources += ["embed/trezorhal/stm32f4/sbu.c"]

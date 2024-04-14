@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from . import get_hw_model_as_number
-from .stm32f4_common import stm32f4_common_files
+from .. import get_hw_model_as_number
+from ..stm32f4_common import stm32f4_common_files
 
 
 def configure(
@@ -12,12 +12,12 @@ def configure(
     paths: list[str],
 ) -> list[str]:
     features_available: list[str] = []
-    hw_model = get_hw_model_as_number("T2B1")
-    hw_revision = 10
-    board = "trezor_r_v10.h"
-    display = "vg-2864ksweg01.c"
+    board = "stm32f429i-disc1.h"
+    display = "ltdc.c"
+    hw_model = get_hw_model_as_number("D001")
+    hw_revision = 0
 
-    mcu = "STM32F427xx"
+    mcu = "STM32F429xx"
 
     stm32f4_common_files(env, defines, sources, paths)
 
@@ -34,25 +34,29 @@ def configure(
     defines += [f"HW_MODEL={hw_model}"]
     defines += [f"HW_REVISION={hw_revision}"]
     sources += [
-        "embed/models/model_T2B1_layout.c",
+        "embed/models/model_D001_layout.c",
     ]
     sources += [f"embed/trezorhal/stm32f4/displays/{display}"]
-
-    sources += ["embed/trezorhal/stm32f4/i2c.c"]
+    sources += ["embed/trezorhal/stm32f4/displays/ili9341_spi.c"]
+    sources += ["embed/trezorhal/stm32f4/dma2d.c"]
+    sources += [
+        "vendor/micropython/lib/stm32lib/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma2d.c"
+    ]
+    sources += ["embed/trezorhal/stm32f4/sdram.c"]
+    sources += [
+        "vendor/micropython/lib/stm32lib/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c"
+    ]
+    defines += ["USE_DMA2D"]
+    defines += ["FRAMEBUFFER"]
+    features_available.append("dma2d")
+    features_available.append("framebuffer")
 
     if "input" in features_wanted:
-        sources += ["embed/trezorhal/stm32f4/button.c"]
-        features_available.append("button")
+        sources += ["embed/trezorhal/stm32f4/i2c.c"]
+        sources += ["embed/trezorhal/stm32f4/touch/stmpe811.c"]
+        sources += ["embed/lib/touch.c"]
+        features_available.append("touch")
 
-    if "sbu" in features_wanted:
-        sources += ["embed/trezorhal/stm32f4/sbu.c"]
-        features_available.append("sbu")
-
-    if "consumption_mask" in features_wanted:
-        sources += ["embed/trezorhal/stm32f4/consumption_mask.c"]
-        sources += [
-            "vendor/micropython/lib/stm32lib/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c"
-        ]
     if "usb" in features_wanted:
         sources += [
             "embed/trezorhal/stm32f4/usb.c",
@@ -63,14 +67,5 @@ def configure(
             "vendor/micropython/lib/stm32lib/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c",
         ]
         features_available.append("usb")
-
-    if "optiga" in features_wanted:
-        defines += ["USE_OPTIGA=1"]
-        sources += ["embed/trezorhal/stm32f4/optiga_hal.c"]
-        sources += ["embed/trezorhal/optiga/optiga.c"]
-        sources += ["embed/trezorhal/optiga/optiga_commands.c"]
-        sources += ["embed/trezorhal/optiga/optiga_transport.c"]
-        sources += ["vendor/trezor-crypto/hash_to_curve.c"]
-        features_available.append("optiga")
 
     return features_available
