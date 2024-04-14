@@ -111,7 +111,6 @@ int main(void) {
   rdi_start();
 #endif
 
-
   // reinitialize HAL for Trezor One
 #if defined TREZOR_MODEL_1
   HAL_Init();
