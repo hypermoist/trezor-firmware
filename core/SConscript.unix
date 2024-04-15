@@ -483,6 +483,8 @@ if ARGUMENTS.get('TREZOR_MEMPERF', '0') == '1':
         ('MICROPY_TREZOR_MEMPERF', '\(1\)')
     ]
 
+env.Replace(
+    TREZOR_MODEL=TREZOR_MODEL, )
 
 ALLPATHS=['.',
          'embed/rust',
