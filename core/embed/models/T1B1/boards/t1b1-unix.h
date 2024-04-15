@@ -16,7 +16,7 @@
 
 #define ORIENTATION_NS 1
 
-#define BACKGROUND_FILE "background_1.h"
+#define BACKGROUND_FILE "T1B1/background_1.h"
 #define BACKGROUND_NAME background_1_jpg
 
 #include "display-unix.h"

@@ -46,30 +46,30 @@ BINDGEN_MACROS_COMMON=-I../unix;-I../trezorhal/unix;-I../../build/unix;-I../../v
 
 ifeq ($(TREZOR_MODEL), 1)
 MCU = STM32F2
-LAYOUT_FILE = embed/models/model_T1B1.h
+LAYOUT_FILE = embed/models/T1B1/model_T1B1.h
 OPENOCD_TARGET = target/stm32f2x.cfg
 else ifeq ($(TREZOR_MODEL),$(filter $(TREZOR_MODEL),T))
 MCU = STM32F4
-LAYOUT_FILE = embed/models/model_T2T1.h
+LAYOUT_FILE = embed/models/T2T1/model_T2T1.h
 OPENOCD_TARGET = target/stm32f4x.cfg
 BINDGEN_MACROS_MODEL = -DSTM32F427;-DTREZOR_MODEL_T;-DFLASH_BIT_ACCESS=1;-DFLASH_BLOCK_WORDS=1;
 MODEL_FEATURE = model_tt
 else ifeq ($(TREZOR_MODEL),$(filter $(TREZOR_MODEL),R))
 MCU = STM32F4
-LAYOUT_FILE = embed/models/model_T2B1.h
+LAYOUT_FILE = embed/models/T2B1/model_T2B1.h
 OPENOCD_TARGET = target/stm32f4x.cfg
 BINDGEN_MACROS_MODEL =-DSTM32F427;-DTREZOR_MODEL_R;-DFLASH_BIT_ACCESS=1;-DFLASH_BLOCK_WORDS=1;
 MODEL_FEATURE = model_tr
 else ifeq ($(TREZOR_MODEL),$(filter $(TREZOR_MODEL),T3T1))
 MCU = STM32U5
 OPENOCD_TARGET = target/stm32u5x.cfg
-LAYOUT_FILE = embed/models/model_T3T1.h
+LAYOUT_FILE = embed/models/T3T1/model_T3T1.h
 else ifeq ($(TREZOR_MODEL),$(filter $(TREZOR_MODEL),DISC1))
 MCU = STM32F4
-LAYOUT_FILE = embed/models/model_D001.h
+LAYOUT_FILE = embed/models/D001/model_D001.h
 else ifeq ($(TREZOR_MODEL),$(filter $(TREZOR_MODEL),DISC2))
 MCU = STM32U5
-LAYOUT_FILE = embed/models/model_D002.h
+LAYOUT_FILE = embed/models/D002/model_D002.h
 OPENOCD_TARGET = target/stm32u5x.cfg
 else
 $(error Unknown TREZOR_MODEL: $(TREZOR_MODEL))
