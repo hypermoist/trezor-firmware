@@ -42,7 +42,7 @@ OPENOCD_INTERFACE ?= stlink
 # OpenOCD transport default. Alternative: jtag
 OPENOCD_TRANSPORT ?= hla_swd
 
-BINDGEN_MACROS_COMMON=-I../unix;-I../trezorhal/unix;-I../../build/unix;-I../../vendor/micropython/ports/unix;-I../../../crypto;-I../../../storage;-I../../vendor/micropython;-I../../vendor/micropython/lib/uzlib;-I../lib;-I../trezorhal;-I../trezorhal/unix;-I../models;-DTREZOR_EMULATOR;-DTREZOR_BOARD="boards/board-unix.h";
+BINDGEN_MACROS_COMMON=-I../unix;-I../trezorhal/unix;-I../../build/unix;-I../../vendor/micropython/ports/unix;-I../../../crypto;-I../../../storage;-I../../vendor/micropython;-I../../vendor/micropython/lib/uzlib;-I../lib;-I../trezorhal;-I../trezorhal/unix;-I../models;-DTREZOR_EMULATOR;
 
 ifeq ($(TREZOR_MODEL), 1)
 MCU = STM32F2
@@ -52,13 +52,13 @@ else ifeq ($(TREZOR_MODEL),$(filter $(TREZOR_MODEL),T))
 MCU = STM32F4
 LAYOUT_FILE = embed/models/T2T1/model_T2T1.h
 OPENOCD_TARGET = target/stm32f4x.cfg
-BINDGEN_MACROS_MODEL = -DSTM32F427;-DTREZOR_MODEL_T;-DFLASH_BIT_ACCESS=1;-DFLASH_BLOCK_WORDS=1;
+BINDGEN_MACROS_MODEL = -DSTM32F427;-DTREZOR_MODEL_T;-DFLASH_BIT_ACCESS=1;-DFLASH_BLOCK_WORDS=1;-DTREZOR_BOARD="T2T1/boards/t2t1-unix.h";
 MODEL_FEATURE = model_tt
 else ifeq ($(TREZOR_MODEL),$(filter $(TREZOR_MODEL),R))
 MCU = STM32F4
 LAYOUT_FILE = embed/models/T2B1/model_T2B1.h
 OPENOCD_TARGET = target/stm32f4x.cfg
-BINDGEN_MACROS_MODEL =-DSTM32F427;-DTREZOR_MODEL_R;-DFLASH_BIT_ACCESS=1;-DFLASH_BLOCK_WORDS=1;
+BINDGEN_MACROS_MODEL =-DSTM32F427;-DTREZOR_MODEL_R;-DFLASH_BIT_ACCESS=1;-DFLASH_BLOCK_WORDS=1;-DTREZOR_BOARD="T2B1/boards/t2b1-unix.h";
 MODEL_FEATURE = model_tr
 else ifeq ($(TREZOR_MODEL),$(filter $(TREZOR_MODEL),T3T1))
 MCU = STM32U5
