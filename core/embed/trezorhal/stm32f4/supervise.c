@@ -28,13 +28,13 @@ __attribute__((noreturn)) static void _reboot_to_bootloader(
 #endif
 
 void svc_reboot_to_bootloader(void) {
+  ensure_compatible_settings();
   boot_command_t boot_command = bootargs_get_command();
   if (is_mode_unprivileged() && !is_mode_handler()) {
     register uint32_t r0 __asm__("r0") = boot_command;
     __asm__ __volatile__("svc %0" ::"i"(SVC_REBOOT_TO_BOOTLOADER), "r"(r0)
                          : "memory");
   } else {
-    ensure_compatible_settings();
     _reboot_to_bootloader(boot_command);
   }
 }
@@ -62,13 +62,11 @@ void SVC_C_Handler(uint32_t *stack) {
         ;
       break;
     case SVC_REBOOT_TO_BOOTLOADER:
-      ensure_compatible_settings();
-
       __asm__ volatile("msr control, %0" ::"r"(0x0));
       __asm__ volatile("isb");
 
       __asm__ volatile(
-          "mov r0, %[boot_command]" ::[boot_command] "r"(stack[0]));
+          "mov r0, %[boot_command]" ::[boot_command] "r"(&stack[0]));
 
       // See stack layout in
       // https://developer.arm.com/documentation/ka004005/latest We are changing
