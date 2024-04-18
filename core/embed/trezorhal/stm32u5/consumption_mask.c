@@ -48,21 +48,21 @@ void consumption_mask_init(void) {
   GPIO_InitTypeDef GPIO_InitStructure = {0};
   GPIO_InitStructure.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStructure.Pull = GPIO_PULLUP;
-  GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStructure.Alternate = GPIO_AF3_TIM8;
+  GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStructure.Alternate = GPIO_AF1_TIM2;
   GPIO_InitStructure.Pin = GPIO_PIN_5;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-  __HAL_RCC_TIM8_CLK_ENABLE();
-  TIM_HandleTypeDef TIM8_Handle = {0};
-  TIM8_Handle.State = HAL_TIM_STATE_RESET;
-  TIM8_Handle.Instance = TIM8;
-  TIM8_Handle.Init.Period = TIMER_PERIOD;
-  TIM8_Handle.Init.Prescaler = 0;
-  TIM8_Handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  TIM8_Handle.Init.CounterMode = TIM_COUNTERMODE_UP;
-  TIM8_Handle.Init.RepetitionCounter = 0;
-  HAL_TIM_PWM_Init(&TIM8_Handle);
+  __HAL_RCC_TIM2_CLK_ENABLE();
+  TIM_HandleTypeDef TIM2_Handle = {0};
+  TIM2_Handle.State = HAL_TIM_STATE_RESET;
+  TIM2_Handle.Instance = TIM2;
+  TIM2_Handle.Init.Period = TIMER_PERIOD;
+  TIM2_Handle.Init.Prescaler = 0;
+  TIM2_Handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  TIM2_Handle.Init.CounterMode = TIM_COUNTERMODE_UP;
+  TIM2_Handle.Init.RepetitionCounter = 0;
+  HAL_TIM_PWM_Init(&TIM2_Handle);
 
   TIM_OC_InitTypeDef TIM_OC_InitStructure = {0};
   TIM_OC_InitStructure.Pulse = 0;
@@ -72,7 +72,7 @@ void consumption_mask_init(void) {
   TIM_OC_InitStructure.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   TIM_OC_InitStructure.OCIdleState = TIM_OCIDLESTATE_SET;
   TIM_OC_InitStructure.OCNIdleState = TIM_OCNIDLESTATE_SET;
-  HAL_TIM_PWM_ConfigChannel(&TIM8_Handle, &TIM_OC_InitStructure, TIM_CHANNEL_1);
+  HAL_TIM_PWM_ConfigChannel(&TIM2_Handle, &TIM_OC_InitStructure, TIM_CHANNEL_1);
 
   __HAL_RCC_GPDMA1_CLK_ENABLE();
   DMA_HandleTypeDef dma_handle = {0};
@@ -95,7 +95,7 @@ void consumption_mask_init(void) {
 
   /* Set node configuration ################################################*/
   pNodeConfig.NodeType = DMA_GPDMA_LINEAR_NODE;
-  pNodeConfig.Init.Request = GPDMA1_REQUEST_TIM8_UP;
+  pNodeConfig.Init.Request = GPDMA1_REQUEST_TIM2_UP;
   pNodeConfig.Init.BlkHWRequest = DMA_BREQ_SINGLE_BURST;
   pNodeConfig.Init.Direction = DMA_MEMORY_TO_PERIPH;
   pNodeConfig.Init.SrcInc = DMA_SINC_INCREMENTED;
@@ -116,7 +116,7 @@ void consumption_mask_init(void) {
   pNodeConfig.DataHandlingConfig.DataExchange = DMA_EXCHANGE_NONE;
   pNodeConfig.DataHandlingConfig.DataAlignment = DMA_DATA_RIGHTALIGN_ZEROPADDED;
   pNodeConfig.SrcAddress = (uint32_t)pwm_data;
-  pNodeConfig.DstAddress = (uint32_t)&TIM8->CCR1;
+  pNodeConfig.DstAddress = (uint32_t)&TIM2->CCR1;
   pNodeConfig.DataSize = SAMPLES * sizeof(uint32_t);
   pNodeConfig.DestSecure = DMA_CHANNEL_DEST_SEC;
   pNodeConfig.SrcSecure = DMA_CHANNEL_SRC_SEC;
@@ -133,16 +133,15 @@ void consumption_mask_init(void) {
   /* Link created queue to DMA channel #######################################*/
   HAL_DMAEx_List_LinkQ(&dma_handle, &Queue);
 
-  TIM4->CR2 |= TIM_CR2_MMS_1;    // update event as TRGO
-  TIM8->CR2 |= TIM_CR2_CCPC;     // preloading CCR register
-  TIM8->CR2 |= TIM_CR2_CCUS;     // preload when TRGI
-  TIM8->DIER |= TIM_DMA_UPDATE;  // allow DMA request from update event
-  TIM8->CCR1 = 0;
+  TIM2->CR2 |= TIM_CR2_CCPC;     // preloading CCR register
+  TIM2->CR2 |= TIM_CR2_CCUS;     // preload when TRGI
+  TIM2->DIER |= TIM_DMA_UPDATE;  // allow DMA request from update event
+  TIM2->CCR1 = 0;
 
   HAL_Delay(1);
 
-  HAL_TIM_Base_Start(&TIM8_Handle);
-  HAL_TIM_PWM_Start(&TIM8_Handle, TIM_CHANNEL_1);
+  HAL_TIM_Base_Start(&TIM2_Handle);
+  HAL_TIM_PWM_Start(&TIM2_Handle, TIM_CHANNEL_1);
 
   HAL_DMAEx_List_Start(&dma_handle);
 }
