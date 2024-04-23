@@ -369,7 +369,10 @@ static void _librust_qstrs(void) {
   MP_QSTR_recovery__title_dry_run;
   MP_QSTR_recovery__title_recover;
   MP_QSTR_recovery__title_remaining_shares;
+  MP_QSTR_recovery__title_unlock_repeated_backup;
   MP_QSTR_recovery__type_word_x_of_y_template;
+  MP_QSTR_recovery__unlock_repeated_backup;
+  MP_QSTR_recovery__unlock_repeated_backup_verb;
   MP_QSTR_recovery__wallet_recovered;
   MP_QSTR_recovery__wanna_cancel_dry_run;
   MP_QSTR_recovery__wanna_cancel_recovery;

@@ -457,6 +457,11 @@ if TYPE_CHECKING:
         ScrambledWords = 0
         Matrix = 1
 
+    class RecoveryKind(IntEnum):
+        NormalRecovery = 0
+        DryRun = 1
+        UnlockRepeatedBackup = 2
+
     class WordRequestType(IntEnum):
         Plain = 0
         Matrix9 = 1

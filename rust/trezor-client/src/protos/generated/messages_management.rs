@@ -7682,8 +7682,8 @@ pub struct RecoveryDevice {
     pub type_: ::std::option::Option<::protobuf::EnumOrUnknown<recovery_device::RecoveryDeviceType>>,
     // @@protoc_insertion_point(field:hw.trezor.messages.management.RecoveryDevice.u2f_counter)
     pub u2f_counter: ::std::option::Option<u32>,
-    // @@protoc_insertion_point(field:hw.trezor.messages.management.RecoveryDevice.dry_run)
-    pub dry_run: ::std::option::Option<bool>,
+    // @@protoc_insertion_point(field:hw.trezor.messages.management.RecoveryDevice.kind)
+    pub kind: ::std::option::Option<::protobuf::EnumOrUnknown<recovery_device::RecoveryKind>>,
     // special fields
     // @@protoc_insertion_point(special_field:hw.trezor.messages.management.RecoveryDevice.special_fields)
     pub special_fields: ::protobuf::SpecialFields,
@@ -7889,23 +7889,26 @@ impl RecoveryDevice {
         self.u2f_counter = ::std::option::Option::Some(v);
     }
 
-    // optional bool dry_run = 10;
+    // optional .hw.trezor.messages.management.RecoveryDevice.RecoveryKind kind = 10;
 
-    pub fn dry_run(&self) -> bool {
-        self.dry_run.unwrap_or(false)
+    pub fn kind(&self) -> recovery_device::RecoveryKind {
+        match self.kind {
+            Some(e) => e.enum_value_or(recovery_device::RecoveryKind::RecoveryKind_NormalRecovery),
+            None => recovery_device::RecoveryKind::RecoveryKind_NormalRecovery,
+        }
     }
 
-    pub fn clear_dry_run(&mut self) {
-        self.dry_run = ::std::option::Option::None;
+    pub fn clear_kind(&mut self) {
+        self.kind = ::std::option::Option::None;
     }
 
-    pub fn has_dry_run(&self) -> bool {
-        self.dry_run.is_some()
+    pub fn has_kind(&self) -> bool {
+        self.kind.is_some()
     }
 
     // Param is passed by value, moved
-    pub fn set_dry_run(&mut self, v: bool) {
-        self.dry_run = ::std::option::Option::Some(v);
+    pub fn set_kind(&mut self, v: recovery_device::RecoveryKind) {
+        self.kind = ::std::option::Option::Some(::protobuf::EnumOrUnknown::new(v));
     }
 
     fn generated_message_descriptor_data() -> ::protobuf::reflect::GeneratedMessageDescriptorData {
@@ -7952,9 +7955,9 @@ impl RecoveryDevice {
             |m: &mut RecoveryDevice| { &mut m.u2f_counter },
         ));
         fields.push(::protobuf::reflect::rt::v2::make_option_accessor::<_, _>(
-            "dry_run",
-            |m: &RecoveryDevice| { &m.dry_run },
-            |m: &mut RecoveryDevice| { &mut m.dry_run },
+            "kind",
+            |m: &RecoveryDevice| { &m.kind },
+            |m: &mut RecoveryDevice| { &mut m.kind },
         ));
         ::protobuf::reflect::GeneratedMessageDescriptorData::new_2::<RecoveryDevice>(
             "RecoveryDevice",
@@ -7999,7 +8002,7 @@ impl ::protobuf::Message for RecoveryDevice {
                     self.u2f_counter = ::std::option::Option::Some(is.read_uint32()?);
                 },
                 80 => {
-                    self.dry_run = ::std::option::Option::Some(is.read_bool()?);
+                    self.kind = ::std::option::Option::Some(is.read_enum_or_unknown()?);
                 },
                 tag => {
                     ::protobuf::rt::read_unknown_or_skip_group(tag, is, self.special_fields.mut_unknown_fields())?;
@@ -8037,8 +8040,8 @@ impl ::protobuf::Message for RecoveryDevice {
         if let Some(v) = self.u2f_counter {
             my_size += ::protobuf::rt::uint32_size(9, v);
         }
-        if let Some(v) = self.dry_run {
-            my_size += 1 + 1;
+        if let Some(v) = self.kind {
+            my_size += ::protobuf::rt::int32_size(10, v.value());
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.special_fields.unknown_fields());
         self.special_fields.cached_size().set(my_size as u32);
@@ -8070,8 +8073,8 @@ impl ::protobuf::Message for RecoveryDevice {
         if let Some(v) = self.u2f_counter {
             os.write_uint32(9, v)?;
         }
-        if let Some(v) = self.dry_run {
-            os.write_bool(10, v)?;
+        if let Some(v) = self.kind {
+            os.write_enum(10, ::protobuf::EnumOrUnknown::value(&v))?;
         }
         os.write_unknown_fields(self.special_fields.unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -8098,7 +8101,7 @@ impl ::protobuf::Message for RecoveryDevice {
         self.enforce_wordlist = ::std::option::Option::None;
         self.type_ = ::std::option::Option::None;
         self.u2f_counter = ::std::option::Option::None;
-        self.dry_run = ::std::option::Option::None;
+        self.kind = ::std::option::Option::None;
         self.special_fields.clear();
     }
 
@@ -8112,7 +8115,7 @@ impl ::protobuf::Message for RecoveryDevice {
             enforce_wordlist: ::std::option::Option::None,
             type_: ::std::option::Option::None,
             u2f_counter: ::std::option::Option::None,
-            dry_run: ::std::option::Option::None,
+            kind: ::std::option::Option::None,
             special_fields: ::protobuf::SpecialFields::new(),
         };
         &instance
@@ -8197,6 +8200,73 @@ pub mod recovery_device {
     impl RecoveryDeviceType {
         pub(in super) fn generated_enum_descriptor_data() -> ::protobuf::reflect::GeneratedEnumDescriptorData {
             ::protobuf::reflect::GeneratedEnumDescriptorData::new::<RecoveryDeviceType>("RecoveryDevice.RecoveryDeviceType")
+        }
+    }
+
+    #[derive(Clone,Copy,PartialEq,Eq,Debug,Hash)]
+    // @@protoc_insertion_point(enum:hw.trezor.messages.management.RecoveryDevice.RecoveryKind)
+    pub enum RecoveryKind {
+        // @@protoc_insertion_point(enum_value:hw.trezor.messages.management.RecoveryDevice.RecoveryKind.RecoveryKind_NormalRecovery)
+        RecoveryKind_NormalRecovery = 0,
+        // @@protoc_insertion_point(enum_value:hw.trezor.messages.management.RecoveryDevice.RecoveryKind.RecoveryKind_DryRun)
+        RecoveryKind_DryRun = 1,
+        // @@protoc_insertion_point(enum_value:hw.trezor.messages.management.RecoveryDevice.RecoveryKind.RecoveryKind_UnlockRepeatedBackup)
+        RecoveryKind_UnlockRepeatedBackup = 2,
+    }
+
+    impl ::protobuf::Enum for RecoveryKind {
+        const NAME: &'static str = "RecoveryKind";
+
+        fn value(&self) -> i32 {
+            *self as i32
+        }
+
+        fn from_i32(value: i32) -> ::std::option::Option<RecoveryKind> {
+            match value {
+                0 => ::std::option::Option::Some(RecoveryKind::RecoveryKind_NormalRecovery),
+                1 => ::std::option::Option::Some(RecoveryKind::RecoveryKind_DryRun),
+                2 => ::std::option::Option::Some(RecoveryKind::RecoveryKind_UnlockRepeatedBackup),
+                _ => ::std::option::Option::None
+            }
+        }
+
+        fn from_str(str: &str) -> ::std::option::Option<RecoveryKind> {
+            match str {
+                "RecoveryKind_NormalRecovery" => ::std::option::Option::Some(RecoveryKind::RecoveryKind_NormalRecovery),
+                "RecoveryKind_DryRun" => ::std::option::Option::Some(RecoveryKind::RecoveryKind_DryRun),
+                "RecoveryKind_UnlockRepeatedBackup" => ::std::option::Option::Some(RecoveryKind::RecoveryKind_UnlockRepeatedBackup),
+                _ => ::std::option::Option::None
+            }
+        }
+
+        const VALUES: &'static [RecoveryKind] = &[
+            RecoveryKind::RecoveryKind_NormalRecovery,
+            RecoveryKind::RecoveryKind_DryRun,
+            RecoveryKind::RecoveryKind_UnlockRepeatedBackup,
+        ];
+    }
+
+    impl ::protobuf::EnumFull for RecoveryKind {
+        fn enum_descriptor() -> ::protobuf::reflect::EnumDescriptor {
+            static descriptor: ::protobuf::rt::Lazy<::protobuf::reflect::EnumDescriptor> = ::protobuf::rt::Lazy::new();
+            descriptor.get(|| super::file_descriptor().enum_by_package_relative_name("RecoveryDevice.RecoveryKind").unwrap()).clone()
+        }
+
+        fn descriptor(&self) -> ::protobuf::reflect::EnumValueDescriptor {
+            let index = *self as usize;
+            Self::enum_descriptor().value_by_index(index)
+        }
+    }
+
+    impl ::std::default::Default for RecoveryKind {
+        fn default() -> Self {
+            RecoveryKind::RecoveryKind_NormalRecovery
+        }
+    }
+
+    impl RecoveryKind {
+        pub(in super) fn generated_enum_descriptor_data() -> ::protobuf::reflect::GeneratedEnumDescriptorData {
+            ::protobuf::reflect::GeneratedEnumDescriptorData::new::<RecoveryKind>("RecoveryDevice.RecoveryKind")
         }
     }
 }
@@ -10713,7 +10783,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     ackupDevice.Slip39GroupR\x06groups\x1a[\n\x0bSlip39Group\x12)\n\x10membe\
     r_threshold\x18\x01\x20\x02(\rR\x0fmemberThreshold\x12!\n\x0cmember_coun\
     t\x18\x02\x20\x02(\rR\x0bmemberCount\"\x10\n\x0eEntropyRequest\"&\n\nEnt\
-    ropyAck\x12\x18\n\x07entropy\x18\x01\x20\x02(\x0cR\x07entropy\"\xd8\x03\
+    ropyAck\x12\x18\n\x07entropy\x18\x01\x20\x02(\x0cR\x07entropy\"\x80\x05\
     \n\x0eRecoveryDevice\x12\x1d\n\nword_count\x18\x01\x20\x01(\rR\twordCoun\
     t\x123\n\x15passphrase_protection\x18\x02\x20\x01(\x08R\x14passphrasePro\
     tection\x12%\n\x0epin_protection\x18\x03\x20\x01(\x08R\rpinProtection\
@@ -10721,36 +10791,38 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x14\n\x05label\x18\x05\x20\x01(\tR\x05label\x12)\n\x10enforce_wordlist\
     \x18\x06\x20\x01(\x08R\x0fenforceWordlist\x12T\n\x04type\x18\x08\x20\x01\
     (\x0e2@.hw.trezor.messages.management.RecoveryDevice.RecoveryDeviceTypeR\
-    \x04type\x12\x1f\n\x0bu2f_counter\x18\t\x20\x01(\rR\nu2fCounter\x12\x17\
-    \n\x07dry_run\x18\n\x20\x01(\x08R\x06dryRun\"Z\n\x12RecoveryDeviceType\
-    \x12%\n!RecoveryDeviceType_ScrambledWords\x10\0\x12\x1d\n\x19RecoveryDev\
-    iceType_Matrix\x10\x01\"\xc5\x01\n\x0bWordRequest\x12N\n\x04type\x18\x01\
-    \x20\x02(\x0e2:.hw.trezor.messages.management.WordRequest.WordRequestTyp\
-    eR\x04type\"f\n\x0fWordRequestType\x12\x19\n\x15WordRequestType_Plain\
-    \x10\0\x12\x1b\n\x17WordRequestType_Matrix9\x10\x01\x12\x1b\n\x17WordReq\
-    uestType_Matrix6\x10\x02\"\x1d\n\x07WordAck\x12\x12\n\x04word\x18\x01\
-    \x20\x02(\tR\x04word\"0\n\rSetU2FCounter\x12\x1f\n\x0bu2f_counter\x18\
-    \x01\x20\x02(\rR\nu2fCounter\"\x13\n\x11GetNextU2FCounter\"1\n\x0eNextU2\
-    FCounter\x12\x1f\n\x0bu2f_counter\x18\x01\x20\x02(\rR\nu2fCounter\"\x11\
-    \n\x0fDoPreauthorized\"\x16\n\x14PreauthorizedRequest\"\x15\n\x13CancelA\
-    uthorization\"\x9a\x02\n\x12RebootToBootloader\x12o\n\x0cboot_command\
-    \x18\x01\x20\x01(\x0e2=.hw.trezor.messages.management.RebootToBootloader\
-    .BootCommand:\rSTOP_AND_WAITR\x0bbootCommand\x12'\n\x0ffirmware_header\
-    \x18\x02\x20\x01(\x0cR\x0efirmwareHeader\x123\n\x14language_data_length\
-    \x18\x03\x20\x01(\r:\x010R\x12languageDataLength\"5\n\x0bBootCommand\x12\
-    \x11\n\rSTOP_AND_WAIT\x10\0\x12\x13\n\x0fINSTALL_UPGRADE\x10\x01\"\x10\n\
-    \x08GetNonce:\x04\x88\xb2\x19\x01\"#\n\x05Nonce\x12\x14\n\x05nonce\x18\
-    \x01\x20\x02(\x0cR\x05nonce:\x04\x88\xb2\x19\x01\";\n\nUnlockPath\x12\
-    \x1b\n\taddress_n\x18\x01\x20\x03(\rR\x08addressN\x12\x10\n\x03mac\x18\
-    \x02\x20\x01(\x0cR\x03mac\"'\n\x13UnlockedPathRequest\x12\x10\n\x03mac\
-    \x18\x01\x20\x01(\x0cR\x03mac\"\x14\n\x12ShowDeviceTutorial\"\x12\n\x10U\
-    nlockBootloader*>\n\nBackupType\x12\t\n\x05Bip39\x10\0\x12\x10\n\x0cSlip\
-    39_Basic\x10\x01\x12\x13\n\x0fSlip39_Advanced\x10\x02*G\n\x10SafetyCheck\
-    Level\x12\n\n\x06Strict\x10\0\x12\x10\n\x0cPromptAlways\x10\x01\x12\x15\
-    \n\x11PromptTemporarily\x10\x02*0\n\x10HomescreenFormat\x12\x08\n\x04Toi\
-    f\x10\x01\x12\x08\n\x04Jpeg\x10\x02\x12\x08\n\x04ToiG\x10\x03BB\n#com.sa\
-    toshilabs.trezor.lib.protobufB\x17TrezorMessageManagement\x80\xa6\x1d\
-    \x01\
+    \x04type\x12\x1f\n\x0bu2f_counter\x18\t\x20\x01(\rR\nu2fCounter\x12N\n\
+    \x04kind\x18\n\x20\x01(\x0e2:.hw.trezor.messages.management.RecoveryDevi\
+    ce.RecoveryKindR\x04kind\"Z\n\x12RecoveryDeviceType\x12%\n!RecoveryDevic\
+    eType_ScrambledWords\x10\0\x12\x1d\n\x19RecoveryDeviceType_Matrix\x10\
+    \x01\"o\n\x0cRecoveryKind\x12\x1f\n\x1bRecoveryKind_NormalRecovery\x10\0\
+    \x12\x17\n\x13RecoveryKind_DryRun\x10\x01\x12%\n!RecoveryKind_UnlockRepe\
+    atedBackup\x10\x02\"\xc5\x01\n\x0bWordRequest\x12N\n\x04type\x18\x01\x20\
+    \x02(\x0e2:.hw.trezor.messages.management.WordRequest.WordRequestTypeR\
+    \x04type\"f\n\x0fWordRequestType\x12\x19\n\x15WordRequestType_Plain\x10\
+    \0\x12\x1b\n\x17WordRequestType_Matrix9\x10\x01\x12\x1b\n\x17WordRequest\
+    Type_Matrix6\x10\x02\"\x1d\n\x07WordAck\x12\x12\n\x04word\x18\x01\x20\
+    \x02(\tR\x04word\"0\n\rSetU2FCounter\x12\x1f\n\x0bu2f_counter\x18\x01\
+    \x20\x02(\rR\nu2fCounter\"\x13\n\x11GetNextU2FCounter\"1\n\x0eNextU2FCou\
+    nter\x12\x1f\n\x0bu2f_counter\x18\x01\x20\x02(\rR\nu2fCounter\"\x11\n\
+    \x0fDoPreauthorized\"\x16\n\x14PreauthorizedRequest\"\x15\n\x13CancelAut\
+    horization\"\x9a\x02\n\x12RebootToBootloader\x12o\n\x0cboot_command\x18\
+    \x01\x20\x01(\x0e2=.hw.trezor.messages.management.RebootToBootloader.Boo\
+    tCommand:\rSTOP_AND_WAITR\x0bbootCommand\x12'\n\x0ffirmware_header\x18\
+    \x02\x20\x01(\x0cR\x0efirmwareHeader\x123\n\x14language_data_length\x18\
+    \x03\x20\x01(\r:\x010R\x12languageDataLength\"5\n\x0bBootCommand\x12\x11\
+    \n\rSTOP_AND_WAIT\x10\0\x12\x13\n\x0fINSTALL_UPGRADE\x10\x01\"\x10\n\x08\
+    GetNonce:\x04\x88\xb2\x19\x01\"#\n\x05Nonce\x12\x14\n\x05nonce\x18\x01\
+    \x20\x02(\x0cR\x05nonce:\x04\x88\xb2\x19\x01\";\n\nUnlockPath\x12\x1b\n\
+    \taddress_n\x18\x01\x20\x03(\rR\x08addressN\x12\x10\n\x03mac\x18\x02\x20\
+    \x01(\x0cR\x03mac\"'\n\x13UnlockedPathRequest\x12\x10\n\x03mac\x18\x01\
+    \x20\x01(\x0cR\x03mac\"\x14\n\x12ShowDeviceTutorial\"\x12\n\x10UnlockBoo\
+    tloader*>\n\nBackupType\x12\t\n\x05Bip39\x10\0\x12\x10\n\x0cSlip39_Basic\
+    \x10\x01\x12\x13\n\x0fSlip39_Advanced\x10\x02*G\n\x10SafetyCheckLevel\
+    \x12\n\n\x06Strict\x10\0\x12\x10\n\x0cPromptAlways\x10\x01\x12\x15\n\x11\
+    PromptTemporarily\x10\x02*0\n\x10HomescreenFormat\x12\x08\n\x04Toif\x10\
+    \x01\x12\x08\n\x04Jpeg\x10\x02\x12\x08\n\x04ToiG\x10\x03BB\n#com.satoshi\
+    labs.trezor.lib.protobufB\x17TrezorMessageManagement\x80\xa6\x1d\x01\
 ";
 
 /// `FileDescriptorProto` object which was a source for this generated file
@@ -10815,13 +10887,14 @@ pub fn file_descriptor() -> &'static ::protobuf::reflect::FileDescriptor {
             messages.push(ShowDeviceTutorial::generated_message_descriptor_data());
             messages.push(UnlockBootloader::generated_message_descriptor_data());
             messages.push(backup_device::Slip39Group::generated_message_descriptor_data());
-            let mut enums = ::std::vec::Vec::with_capacity(8);
+            let mut enums = ::std::vec::Vec::with_capacity(9);
             enums.push(BackupType::generated_enum_descriptor_data());
             enums.push(SafetyCheckLevel::generated_enum_descriptor_data());
             enums.push(HomescreenFormat::generated_enum_descriptor_data());
             enums.push(features::Capability::generated_enum_descriptor_data());
             enums.push(sd_protect::SdProtectOperationType::generated_enum_descriptor_data());
             enums.push(recovery_device::RecoveryDeviceType::generated_enum_descriptor_data());
+            enums.push(recovery_device::RecoveryKind::generated_enum_descriptor_data());
             enums.push(word_request::WordRequestType::generated_enum_descriptor_data());
             enums.push(reboot_to_bootloader::BootCommand::generated_enum_descriptor_data());
             ::protobuf::reflect::GeneratedFileDescriptor::new_generated(

@@ -491,6 +491,12 @@ class RecoveryDeviceType(IntEnum):
     Matrix = 1
 
 
+class RecoveryKind(IntEnum):
+    NormalRecovery = 0
+    DryRun = 1
+    UnlockRepeatedBackup = 2
+
+
 class WordRequestType(IntEnum):
     Plain = 0
     Matrix9 = 1
@@ -3732,7 +3738,7 @@ class RecoveryDevice(protobuf.MessageType):
         6: protobuf.Field("enforce_wordlist", "bool", repeated=False, required=False, default=None),
         8: protobuf.Field("type", "RecoveryDeviceType", repeated=False, required=False, default=None),
         9: protobuf.Field("u2f_counter", "uint32", repeated=False, required=False, default=None),
-        10: protobuf.Field("dry_run", "bool", repeated=False, required=False, default=None),
+        10: protobuf.Field("kind", "RecoveryKind", repeated=False, required=False, default=None),
     }
 
     def __init__(
@@ -3746,7 +3752,7 @@ class RecoveryDevice(protobuf.MessageType):
         enforce_wordlist: Optional["bool"] = None,
         type: Optional["RecoveryDeviceType"] = None,
         u2f_counter: Optional["int"] = None,
-        dry_run: Optional["bool"] = None,
+        kind: Optional["RecoveryKind"] = None,
     ) -> None:
         self.word_count = word_count
         self.passphrase_protection = passphrase_protection
@@ -3756,7 +3762,7 @@ class RecoveryDevice(protobuf.MessageType):
         self.enforce_wordlist = enforce_wordlist
         self.type = type
         self.u2f_counter = u2f_counter
-        self.dry_run = dry_run
+        self.kind = kind
 
 
 class WordRequest(protobuf.MessageType):

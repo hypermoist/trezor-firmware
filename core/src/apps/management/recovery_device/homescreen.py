@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+import storage.cache as storage_cache
 import storage.device as storage_device
 import storage.recovery as storage_recovery
 import storage.recovery_shares as storage_recovery_shares
@@ -21,24 +22,73 @@ async def recovery_homescreen() -> None:
     if not storage_recovery.is_in_progress():
         workflow.set_default(homescreen)
         return
-
-    await recovery_process()
+    elif (
+        storage_cache.get(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
+        == b"\x01"
+    ):
+        await _continue_repeated_backup()
+    else:
+        await recovery_process()
 
 
 async def recovery_process() -> Success:
     import storage
     from trezor.enums import MessageType
 
-    wire.AVOID_RESTARTING_FOR = (MessageType.Initialize, MessageType.GetFeatures)
+    is_special_kind = (
+        storage_recovery.is_dry_run() or storage_recovery.is_unlock_repeated_backup()
+    )
+
+    wire.AVOID_RESTARTING_FOR = (
+        MessageType.Initialize,
+        MessageType.GetFeatures,
+        MessageType.EndSession,
+    )
     try:
         return await _continue_recovery_process()
     except recover.RecoveryAborted:
-        dry_run = storage_recovery.is_dry_run()
-        if dry_run:
+        if is_special_kind:
             storage_recovery.end_progress()
         else:
             storage.wipe()
         raise wire.ActionCancelled
+
+
+async def _continue_repeated_backup() -> None:
+    from trezor import workflow
+    from trezor.enums import ButtonRequestType, MessageType
+    from trezor.ui.layouts import confirm_action
+    from trezor.wire import ActionCancelled
+
+    from apps.common import mnemonic
+    from apps.homescreen import homescreen
+    from apps.management.reset_device import backup_seed
+
+    wire.AVOID_RESTARTING_FOR = (
+        MessageType.Initialize,
+        MessageType.GetFeatures,
+        MessageType.EndSession,
+    )
+
+    try:
+        await confirm_action(
+            "confirm_repeated_backup",
+            TR.recovery__title_unlock_repeated_backup,
+            description=TR.recovery__unlock_repeated_backup,
+            br_code=ButtonRequestType.ProtectCall,
+            verb=TR.recovery__unlock_repeated_backup_verb,
+        )
+
+        mnemonic_secret, backup_type = mnemonic.get()
+        if mnemonic_secret is None:
+            raise RuntimeError
+
+        await backup_seed(backup_type, mnemonic_secret)
+    except ActionCancelled:
+        workflow.set_default(homescreen)
+    finally:
+        storage_cache.delete(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
+        storage_recovery.end_progress()
 
 
 async def _continue_recovery_process() -> Success:
@@ -47,6 +97,7 @@ async def _continue_recovery_process() -> Success:
 
     # gather the current recovery state from storage
     dry_run = storage_recovery.is_dry_run()
+    unlock_repeated_backup = storage_recovery.is_unlock_repeated_backup()
     word_count, backup_type = recover.load_slip39_state()
 
     # Both word_count and backup_type are derived from the same data. Both will be
@@ -95,27 +146,25 @@ async def _continue_recovery_process() -> Success:
     assert backup_type is not None
     if dry_run:
         result = await _finish_recovery_dry_run(secret, backup_type)
+    elif unlock_repeated_backup:
+        result = await _finish_recovery_unlock_repeated_backup(secret, backup_type)
     else:
         result = await _finish_recovery(secret, backup_type)
 
     return result
 
 
-async def _finish_recovery_dry_run(secret: bytes, backup_type: BackupType) -> Success:
+def _check_secret_against_stored_secret(secret: bytes, is_slip39: bool) -> bool:
     from trezor import utils
     from trezor.crypto.hashlib import sha256
 
     from apps.common import mnemonic
-
-    if backup_type is None:
-        raise RuntimeError
 
     digest_input = sha256(secret).digest()
     stored = mnemonic.get_secret()
     digest_stored = sha256(stored).digest()
     result = utils.consteq(digest_stored, digest_input)
 
-    is_slip39 = backup_types.is_slip39_backup_type(backup_type)
     # Check that the identifier and iteration exponent match as well
     if is_slip39:
         result &= (
@@ -127,12 +176,42 @@ async def _finish_recovery_dry_run(secret: bytes, backup_type: BackupType) -> Su
             == storage_recovery.get_slip39_iteration_exponent()
         )
 
+    return result
+
+
+async def _finish_recovery_dry_run(secret: bytes, backup_type: BackupType) -> Success:
+    if backup_type is None:
+        raise RuntimeError
+
+    is_slip39 = backup_types.is_slip39_backup_type(backup_type)
+
+    result = _check_secret_against_stored_secret(secret, is_slip39)
+
     storage_recovery.end_progress()
 
     await layout.show_dry_run_result(result, is_slip39)
 
     if result:
         return Success(message="The seed is valid and matches the one in the device")
+    else:
+        raise wire.ProcessError("The seed does not match the one in the device")
+
+
+async def _finish_recovery_unlock_repeated_backup(
+    secret: bytes, backup_type: BackupType
+) -> Success:
+    import storage.cache as storage_cache
+
+    if backup_type is None:
+        raise RuntimeError
+
+    is_slip39 = backup_types.is_slip39_backup_type(backup_type)
+
+    result = _check_secret_against_stored_secret(secret, is_slip39)
+
+    if result:
+        storage_cache.set(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED, b"\x01")
+        return Success(message="Backup unlocked")
     else:
         raise wire.ProcessError("The seed does not match the one in the device")
 

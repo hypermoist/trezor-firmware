@@ -1439,7 +1439,7 @@ extern "C" fn new_select_word_count(n_args: usize, args: *const Obj, kwargs: *mu
 
         let paragraphs = Paragraphs::new(Paragraph::new(
             &theme::TEXT_DEMIBOLD,
-            TR::recovery__select_num_of_words,
+            TR::recovery__num_of_words,
         ));
 
         let obj = LayoutObj::new(Frame::left_aligned(

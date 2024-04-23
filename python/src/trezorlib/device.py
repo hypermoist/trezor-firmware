@@ -159,6 +159,7 @@ def recover(
     input_callback: Optional[Callable] = None,
     type: messages.RecoveryDeviceType = messages.RecoveryDeviceType.ScrambledWords,
     dry_run: bool = False,
+    unlock_repeated_backup: bool = False,
     u2f_counter: Optional[int] = None,
 ) -> "MessageType":
     if language is not None:
@@ -173,7 +174,7 @@ def recover(
     if word_count not in (12, 18, 24):
         raise ValueError("Invalid word count. Use 12/18/24")
 
-    if client.features.initialized and not dry_run:
+    if client.features.initialized and not (dry_run or unlock_repeated_backup):
         raise RuntimeError(
             "Device already initialized. Call device.wipe() and try again."
         )
@@ -181,11 +182,22 @@ def recover(
     if u2f_counter is None:
         u2f_counter = int(time.time())
 
+    if not dry_run and not unlock_repeated_backup:
+        kind = messages.RecoveryKind.NormalRecovery
+    elif dry_run and not unlock_repeated_backup:
+        kind = messages.RecoveryKind.DryRun
+    elif unlock_repeated_backup and not dry_run:
+        kind = messages.RecoveryKind.UnlockRepeatedBackup
+    else:
+        raise RuntimeError(
+            "Only one of dry_run and unlock_repeated_backup can be requested at the same time."
+        )
+
     msg = messages.RecoveryDevice(
-        word_count=word_count, enforce_wordlist=True, type=type, dry_run=dry_run
+        word_count=word_count, enforce_wordlist=True, type=type, kind=kind
     )
 
-    if not dry_run:
+    if kind == messages.RecoveryKind.NormalRecovery:
         # set additional parameters
         msg.passphrase_protection = passphrase_protection
         msg.pin_protection = pin_protection

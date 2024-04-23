@@ -34,7 +34,7 @@ APP_COMMON_REQUEST_PIN_LAST_UNLOCK = const(3 | _SESSIONLESS_FLAG)
 APP_COMMON_BUSY_DEADLINE_MS = const(4 | _SESSIONLESS_FLAG)
 APP_MISC_COSI_NONCE = const(5 | _SESSIONLESS_FLAG)
 APP_MISC_COSI_COMMITMENT = const(6 | _SESSIONLESS_FLAG)
-
+APP_RECOVERY_REPEATED_BACKUP_UNLOCKED = const(7 | _SESSIONLESS_FLAG)
 
 # === Homescreen storage ===
 # This does not logically belong to the "cache" functionality, but the cache module is
@@ -145,6 +145,7 @@ class SessionlessCache(DataCache):
             8,  # APP_COMMON_BUSY_DEADLINE_MS
             32,  # APP_MISC_COSI_NONCE
             32,  # APP_MISC_COSI_COMMITMENT
+            1,  # APP_RECOVERY_REPEATED_BACKUP_UNLOCKED
         )
         super().__init__()
 

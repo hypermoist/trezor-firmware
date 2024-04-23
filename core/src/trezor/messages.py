@@ -53,6 +53,7 @@ if TYPE_CHECKING:
     from trezor.enums import OutputScriptType  # noqa: F401
     from trezor.enums import PinMatrixRequestType  # noqa: F401
     from trezor.enums import RecoveryDeviceType  # noqa: F401
+    from trezor.enums import RecoveryKind  # noqa: F401
     from trezor.enums import RequestType  # noqa: F401
     from trezor.enums import SafetyCheckLevel  # noqa: F401
     from trezor.enums import SdProtectOperationType  # noqa: F401
@@ -2571,7 +2572,7 @@ if TYPE_CHECKING:
         enforce_wordlist: "bool | None"
         type: "RecoveryDeviceType | None"
         u2f_counter: "int | None"
-        dry_run: "bool | None"
+        kind: "RecoveryKind | None"
 
         def __init__(
             self,
@@ -2583,7 +2584,7 @@ if TYPE_CHECKING:
             enforce_wordlist: "bool | None" = None,
             type: "RecoveryDeviceType | None" = None,
             u2f_counter: "int | None" = None,
-            dry_run: "bool | None" = None,
+            kind: "RecoveryKind | None" = None,
         ) -> None:
             pass
 

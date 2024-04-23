@@ -151,6 +151,7 @@ def load(
     "-t", "--type", "rec_type", type=ChoiceType(RECOVERY_TYPE), default="scrambled"
 )
 @click.option("-d", "--dry-run", is_flag=True)
+@click.option("-b", "--unlock-repeated-backup", is_flag=True)
 @with_client
 def recover(
     client: "TrezorClient",
@@ -162,6 +163,7 @@ def recover(
     u2f_counter: int,
     rec_type: messages.RecoveryDeviceType,
     dry_run: bool,
+    unlock_repeated_backup: bool,
 ) -> "MessageType":
     """Start safe recovery workflow."""
     if rec_type == messages.RecoveryDeviceType.ScrambledWords:
@@ -180,6 +182,7 @@ def recover(
         input_callback=input_callback,
         type=rec_type,
         dry_run=dry_run,
+        unlock_repeated_backup=unlock_repeated_backup,
     )
 
 
