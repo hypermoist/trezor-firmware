@@ -30,6 +30,15 @@ ALLOW_WHILE_LOCKED = (
 )
 
 
+ALLOW_WHILE_REPEATED_BACKUP_UNLOCKED = (
+    MessageType.Initialize,
+    MessageType.GetFeatures,
+    MessageType.EndSession,
+    MessageType.BackupDevice,
+    MessageType.WipeDevice,
+)
+
+
 # Set of workflow tasks.  Multiple workflows can be running at the same time.
 tasks: set[loop.spawn] = set()
 

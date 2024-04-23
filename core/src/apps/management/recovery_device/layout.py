@@ -148,13 +148,14 @@ async def homescreen_dialog(
     show_info: bool = False,
 ) -> None:
     import storage.recovery as storage_recovery
+    from trezor.enums import RecoveryKind
     from trezor.ui.layouts.recovery import continue_recovery
     from trezor.wire import ActionCancelled
 
     from .recover import RecoveryAborted
 
     while True:
-        dry_run = storage_recovery.is_dry_run()
+        dry_run = storage_recovery.get_kind() == RecoveryKind.DryRun
         if await continue_recovery(
             button_label, text, subtext, info_func, dry_run, show_info
         ):
