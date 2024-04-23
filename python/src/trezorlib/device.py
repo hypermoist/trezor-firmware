@@ -158,8 +158,10 @@ def recover(
     language: Optional[str] = None,
     input_callback: Optional[Callable] = None,
     type: messages.RecoveryDeviceType = messages.RecoveryDeviceType.ScrambledWords,
-    dry_run: bool = False,
+    dry_run: Optional[bool] = None,
     u2f_counter: Optional[int] = None,
+    *,
+    recovery_kind: Optional[messages.RecoveryKind] = None,
 ) -> "MessageType":
     if language is not None:
         warnings.warn(
@@ -167,13 +169,29 @@ def recover(
             DeprecationWarning,
         )
 
+    if dry_run is not None:
+        warnings.warn(
+            "Use recovery_kind=RecoveryKind.DryRun instead!",
+            DeprecationWarning,
+        )
+
+        if recovery_kind is not None:
+            raise ValueError(
+                "Cannot use both dry_run and recovery_kind simultaneously."
+            )
+
     if client.features.model == "1" and input_callback is None:
         raise RuntimeError("Input callback required for Trezor One")
 
     if word_count not in (12, 18, 24):
         raise ValueError("Invalid word count. Use 12/18/24")
 
-    if client.features.initialized and not dry_run:
+    is_special_recovery = dry_run or recovery_kind in (
+        messages.RecoveryKind.DryRun,
+        messages.RecoveryKind.UnlockRepeatedBackup,
+    )
+
+    if client.features.initialized and not is_special_recovery:
         raise RuntimeError(
             "Device already initialized. Call device.wipe() and try again."
         )
@@ -182,10 +200,10 @@ def recover(
         u2f_counter = int(time.time())
 
     msg = messages.RecoveryDevice(
-        word_count=word_count, enforce_wordlist=True, type=type, dry_run=dry_run
+        word_count=word_count, enforce_wordlist=True, type=type, kind=recovery_kind
     )
 
-    if not dry_run:
+    if recovery_kind == messages.RecoveryKind.NormalRecovery:
         # set additional parameters
         msg.passphrase_protection = passphrase_protection
         msg.pin_protection = pin_protection

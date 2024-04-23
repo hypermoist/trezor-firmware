@@ -46,9 +46,9 @@ def enter_word(
         raise ValueError("Unknown model")
 
 
-def confirm_recovery(debug: "DebugLink") -> None:
+def confirm_recovery(debug: "DebugLink", title: str = "recovery__title") -> None:
     layout = debug.wait_layout()
-    TR.assert_equals(layout.title(), "recovery__title")
+    TR.assert_equals(layout.title(), title)
     if debug.model in (models.T2T1, models.T3T1):
         debug.click(buttons.OK, wait=True)
     elif debug.model in (models.T2B1,):
@@ -109,7 +109,11 @@ def enter_share(
     return layout
 
 
-def enter_shares(debug: "DebugLink", shares: list[str]) -> None:
+def enter_shares(
+    debug: "DebugLink",
+    shares: list[str],
+    after_layout_text: str = "recovery__wallet_recovered",
+) -> None:
     TR.assert_in(debug.read_layout().text_content(), "recovery__enter_any_share")
     for index, share in enumerate(shares):
         enter_share(debug, share, is_first=index == 0)
@@ -120,16 +124,22 @@ def enter_shares(debug: "DebugLink", shares: list[str]) -> None:
                 template=(index + 1, len(shares)),
             )
 
-    TR.assert_in(debug.read_layout().text_content(), "recovery__wallet_recovered")
+    TR.assert_in(debug.read_layout().text_content(), after_layout_text)
 
 
-def enter_seed(debug: "DebugLink", seed_words: list[str]) -> None:
-    prepare_enter_seed(debug)
+def enter_seed(
+    debug: "DebugLink",
+    seed_words: list[str],
+    is_slip39=False,
+    prepare_layout_text: str = "recovery__enter_backup",
+    after_layout_text: str = "recovery__wallet_recovered",
+) -> None:
+    prepare_enter_seed(debug, prepare_layout_text)
 
     for word in seed_words:
-        enter_word(debug, word, is_slip39=False)
+        enter_word(debug, word, is_slip39=is_slip39)
 
-    TR.assert_in(debug.read_layout().text_content(), "recovery__wallet_recovered")
+    TR.assert_in(debug.read_layout().text_content(), after_layout_text)
 
 
 def enter_seed_previous_correct(
@@ -177,8 +187,10 @@ def enter_seed_previous_correct(
     TR.assert_in(debug.read_layout().text_content(), "recovery__wallet_recovered")
 
 
-def prepare_enter_seed(debug: "DebugLink") -> None:
-    TR.assert_in(debug.read_layout().text_content(), "recovery__enter_backup")
+def prepare_enter_seed(
+    debug: "DebugLink", layout_text: str = "recovery__enter_backup"
+) -> None:
+    TR.assert_in(debug.read_layout().text_content(), layout_text)
     if debug.model in (models.T2T1, models.T3T1):
         debug.click(buttons.OK, wait=True)
     elif debug.model in (models.T2B1,):
