@@ -4,7 +4,7 @@
 #define DISPLAY_RESX 128
 #define DISPLAY_RESY 64
 
-#define VDD_1V8 1
+#define VDD_3V3 1
 
 #define USE_I2C 1
 #define USE_BUTTON 1
