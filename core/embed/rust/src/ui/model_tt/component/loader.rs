@@ -1,5 +1,5 @@
 #[cfg(feature = "haptic")]
-use crate::trezorhal::haptic::{play, HapticEffect};
+use crate::trezorhal::haptic::{self, play, HapticEffect};
 use crate::{
     time::{Duration, Instant},
     ui::{
@@ -7,6 +7,7 @@ use crate::{
         component::{Component, Event, EventCtx, Pad},
         display::{self, toif::Icon, Color},
         geometry::{Alignment2D, Offset, Rect},
+        lerp::Lerp,
         model_tt::constant,
         shape::{self, Renderer},
         util::animation_disabled,
@@ -174,6 +175,10 @@ impl Component for Loader {
                 } else if self.is_completely_shrunk(now) {
                     return Some(LoaderMsg::ShrunkCompletely);
                 } else {
+                    let progress = self.progress(now).unwrap() as f32 / 1000.0;
+                    let ampl = i16::lerp(0, 76, progress);
+                    haptic::play_rtp(ampl as i8, 100);
+
                     // There is further progress in the animation, request an animation frame event.
                     ctx.request_anim_frame();
                 }
