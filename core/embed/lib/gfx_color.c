@@ -47,3 +47,7 @@ const gfx_color32_t* gfx_color32_gradient_a4(gfx_color_t fg_color,
 
   return cache;
 }
+
+gfx_color32_t gfx_color32_set_alpha(gfx_color32_t c, uint8_t alpha) {
+  return (c & 0xFFFFFF) | (alpha << 24);
+}

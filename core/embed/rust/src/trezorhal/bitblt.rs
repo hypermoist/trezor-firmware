@@ -237,7 +237,8 @@ impl<'a> BitBltCopy<'a> {
                     .with_rect(r)
                     .with_src(src.bitmap, offset.x, offset.y)
                     .with_bg(src.bg_color)
-                    .with_fg(src.fg_color),
+                    .with_fg(src.fg_color)
+                    .with_alpha(src.alpha),
                 src,
             })
         } else {

@@ -342,4 +342,9 @@ const gfx_color16_t* gfx_color16_gradient_a4(gfx_color_t fg, gfx_color_t bg);
 // the background (`bg`) color and `retval[15]` the foreground (`fg`) color
 const gfx_color32_t* gfx_color32_gradient_a4(gfx_color_t fg, gfx_color_t bg);
 
+// Returns a color with alpha channel set
+//
+// The original color is not modified
+gfx_color32_t gfx_color32_set_alpha(gfx_color32_t c, uint8_t alpha);
+
 #endif  // GFX_COLOR_H

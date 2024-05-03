@@ -275,6 +275,7 @@ pub struct BitmapView<'a> {
     pub offset: Offset,
     pub fg_color: Color,
     pub bg_color: Color,
+    pub alpha: u8,
 }
 
 impl<'a> BitmapView<'a> {
@@ -285,6 +286,7 @@ impl<'a> BitmapView<'a> {
             offset: Offset::zero(),
             fg_color: Color::black(),
             bg_color: Color::black(),
+            alpha: 255,
         }
     }
 
@@ -304,6 +306,11 @@ impl<'a> BitmapView<'a> {
     /// Builds a new structure with background color set to the specified value
     pub fn with_bg(self, bg_color: Color) -> Self {
         Self { bg_color, ..self }
+    }
+
+    /// Builds a new structure with alpha set to the specified value
+    pub fn with_alpha(self, alpha: u8) -> Self {
+        Self { alpha, ..self }
     }
 
     /// Returns the bitmap width and height in pixels
