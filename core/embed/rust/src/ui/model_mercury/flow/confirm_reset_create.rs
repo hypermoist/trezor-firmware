@@ -1,5 +1,6 @@
 use crate::{
     error,
+    micropython::{map::Map, obj::Obj, util},
     strutil::TString,
     translations::TR,
     ui::{
@@ -8,11 +9,12 @@ use crate::{
             ComponentExt, SwipeDirection,
         },
         flow::{base::Decision, flow_store, FlowMsg, FlowState, FlowStore, SwipeFlow, SwipePage},
+        layout::obj::LayoutObj,
     },
 };
 
 use super::super::{
-    component::{Frame, FrameMsg, PromptScreen, VerticalMenu, VerticalMenuChoiceMsg},
+    component::{Frame, FrameMsg, HoldToConfirm, VerticalMenu, VerticalMenuChoiceMsg},
     theme,
 };
 
@@ -59,11 +61,6 @@ impl FlowState for ConfirmResetCreate {
     }
 }
 
-use crate::{
-    micropython::{map::Map, obj::Obj, util},
-    ui::layout::obj::LayoutObj,
-};
-
 #[allow(clippy::not_unsafe_ptr_arg_deref)]
 pub extern "C" fn new_confirm_reset_create(
     n_args: usize,
@@ -98,15 +95,14 @@ impl ConfirmResetCreate {
             FrameMsg::Button(_) => Some(FlowMsg::Cancelled),
         });
 
-        let content_confirm = Frame::left_aligned(
-            TR::reset__title_create_wallet.into(),
-            PromptScreen::new_hold_to_confirm(),
-        )
-        .with_footer(TR::instructions__hold_to_confirm.into(), None)
-        .map(|msg| match msg {
-            FrameMsg::Content(()) => Some(FlowMsg::Confirmed),
-            _ => Some(FlowMsg::Cancelled),
-        });
+        let content_confirm =
+            Frame::left_aligned(TR::reset__title_create_wallet.into(), HoldToConfirm::new())
+                .with_overlapping_content()
+                .with_footer(TR::instructions__hold_to_confirm.into(), None)
+                .map(|msg| match msg {
+                    FrameMsg::Content(()) => Some(FlowMsg::Confirmed),
+                    _ => Some(FlowMsg::Cancelled),
+                });
 
         let store = flow_store()
             .add(content_intro)?

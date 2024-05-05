@@ -129,7 +129,8 @@ impl Component for PromptScreen {
                 .with_thickness(2)
                 .render(target);
         });
-        self.button.render_content(target, self.button.style());
+        self.button
+            .render_content(target, self.button.style(), 0xff);
     }
 }
 

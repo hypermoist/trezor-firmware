@@ -104,6 +104,11 @@ impl<'a> Label<'a> {
         };
         Rect::from_bottom_left_and_size(baseline, Offset::new(width, height))
     }
+
+    pub fn render_with_alpha<'s>(&'s self, target: &mut impl Renderer<'s>, alpha: u8) {
+        self.text
+            .map(|c| self.layout.render_text_with_alpha(c, target, alpha));
+    }
 }
 
 impl Component for Label<'_> {
@@ -132,7 +137,7 @@ impl Component for Label<'_> {
     }
 
     fn render<'s>(&'s self, target: &mut impl Renderer<'s>) {
-        self.text.map(|c| self.layout.render_text2(c, target));
+        self.render_with_alpha(target, 255);
     }
 
     #[cfg(feature = "ui_bounds")]

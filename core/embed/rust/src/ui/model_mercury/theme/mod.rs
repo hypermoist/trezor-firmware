@@ -804,6 +804,7 @@ pub const TEXT_CHECKLIST_DONE: TextStyle =
 /// the header. [px]
 pub const SPACING: i16 = 2;
 
+pub const TITLE_HEIGHT: i16 = 42;
 pub const CONTENT_BORDER: i16 = 0;
 pub const BUTTON_HEIGHT: i16 = 62;
 pub const BUTTON_WIDTH: i16 = 78;
@@ -821,6 +822,8 @@ pub const RESULT_PADDING: i16 = 6;
 pub const RESULT_FOOTER_START: i16 = 171;
 pub const RESULT_FOOTER_HEIGHT: i16 = 62;
 pub const DETAILS_SPACING: i16 = 8;
+
+pub const CONFIRM_ANIMATION_OFFSET: i16 = 9;
 
 // checklist settings
 pub const CHECKLIST_CHECK_WIDTH: i16 = 16;
