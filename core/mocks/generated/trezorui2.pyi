@@ -1053,6 +1053,16 @@ def confirm_firmware_update(
 # rust/src/ui/model_tr/layout.rs
 def show_wait_text(message: str, /) -> None:
     """Show single-line text in the middle of the screen."""
+
+
+# rust/src/ui/model_tr/layout.rs
+class BacklightLevels:
+    """Backlight levels. Values dynamically update based on user settings."""
+    MAX: ClassVar[int]
+    NORMAL: ClassVar[int]
+    LOW: ClassVar[int]
+    DIM: ClassVar[int]
+    NONE: ClassVar[int]
 from trezor import utils
 T = TypeVar("T")
 
