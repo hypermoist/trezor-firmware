@@ -345,6 +345,9 @@ const gfx_color32_t* gfx_color32_gradient_a4(gfx_color_t fg, gfx_color_t bg);
 // Returns a color with alpha channel set
 //
 // The original color is not modified
-gfx_color32_t gfx_color32_set_alpha(gfx_color32_t c, uint8_t alpha);
+static inline gfx_color32_t gfx_color32_set_alpha(gfx_color32_t c,
+                                                  uint8_t alpha) {
+  return (c & 0xFFFFFF) | (alpha << 24);
+}
 
 #endif  // GFX_COLOR_H

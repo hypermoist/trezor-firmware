@@ -98,14 +98,13 @@ bool dma2d_rgb565_fill(const gfx_bitblt_t* bb) {
 }
 
 static void dma2d_config_clut(uint32_t layer, gfx_color_t fg, gfx_color_t bg,
-                              uint8_t alpha, bool blend) {
+                              bool blend) {
 #define LAYER_COUNT 2
 #define GRADIENT_STEPS 16
 
   static struct {
     gfx_color_t c_fg;
     gfx_color_t c_bg;
-    uint8_t alpha;
     bool blend;
   } cache[LAYER_COUNT] = {0};
 
@@ -117,16 +116,15 @@ static void dma2d_config_clut(uint32_t layer, gfx_color_t fg, gfx_color_t bg,
       layer ? dma2d_handle.Instance->FGCLUT : dma2d_handle.Instance->BGCLUT;
 
   if (fg != cache[layer].c_fg || bg != cache[layer].c_bg ||
-      alpha != cache[layer].alpha || blend != cache[layer].blend) {
+      blend != cache[layer].blend) {
     cache[layer].c_fg = fg;
     cache[layer].c_bg = bg;
-    cache[layer].alpha = alpha;
     cache[layer].blend = blend;
 
     if (blend) {
       gfx_color32_t fg32 = gfx_color16_to_color32(fg);
       for (int step = 0; step < GRADIENT_STEPS; step++) {
-        uint8_t alpha_step = (alpha * step) / (GRADIENT_STEPS - 1);
+        uint8_t alpha_step = (255 * step) / (GRADIENT_STEPS - 1);
         clut[step] = gfx_color32_set_alpha(fg32, alpha_step);
       }
     } else {
@@ -218,7 +216,7 @@ bool dma2d_rgb565_copy_mono4(const gfx_bitblt_t* params) {
   dma2d_handle.LayerCfg[1].InputAlpha = 0;
   HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
 
-  dma2d_config_clut(1, bb->src_fg, bb->src_bg, 255, false);
+  dma2d_config_clut(1, bb->src_fg, bb->src_bg, false);
 
   HAL_DMA2D_Start(&dma2d_handle, (uint32_t)bb->src_row + bb->src_x / 2,
                   (uint32_t)bb->dst_row + bb->dst_x * sizeof(uint16_t),
@@ -320,11 +318,13 @@ bool dma2d_rgb565_blend_mono4(const gfx_bitblt_t* params) {
 
     dma2d_handle.LayerCfg[1].InputColorMode = DMA2D_INPUT_L4;
     dma2d_handle.LayerCfg[1].InputOffset = bb->src_stride * 2 - bb->width;
-    dma2d_handle.LayerCfg[1].AlphaMode = 0;
-    dma2d_handle.LayerCfg[1].InputAlpha = 0;
+    dma2d_handle.LayerCfg[1].AlphaMode = DMA2D_COMBINE_ALPHA;
+    dma2d_handle.LayerCfg[1].InputAlpha = bb->src_alpha;
     HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
 
-    dma2d_config_clut(1, bb->src_fg, bb->src_bg, bb->src_alpha, true);
+    gfx_color_t bg = gfx_color32_set_alpha(bb->src_fg, 0);
+
+    dma2d_config_clut(1, bb->src_fg, bg, true);
 
     dma2d_handle.LayerCfg[0].InputColorMode = DMA2D_INPUT_RGB565;
     dma2d_handle.LayerCfg[0].InputOffset =
@@ -468,7 +468,7 @@ bool dma2d_rgba8888_copy_mono4(const gfx_bitblt_t* params) {
   dma2d_handle.LayerCfg[1].InputAlpha = 0;
   HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
 
-  dma2d_config_clut(1, bb->src_fg, bb->src_bg, 255, false);
+  dma2d_config_clut(1, bb->src_fg, bb->src_bg, false);
 
   HAL_DMA2D_Start(&dma2d_handle, (uint32_t)bb->src_row + bb->src_x / 2,
                   (uint32_t)bb->dst_row + bb->dst_x * sizeof(uint32_t),
@@ -570,11 +570,11 @@ bool dma2d_rgba8888_blend_mono4(const gfx_bitblt_t* params) {
 
     dma2d_handle.LayerCfg[1].InputColorMode = DMA2D_INPUT_L4;
     dma2d_handle.LayerCfg[1].InputOffset = bb->src_stride * 2 - bb->width;
-    dma2d_handle.LayerCfg[1].AlphaMode = 0;
-    dma2d_handle.LayerCfg[1].InputAlpha = 0;
+    dma2d_handle.LayerCfg[1].AlphaMode = DMA2D_COMBINE_ALPHA;
+    dma2d_handle.LayerCfg[1].InputAlpha = bb->src_alpha;
     HAL_DMA2D_ConfigLayer(&dma2d_handle, 1);
 
-    dma2d_config_clut(1, bb->src_fg, bb->src_bg, bb->src_alpha, true);
+    dma2d_config_clut(1, bb->src_fg, bb->src_bg, true);
 
     dma2d_handle.LayerCfg[0].InputColorMode = DMA2D_INPUT_ARGB8888;
     dma2d_handle.LayerCfg[0].InputOffset =
