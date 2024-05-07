@@ -1237,11 +1237,11 @@ pub enum TranslatedString {
     storage_msg__starting = 842,  // "Starting up"
     storage_msg__verifying_pin = 843,  // "Verifying PIN"
     storage_msg__wrong_pin = 844,  // "Wrong PIN"
-    recovery__title_unlock_repeated_backup = 845,  // "Unlock backup"
-    recovery__unlock_repeated_backup = 846,  // "Do you want to unlock the backup?"
-    recovery__unlock_repeated_backup_verb = 847,  // "Unlock backup"
-    reset__create_x_of_y_shamir_backup_template = 848,  // "Do you want to create a {0} of {1} Shamir backup?"
-    reset__title_shamir_backup = 849,  // "Shamir backup"
+    reset__create_x_of_y_shamir_backup_template = 845,  // "Do you want to create a {0} of {1} Shamir backup?"
+    reset__title_shamir_backup = 846,  // "Shamir backup"
+    recovery__title_unlock_repeated_backup = 847,  // "Unlock backup"
+    recovery__unlock_repeated_backup = 848,  // "Do you want to unlock the backup?"
+    recovery__unlock_repeated_backup_verb = 849,  // "Unlock backup"
 }
 
 impl TranslatedString {
@@ -2474,11 +2474,11 @@ impl TranslatedString {
             Self::storage_msg__starting => "Starting up",
             Self::storage_msg__verifying_pin => "Verifying PIN",
             Self::storage_msg__wrong_pin => "Wrong PIN",
+            Self::reset__create_x_of_y_shamir_backup_template => "Do you want to create a {0} of {1} Shamir backup?",
+            Self::reset__title_shamir_backup => "Shamir backup",
             Self::recovery__title_unlock_repeated_backup => "Unlock backup",
             Self::recovery__unlock_repeated_backup => "Do you want to unlock the backup?",
             Self::recovery__unlock_repeated_backup_verb => "Unlock backup",
-            Self::reset__create_x_of_y_shamir_backup_template => "Do you want to create a {0} of {1} Shamir backup?",
-            Self::reset__title_shamir_backup => "Shamir backup",
         }
     }
 
@@ -3712,11 +3712,11 @@ impl TranslatedString {
             Qstr::MP_QSTR_storage_msg__starting => Some(Self::storage_msg__starting),
             Qstr::MP_QSTR_storage_msg__verifying_pin => Some(Self::storage_msg__verifying_pin),
             Qstr::MP_QSTR_storage_msg__wrong_pin => Some(Self::storage_msg__wrong_pin),
+            Qstr::MP_QSTR_reset__create_x_of_y_shamir_backup_template => Some(Self::reset__create_x_of_y_shamir_backup_template),
+            Qstr::MP_QSTR_reset__title_shamir_backup => Some(Self::reset__title_shamir_backup),
             Qstr::MP_QSTR_recovery__title_unlock_repeated_backup => Some(Self::recovery__title_unlock_repeated_backup),
             Qstr::MP_QSTR_recovery__unlock_repeated_backup => Some(Self::recovery__unlock_repeated_backup),
             Qstr::MP_QSTR_recovery__unlock_repeated_backup_verb => Some(Self::recovery__unlock_repeated_backup_verb),
-            Qstr::MP_QSTR_reset__create_x_of_y_shamir_backup_template => Some(Self::reset__create_x_of_y_shamir_backup_template),
-            Qstr::MP_QSTR_reset__title_shamir_backup => Some(Self::reset__title_shamir_backup),
             _ => None,
         }
     }

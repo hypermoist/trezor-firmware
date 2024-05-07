@@ -150,6 +150,6 @@ def test_bad_parameters(client: Client, field_name: str, field_value: Any):
     setattr(msg, field_name, field_value)
     with pytest.raises(
         exceptions.TrezorFailure,
-        match="Forbidden field set in DryRun or UnlockRepeatedBackup",
+        match="Forbidden field set in dry-run",
     ):
         client.call(msg)

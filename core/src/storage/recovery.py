@@ -1,7 +1,10 @@
 from micropython import const
+from typing import TYPE_CHECKING
 
 from storage import common
-from trezor.enums import RecoveryKind
+
+if TYPE_CHECKING:
+    from trezor.enums import RecoveryKind
 
 # Namespace:
 _NAMESPACE = common.APP_RECOVERY
@@ -16,7 +19,6 @@ _SLIP39_ITERATION_EXPONENT = const(0x06)  # int
 _SLIP39_GROUP_COUNT        = const(0x07)  # int
 
 # Deprecated Keys:
-# _DRY_RUN                   = const(0x01)  # bool (got upgraded to int)
 # _WORD_COUNT                = const(0x02)  # int
 # _SLIP39_THRESHOLD          = const(0x04)  # int
 # fmt: on
@@ -43,14 +45,22 @@ def set_kind(val: int) -> None:
     common.set_uint8(_NAMESPACE, _KIND, val)
 
 
-def is_dry_run() -> bool:
-    _require_progress()
-    return common.get_uint8(_NAMESPACE, _KIND) == RecoveryKind.DryRun
+def get_kind() -> RecoveryKind:
+    from trezor.enums import RecoveryKind
 
-
-def is_unlock_repeated_backup() -> bool:
     _require_progress()
-    return common.get_uint8(_NAMESPACE, _KIND) == RecoveryKind.UnlockRepeatedBackup
+    recovery_kind = common.get_uint8(_NAMESPACE, _KIND)
+    if recovery_kind is None:
+        recovery_kind = RecoveryKind.NormalRecovery
+
+    if recovery_kind not in (
+        RecoveryKind.NormalRecovery,
+        RecoveryKind.DryRun,
+        RecoveryKind.UnlockRepeatedBackup,
+    ):
+        # Invalid recovery kind
+        raise RuntimeError
+    return recovery_kind  # type: ignore [int-into-enum]
 
 
 def set_slip39_identifier(identifier: int) -> None:

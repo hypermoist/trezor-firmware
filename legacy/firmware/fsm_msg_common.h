@@ -499,7 +499,7 @@ void fsm_msgRecoveryDevice(const RecoveryDevice *msg) {
     CHECK_PARAM(!msg->has_passphrase_protection && !msg->has_pin_protection &&
                     !msg->has_language && !msg->has_label &&
                     !msg->has_u2f_counter,
-                _("Forbidden field set in DryRun or UnlockRepeatedBackup"))
+                _("Forbidden field set in dry-run"))
   }
 
   CHECK_PARAM(!msg->has_word_count || msg->word_count == 12 ||

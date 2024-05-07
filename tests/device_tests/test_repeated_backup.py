@@ -49,7 +49,7 @@ def test_repeated_backup(client: Client):
     with client:
         IF = InputFlowSlip39BasicRecoveryDryRun(client, mnemonics[:3])
         client.set_input_flow(IF.get())
-        ret = device.recover(client, unlock_repeated_backup=True)
+        ret = device.recover(client, recovery_kind=messages.RecoveryKind.UnlockRepeatedBackup)
         assert ret == messages.Success(message="Backup unlocked")
 
     # we can now perform another backup

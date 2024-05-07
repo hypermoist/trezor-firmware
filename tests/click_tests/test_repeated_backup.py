@@ -97,12 +97,12 @@ def test_repeated_backup(
     assert features.initialized is True
     assert features.needs_backup is False
     assert features.no_backup is False
-    assert features.recovery_mode is False
+    assert features.recovery_status == messages.RecoveryStatus.NoRecovery
 
     # run recovery to unlock backup
     device_handler.run(
         device.recover,
-        unlock_repeated_backup=True,
+        recovery_kind=messages.RecoveryKind.UnlockRepeatedBackup,
     )
 
     recovery.confirm_recovery(debug, "recovery__title_unlock_repeated_backup")
@@ -127,7 +127,7 @@ def test_repeated_backup(
     assert features.initialized is True
     assert features.needs_backup is False
     assert features.no_backup is False
-    assert features.recovery_mode is True
+    assert features.recovery_status == messages.RecoveryStatus.InUnlockRepeatedBackupRecovery
 
     # at this point, the backup is unlocked...
 
@@ -170,12 +170,12 @@ def test_repeated_backup(
     assert features.initialized is True
     assert features.needs_backup is False
     assert features.no_backup is False
-    assert features.recovery_mode is False
+    assert features.recovery_status == messages.RecoveryStatus.NoRecovery
 
     # try to unlock backup again...
     device_handler.run(
         device.recover,
-        unlock_repeated_backup=True,
+        recovery_kind=messages.RecoveryKind.UnlockRepeatedBackup,
     )
 
     recovery.confirm_recovery(debug, "recovery__title_unlock_repeated_backup")
@@ -194,7 +194,7 @@ def test_repeated_backup(
     assert features.initialized is True
     assert features.needs_backup is False
     assert features.no_backup is False
-    assert features.recovery_mode is True
+    assert features.recovery_status == messages.RecoveryStatus.InUnlockRepeatedBackupRecovery
 
     # but if we cancel the backup at this point...
     reset.cancel_backup(debug)
@@ -205,4 +205,4 @@ def test_repeated_backup(
     assert features.initialized is True
     assert features.needs_backup is False
     assert features.no_backup is False
-    assert features.recovery_mode is False
+    assert features.recovery_status == messages.RecoveryStatus.NoRecovery

@@ -60,7 +60,7 @@ def _language_version_matches() -> bool | None:
 def get_features() -> Features:
     import storage.recovery as storage_recovery
     from trezor import translations
-    from trezor.enums import Capability
+    from trezor.enums import Capability, RecoveryKind, RecoveryStatus
     from trezor.messages import Features
     from trezor.ui import HEIGHT, WIDTH
 
@@ -153,7 +153,18 @@ def get_features() -> Features:
         f.unfinished_backup = storage_device.unfinished_backup()
         f.no_backup = storage_device.no_backup()
         f.flags = storage_device.get_flags()
-        f.recovery_mode = storage_recovery.is_in_progress()
+        if storage_recovery.is_in_progress():
+            kind = storage_recovery.get_kind()
+            if kind == RecoveryKind.NormalRecovery:
+                f.recovery_status = RecoveryStatus.InNormalRecovery
+            elif kind == RecoveryKind.DryRun:
+                f.recovery_status = RecoveryStatus.InDryRunRecovery
+            elif kind == RecoveryKind.UnlockRepeatedBackup:
+                f.recovery_status = RecoveryStatus.InUnlockRepeatedBackupRecovery
+            else:
+                raise wire.ProcessError("Unknown recovery kind")
+        else:
+            f.recovery_status = RecoveryStatus.NoRecovery
         f.backup_type = mnemonic.get_type()
 
         # Only some models are capable of SD card

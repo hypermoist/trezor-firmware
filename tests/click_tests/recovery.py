@@ -46,7 +46,7 @@ def enter_word(
         raise ValueError("Unknown model")
 
 
-def confirm_recovery(debug: "DebugLink", title="recovery__title") -> None:
+def confirm_recovery(debug: "DebugLink", title: str = "recovery__title") -> None:
     layout = debug.wait_layout()
     TR.assert_equals(layout.title(), title)
     if debug.model in (models.T2T1, models.T3T1):
@@ -112,7 +112,7 @@ def enter_share(
 def enter_shares(
     debug: "DebugLink",
     shares: list[str],
-    after_layout_text="recovery__wallet_recovered",
+    after_layout_text: str = "recovery__wallet_recovered",
 ) -> None:
     TR.assert_in(debug.read_layout().text_content(), "recovery__enter_any_share")
     for index, share in enumerate(shares):
@@ -131,8 +131,8 @@ def enter_seed(
     debug: "DebugLink",
     seed_words: list[str],
     is_slip39=False,
-    prepare_layout_text="recovery__enter_backup",
-    after_layout_text="recovery__wallet_recovered",
+    prepare_layout_text: str = "recovery__enter_backup",
+    after_layout_text: str = "recovery__wallet_recovered",
 ) -> None:
     prepare_enter_seed(debug, prepare_layout_text)
 
@@ -188,7 +188,7 @@ def enter_seed_previous_correct(
 
 
 def prepare_enter_seed(
-    debug: "DebugLink", layout_text="recovery__enter_backup"
+    debug: "DebugLink", layout_text: str = "recovery__enter_backup"
 ) -> None:
     TR.assert_in(debug.read_layout().text_content(), layout_text)
     if debug.model in (models.T2T1, models.T3T1):

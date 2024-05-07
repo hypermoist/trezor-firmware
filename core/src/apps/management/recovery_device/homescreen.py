@@ -19,24 +19,24 @@ async def recovery_homescreen() -> None:
 
     from apps.homescreen import homescreen
 
-    if not storage_recovery.is_in_progress():
-        workflow.set_default(homescreen)
-        return
-    elif (
+    if (
         storage_cache.get(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
         == b"\x01"
     ):
         await _continue_repeated_backup()
+    elif not storage_recovery.is_in_progress():
+        workflow.set_default(homescreen)
     else:
         await recovery_process()
 
 
 async def recovery_process() -> Success:
     import storage
-    from trezor.enums import MessageType
+    from trezor.enums import MessageType, RecoveryKind
 
-    is_special_kind = (
-        storage_recovery.is_dry_run() or storage_recovery.is_unlock_repeated_backup()
+    is_special_kind = storage_recovery.get_kind() in (
+        RecoveryKind.DryRun,
+        RecoveryKind.UnlockRepeatedBackup,
     )
 
     wire.AVOID_RESTARTING_FOR = (
@@ -93,11 +93,11 @@ async def _continue_repeated_backup() -> None:
 
 async def _continue_recovery_process() -> Success:
     from trezor import utils
+    from trezor.enums import RecoveryKind
     from trezor.errors import MnemonicError
 
     # gather the current recovery state from storage
-    dry_run = storage_recovery.is_dry_run()
-    unlock_repeated_backup = storage_recovery.is_unlock_repeated_backup()
+    kind = storage_recovery.get_kind()
     word_count, backup_type = recover.load_slip39_state()
 
     # Both word_count and backup_type are derived from the same data. Both will be
@@ -122,7 +122,7 @@ async def _continue_recovery_process() -> Success:
                     TR.buttons__continue, TR.recovery__num_of_words
                 )
             # ask for the number of words
-            word_count = await layout.request_word_count(dry_run)
+            word_count = await layout.request_word_count(kind == RecoveryKind.DryRun)
             # ...and only then show the starting screen with word count.
             await _request_share_first_screen(word_count)
         assert word_count is not None
@@ -144,9 +144,9 @@ async def _continue_recovery_process() -> Success:
             await layout.show_invalid_mnemonic(word_count)
 
     assert backup_type is not None
-    if dry_run:
+    if kind == RecoveryKind.DryRun:
         result = await _finish_recovery_dry_run(secret, backup_type)
-    elif unlock_repeated_backup:
+    elif kind == RecoveryKind.UnlockRepeatedBackup:
         result = await _finish_recovery_unlock_repeated_backup(secret, backup_type)
     else:
         result = await _finish_recovery(secret, backup_type)

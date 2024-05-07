@@ -47,7 +47,7 @@ async def recovery_device(msg: RecoveryDevice) -> Success:
         for key, value in msg.__dict__.items():
             if key not in DRY_RUN_ALLOWED_FIELDS and value is not None:
                 raise wire.ProcessError(
-                    f"Forbidden field set in DryRun or UnlockRepeatedBackup: {key}"
+                    f"Forbidden field set in dry-run: {key}"
                 )
     else:
         raise ValueError("Unknown RecoveryKind")
