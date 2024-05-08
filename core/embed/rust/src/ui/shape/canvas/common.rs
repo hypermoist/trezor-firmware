@@ -365,6 +365,10 @@ pub trait Canvas: BasicCanvas {
     // Draws circle with the specified center and the radius.
     #[cfg(not(feature = "ui_antialiasing"))]
     fn draw_circle(&mut self, center: Point, radius: i16, color: Color, alpha: u8) {
+        if radius == 0 {
+            return;
+        }
+
         let split = unwrap!(circle_points(radius).last()).v;
 
         let r = Rect::new(
@@ -427,6 +431,10 @@ pub trait Canvas: BasicCanvas {
     /// Draws filled circle with the specified center and the radius.
     #[cfg(not(feature = "ui_antialiasing"))]
     fn fill_circle(&mut self, center: Point, radius: i16, color: Color, alpha: u8) {
+        if radius == 0 {
+            return;
+        }
+
         let split = unwrap!(circle_points(radius).last()).v;
 
         let r = Rect::new(
@@ -490,6 +498,10 @@ pub trait Canvas: BasicCanvas {
     /// radius.
     #[cfg(feature = "ui_antialiasing")]
     fn fill_circle(&mut self, center: Point, radius: i16, color: Color, alpha: u8) {
+        if radius == 0 {
+            return;
+        }
+
         let split = unwrap!(circle_points(radius).last()).v;
 
         let alpha_mul = |a: u8| -> u8 { ((a as u16 * alpha as u16) / 255) as u8 };
@@ -580,6 +592,10 @@ pub trait Canvas: BasicCanvas {
         mut end: i16,
         color: Color,
     ) {
+        if radius == 0 {
+            return;
+        }
+
         start = (PI4 * 8 + start % (PI4 * 8)) % (PI4 * 8);
         end = (PI4 * 8 + end % (PI4 * 8)) % (PI4 * 8);
 
@@ -703,6 +719,10 @@ fn fill_octant(
     mut u2: i16,
     fill: &mut impl FnMut(Option<Point>, u8, Point, u8),
 ) {
+    if radius == 0 {
+        return;
+    }
+
     // Starting end ending points on
     if u1 > u2 {
         (u1, u2) = (u2, u1);
