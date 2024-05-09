@@ -60,6 +60,7 @@ async def _continue_repeated_backup() -> None:
     from trezor.ui.layouts import confirm_action
     from trezor.wire import ActionCancelled
 
+    from apps import workflow_handlers
     from apps.common import mnemonic
     from apps.homescreen import homescreen
     from apps.management.reset_device import backup_seed
@@ -88,6 +89,7 @@ async def _continue_repeated_backup() -> None:
         workflow.set_default(homescreen)
     finally:
         storage_cache.delete(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
+        wire.find_handler = workflow_handlers.find_registered_handler
         storage_recovery.end_progress()
 
 

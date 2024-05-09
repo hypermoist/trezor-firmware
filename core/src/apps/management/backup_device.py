@@ -15,6 +15,7 @@ async def backup_device(msg: BackupDevice) -> Success:
     from trezor import wire
     from trezor.messages import Success
 
+    from apps import workflow_handlers
     from apps.common import mnemonic
 
     from .reset_device import backup_seed, backup_slip39_custom, layout
@@ -63,5 +64,6 @@ async def backup_device(msg: BackupDevice) -> Success:
     await layout.show_backup_success()
 
     storage_cache.delete(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
+    wire.find_handler = workflow_handlers.find_registered_handler
 
     return Success(message="Seed successfully backed up")

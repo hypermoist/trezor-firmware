@@ -374,7 +374,7 @@ def set_homescreen() -> None:
 def lock_device(interrupt_workflow: bool = True) -> None:
     if config.has_pin():
         config.lock()
-        wire.find_handler = get_pinlocked_handler
+        wire.find_handler = _get_pinlocked_handler
         set_homescreen()
         if interrupt_workflow:
             workflow.close_others()
@@ -413,7 +413,7 @@ async def unlock_device() -> None:
     wire.find_handler = workflow_handlers.find_registered_handler
 
 
-def get_pinlocked_handler(
+def _get_pinlocked_handler(
     iface: wire.WireInterface, msg_type: int
 ) -> wire.Handler[wire.Msg] | None:
     orig_handler = workflow_handlers.find_registered_handler(iface, msg_type)
@@ -432,6 +432,28 @@ def get_pinlocked_handler(
     async def wrapper(msg: protobuf.MessageType) -> protobuf.MessageType:
         await unlock_device()
         return await orig_handler(msg)
+
+    return wrapper
+
+
+def _get_backup_handler(
+    iface: wire.WireInterface, msg_type: int
+) -> wire.Handler[wire.Msg] | None:
+    orig_handler = workflow_handlers.find_registered_handler(iface, msg_type)
+    if orig_handler is None:
+        return None
+
+    if __debug__:
+        import usb
+
+        if iface is usb.iface_debug:
+            return orig_handler
+
+    if msg_type in workflow.ALLOW_WHILE_REPEATED_BACKUP_UNLOCKED:
+        return orig_handler
+
+    async def wrapper(_msg: wire.Msg) -> protobuf.MessageType:
+        raise wire.ProcessError("Operation not allowed when in repeated backup state")
 
     return wrapper
 
@@ -468,7 +490,12 @@ def boot() -> None:
         workflow_handlers.register(msg_type, handler)
 
     reload_settings_from_storage()
-    if config.is_unlocked():
+    if (
+        storage_cache.get(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
+        == b"\x01"
+    ):
+        wire.find_handler = _get_backup_handler
+    elif config.is_unlocked():
         wire.find_handler = workflow_handlers.find_registered_handler
     else:
-        wire.find_handler = get_pinlocked_handler
+        wire.find_handler = _get_pinlocked_handler
