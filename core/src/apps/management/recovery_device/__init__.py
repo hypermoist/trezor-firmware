@@ -22,9 +22,10 @@ async def recovery_device(msg: RecoveryDevice) -> Success:
     import storage.device as storage_device
     import storage.recovery as storage_recovery
     from trezor import TR, config, wire, workflow
-    from trezor.enums import ButtonRequestType
+    from trezor.enums import BackupType, ButtonRequestType
     from trezor.ui.layouts import confirm_action, confirm_reset_device
 
+    from apps.common import mnemonic
     from apps.common.request_pin import (
         error_pin_invalid,
         request_pin_and_sd_salt,
@@ -43,6 +44,8 @@ async def recovery_device(msg: RecoveryDevice) -> Success:
     elif recovery_kind in (RecoveryKind.DryRun, RecoveryKind.UnlockRepeatedBackup):
         if not storage_device.is_initialized():
             raise wire.NotInitialized("Device is not initialized")
+        if recovery_kind == RecoveryKind.UnlockRepeatedBackup and mnemonic.get_type() == BackupType.Bip39:
+            raise wire.ProcessError("Repeated Backup not available for BIP39 backups")
         # check that only allowed fields are set
         for key, value in msg.__dict__.items():
             if key not in DRY_RUN_ALLOWED_FIELDS and value is not None:
