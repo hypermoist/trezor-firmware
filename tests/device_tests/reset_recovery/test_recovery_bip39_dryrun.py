@@ -40,7 +40,7 @@ def do_recover_legacy(client: Client, mnemonic: list[str], **kwargs: Any):
 
     ret = device.recover(
         client,
-        dry_run=True,
+        recovery_kind=messages.RecoveryKind.DryRun,
         word_count=len(mnemonic),
         type=messages.RecoveryDeviceType.ScrambledWords,
         input_callback=input_callback,
@@ -56,7 +56,7 @@ def do_recover_core(client: Client, mnemonic: list[str], mismatch: bool = False)
         client.watch_layout()
         IF = InputFlowBip39RecoveryDryRun(client, mnemonic, mismatch=mismatch)
         client.set_input_flow(IF.get())
-        return device.recover(client, dry_run=True)
+        return device.recover(client, recovery_kind=messages.RecoveryKind.DryRun)
 
 
 def do_recover(client: Client, mnemonic: list[str], mismatch: bool = False):

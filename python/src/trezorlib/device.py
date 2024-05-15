@@ -180,6 +180,8 @@ def recover(
                 "Cannot use both dry_run and recovery_kind simultaneously."
             )
 
+        recovery_kind = messages.RecoveryKind.DryRun
+
     if client.features.model == "1" and input_callback is None:
         raise RuntimeError("Input callback required for Trezor One")
 
