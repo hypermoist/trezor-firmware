@@ -193,7 +193,10 @@ def recover(
     if word_count not in (12, 18, 24):
         raise ValueError("Invalid word count. Use 12/18/24")
 
-    if client.features.initialized and recovery_kind == messages.RecoveryKind.NormalRecovery:
+    if (
+        client.features.initialized
+        and recovery_kind == messages.RecoveryKind.NormalRecovery
+    ):
         raise RuntimeError(
             "Device already initialized. Call device.wipe() and try again."
         )
