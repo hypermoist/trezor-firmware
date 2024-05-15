@@ -22,7 +22,9 @@ async def backup_device(msg: BackupDevice) -> Success:
 
     # do this early before we show any UI
     # the homescreen will clear the flag right after its own UI is gone
-    repeated_backup_unlocked = storage_cache.get_bool(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
+    repeated_backup_unlocked = storage_cache.get_bool(
+        storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED
+    )
 
     if not storage_device.is_initialized():
         raise wire.NotInitialized("Device is not initialized")
