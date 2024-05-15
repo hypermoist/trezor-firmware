@@ -209,7 +209,7 @@ async def _finish_recovery_unlock_repeated_backup(
     result = _check_secret_against_stored_secret(secret, is_slip39)
 
     if result:
-        storage_cache.set_bool(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
+        storage_cache.set_bool(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED, True)
         return Success(message="Backup unlocked")
     else:
         raise wire.ProcessError("The seed does not match the one in the device")

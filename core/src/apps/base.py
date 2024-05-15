@@ -452,7 +452,7 @@ def _get_backup_handler(
     if msg_type in workflow.ALLOW_WHILE_REPEATED_BACKUP_UNLOCKED:
         return orig_handler
 
-    async def wrapper(_msg: wire.Msg) -> protobuf.MessageType:
+    async def wrapper(_msg: protobuf.MessageType) -> protobuf.MessageType:
         raise wire.ProcessError("Operation not allowed when in repeated backup state")
 
     return wrapper

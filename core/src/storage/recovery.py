@@ -60,7 +60,7 @@ def get_kind() -> RecoveryKind:
     ):
         # Invalid recovery kind
         raise RuntimeError
-    return recovery_kind  # type: ignore [int-into-enum]
+    return recovery_kind
 
 
 def set_slip39_identifier(identifier: int) -> None:
