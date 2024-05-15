@@ -61,7 +61,6 @@ def select_number_of_words(
 ) -> None:
     if wait:
         debug.wait_layout()
-    TR.assert_equals(debug.read_layout().text_content(), "recovery__num_of_words")
     if debug.model in (models.T2T1, models.T3T1):
         # click the number
         word_option_offset = 6
@@ -72,6 +71,7 @@ def select_number_of_words(
         coords = buttons.grid34(index % 3, index // 3)
         layout = debug.click(coords, wait=True)
     elif debug.model in (models.T2B1,):
+        TR.assert_equals(debug.read_layout().text_content(), "recovery__num_of_words")
         layout = debug.press_right(wait=True)
         TR.assert_equals(layout.title(), "word_count__title")
 
