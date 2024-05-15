@@ -83,6 +83,7 @@ async def recovery_device(msg: RecoveryDevice) -> Success:
 
         if msg.label is not None:
             storage_device.set_label(msg.label)
+
     elif recovery_kind in (RecoveryKind.DryRun, RecoveryKind.UnlockRepeatedBackup):
         title = (
             TR.recovery__title_dry_run

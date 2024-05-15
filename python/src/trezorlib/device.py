@@ -179,8 +179,10 @@ def recover(
             raise ValueError(
                 "Cannot use both dry_run and recovery_kind simultaneously."
             )
-
-        recovery_kind = messages.RecoveryKind.DryRun
+        elif dry_run:
+            recovery_kind = messages.RecoveryKind.DryRun
+        else:
+            recovery_kind = messages.RecoveryKind.NormalRecovery
 
     if client.features.model == "1" and input_callback is None:
         raise RuntimeError("Input callback required for Trezor One")
@@ -188,12 +190,7 @@ def recover(
     if word_count not in (12, 18, 24):
         raise ValueError("Invalid word count. Use 12/18/24")
 
-    is_special_recovery = dry_run or recovery_kind in (
-        messages.RecoveryKind.DryRun,
-        messages.RecoveryKind.UnlockRepeatedBackup,
-    )
-
-    if client.features.initialized and not is_special_recovery:
+    if client.features.initialized and recovery_kind == messages.RecoveryKind.NormalRecovery:
         raise RuntimeError(
             "Device already initialized. Call device.wipe() and try again."
         )

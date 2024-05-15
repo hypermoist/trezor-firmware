@@ -15,8 +15,8 @@
 # If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.
 
 from trezorlib import device
-from trezorlib.messages import RecoveryStatus
 from trezorlib.debuglink import DebugLink
+from trezorlib.messages import RecoveryStatus
 
 from .. import buttons
 from ..click_tests import recovery
