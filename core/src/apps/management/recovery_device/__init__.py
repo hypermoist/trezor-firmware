@@ -44,14 +44,15 @@ async def recovery_device(msg: RecoveryDevice) -> Success:
     elif recovery_kind in (RecoveryKind.DryRun, RecoveryKind.UnlockRepeatedBackup):
         if not storage_device.is_initialized():
             raise wire.NotInitialized("Device is not initialized")
-        if recovery_kind == RecoveryKind.UnlockRepeatedBackup and mnemonic.get_type() == BackupType.Bip39:
+        if (
+            recovery_kind == RecoveryKind.UnlockRepeatedBackup
+            and mnemonic.get_type() == BackupType.Bip39
+        ):
             raise wire.ProcessError("Repeated Backup not available for BIP39 backups")
         # check that only allowed fields are set
         for key, value in msg.__dict__.items():
             if key not in DRY_RUN_ALLOWED_FIELDS and value is not None:
-                raise wire.ProcessError(
-                    f"Forbidden field set in dry-run: {key}"
-                )
+                raise wire.ProcessError(f"Forbidden field set in dry-run: {key}")
     else:
         raise ValueError("Unknown RecoveryKind")
 

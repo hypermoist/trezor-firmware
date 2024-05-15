@@ -184,6 +184,9 @@ def recover(
         else:
             recovery_kind = messages.RecoveryKind.NormalRecovery
 
+    if recovery_kind is None:
+        recovery_kind = messages.RecoveryKind.NormalRecovery
+
     if client.features.model == "1" and input_callback is None:
         raise RuntimeError("Input callback required for Trezor One")
 

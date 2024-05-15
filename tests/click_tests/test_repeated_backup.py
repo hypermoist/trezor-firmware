@@ -127,7 +127,10 @@ def test_repeated_backup(
     assert features.initialized is True
     assert features.needs_backup is False
     assert features.no_backup is False
-    assert features.recovery_status == messages.RecoveryStatus.InUnlockRepeatedBackupRecovery
+    assert (
+        features.recovery_status
+        == messages.RecoveryStatus.InUnlockRepeatedBackupRecovery
+    )
 
     # at this point, the backup is unlocked...
 
@@ -194,7 +197,10 @@ def test_repeated_backup(
     assert features.initialized is True
     assert features.needs_backup is False
     assert features.no_backup is False
-    assert features.recovery_status == messages.RecoveryStatus.InUnlockRepeatedBackupRecovery
+    assert (
+        features.recovery_status
+        == messages.RecoveryStatus.InUnlockRepeatedBackupRecovery
+    )
 
     # but if we cancel the backup at this point...
     reset.cancel_backup(debug)
