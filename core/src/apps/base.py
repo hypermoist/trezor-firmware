@@ -161,8 +161,6 @@ def get_features() -> Features:
                 f.recovery_status = RecoveryStatus.InDryRunRecovery
             elif kind == RecoveryKind.UnlockRepeatedBackup:
                 f.recovery_status = RecoveryStatus.InUnlockRepeatedBackupRecovery
-            else:
-                raise wire.ProcessError("Unknown recovery kind")
         else:
             f.recovery_status = RecoveryStatus.NoRecovery
         f.backup_type = mnemonic.get_type()
@@ -436,6 +434,16 @@ def _get_pinlocked_handler(
     return wrapper
 
 
+_ALLOW_WHILE_REPEATED_BACKUP_UNLOCKED = (
+    MessageType.Initialize,
+    MessageType.GetFeatures,
+    MessageType.EndSession,
+    MessageType.BackupDevice,
+    MessageType.WipeDevice,
+    MessageType.Cancel,
+)
+
+
 def _get_backup_handler(
     iface: wire.WireInterface, msg_type: int
 ) -> wire.Handler[wire.Msg] | None:
@@ -449,7 +457,7 @@ def _get_backup_handler(
         if iface is usb.iface_debug:
             return orig_handler
 
-    if msg_type in workflow.ALLOW_WHILE_REPEATED_BACKUP_UNLOCKED:
+    if msg_type in _ALLOW_WHILE_REPEATED_BACKUP_UNLOCKED:
         return orig_handler
 
     async def wrapper(_msg: protobuf.MessageType) -> protobuf.MessageType:

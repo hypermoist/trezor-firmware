@@ -494,7 +494,7 @@ void fsm_msgRecoveryDevice(const RecoveryDevice *msg) {
   CHECK_PARAM(!msg->has_kind || msg->kind == 0 || msg->kind == 1,
               _("UnlockRepeatedBackup not supported"))
 
-  const bool dry_run = msg->has_kind ? msg->kind == 1 /* RecoveryKind.DryRun */ : false;
+  const bool dry_run = msg->has_kind ? msg->kind == RecoveryKind_DryRun : false;
   if (!dry_run) {
     CHECK_NOT_INITIALIZED
   } else {

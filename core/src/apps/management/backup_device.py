@@ -51,6 +51,7 @@ async def backup_device(msg: BackupDevice) -> Success:
     if not repeated_backup_unlocked:
         storage_device.set_unfinished_backup(True)
 
+    storage_cache.delete(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
     storage_device.set_backed_up()
 
     if group_threshold is not None:
@@ -60,9 +61,7 @@ async def backup_device(msg: BackupDevice) -> Success:
 
     storage_device.set_unfinished_backup(False)
 
-    await layout.show_backup_success()
-
-    storage_cache.delete(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
     wire.find_handler = workflow_handlers.find_registered_handler
+    await layout.show_backup_success()
 
     return Success(message="Seed successfully backed up")

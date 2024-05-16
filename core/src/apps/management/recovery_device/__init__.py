@@ -34,7 +34,7 @@ async def recovery_device(msg: RecoveryDevice) -> Success:
 
     from .homescreen import recovery_homescreen, recovery_process
 
-    recovery_kind = msg.kind or RecoveryKind.NormalRecovery  # local_cache_attribute
+    recovery_kind = msg.kind  # local_cache_attribute
 
     # --------------------------------------------------------
     # validate
@@ -54,7 +54,7 @@ async def recovery_device(msg: RecoveryDevice) -> Success:
             if key not in DRY_RUN_ALLOWED_FIELDS and value is not None:
                 raise wire.ProcessError(f"Forbidden field set in dry-run: {key}")
     else:
-        raise ValueError("Unknown RecoveryKind")
+        raise RuntimeError # Unknown RecoveryKind
 
     if msg.enforce_wordlist is False:
         raise wire.ProcessError(
