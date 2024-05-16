@@ -1407,7 +1407,8 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
             TR::recovery__title_unlock_repeated_backup
         } else {
             TR::recovery__title
-        }.try_into()?;
+        }
+        .try_into()?;
 
         let obj = if info_button {
             LayoutObj::new(Frame::left_aligned(

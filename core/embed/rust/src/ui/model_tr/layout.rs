@@ -1412,7 +1412,9 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
         let description: TString = kwargs.get(Qstr::MP_QSTR_description)?.try_into()?;
         let button: TString<'static> = kwargs.get(Qstr::MP_QSTR_button)?.try_into()?;
         let dry_run: bool = kwargs.get(Qstr::MP_QSTR_dry_run)?.try_into()?;
-        let unlock_repeated_backup: bool = kwargs.get(Qstr::MP_QSTR_unlock_repeated_backup)?.try_into()?;
+        let unlock_repeated_backup: bool = kwargs
+            .get(Qstr::MP_QSTR_unlock_repeated_backup)?
+            .try_into()?;
         let show_info: bool = kwargs.get(Qstr::MP_QSTR_show_info)?.try_into()?;
 
         let mut paragraphs = ParagraphVecShort::new();
@@ -1435,10 +1437,11 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
             TR::recovery__title_unlock_repeated_backup
         } else {
             TR::recovery__title
-        }.try_into()?;
+        }
+        .try_into()?;
 
         content_in_button_page(
-            title.try_into()?,
+            title,
             paragraphs.into_paragraphs(),
             button,
             Some("".into()),
