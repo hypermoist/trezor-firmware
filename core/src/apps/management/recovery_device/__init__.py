@@ -54,7 +54,7 @@ async def recovery_device(msg: RecoveryDevice) -> Success:
             if key not in DRY_RUN_ALLOWED_FIELDS and value is not None:
                 raise wire.ProcessError(f"Forbidden field set in dry-run: {key}")
     else:
-        raise RuntimeError # Unknown RecoveryKind
+        raise RuntimeError  # Unknown RecoveryKind
 
     if msg.enforce_wordlist is False:
         raise wire.ProcessError(
