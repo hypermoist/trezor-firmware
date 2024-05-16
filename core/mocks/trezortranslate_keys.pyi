@@ -536,7 +536,7 @@ class TR:
     recovery__title_remaining_shares: str = "Remaining shares"
     recovery__title_unlock_repeated_backup: str = "Unlock backup"
     recovery__type_word_x_of_y_template: str = "Type word {0} of {1}"
-    recovery__unlock_repeated_backup: str = "Do you want to unlock the backup?"
+    recovery__unlock_repeated_backup: str = "Do you want to unlock the seed for repeated backup?"
     recovery__unlock_repeated_backup_verb: str = "Unlock backup"
     recovery__wallet_recovered: str = "Wallet recovered successfully"
     recovery__wanna_cancel_dry_run: str = "Are you sure you want to cancel the backup check?"

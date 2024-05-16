@@ -1240,7 +1240,7 @@ pub enum TranslatedString {
     reset__create_x_of_y_shamir_backup_template = 845,  // "Do you want to create a {0} of {1} Shamir backup?"
     reset__title_shamir_backup = 846,  // "Shamir backup"
     recovery__title_unlock_repeated_backup = 847,  // "Unlock backup"
-    recovery__unlock_repeated_backup = 848,  // "Do you want to unlock the backup?"
+    recovery__unlock_repeated_backup = 848,  // "Do you want to unlock the seed for repeated backup?"
     recovery__unlock_repeated_backup_verb = 849,  // "Unlock backup"
 }
 
@@ -2477,7 +2477,7 @@ impl TranslatedString {
             Self::reset__create_x_of_y_shamir_backup_template => "Do you want to create a {0} of {1} Shamir backup?",
             Self::reset__title_shamir_backup => "Shamir backup",
             Self::recovery__title_unlock_repeated_backup => "Unlock backup",
-            Self::recovery__unlock_repeated_backup => "Do you want to unlock the backup?",
+            Self::recovery__unlock_repeated_backup => "Do you want to unlock the seed for repeated backup?",
             Self::recovery__unlock_repeated_backup_verb => "Unlock backup",
         }
     }
