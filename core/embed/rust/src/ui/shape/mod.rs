@@ -22,7 +22,9 @@ pub use bitmap::{Bitmap, BitmapFormat, BitmapView};
 #[cfg(feature = "ui_blurring")]
 pub use blur::Blurring;
 pub use cache::drawing_cache::DrawingCache;
-pub use canvas::{BasicCanvas, Canvas, Mono8Canvas, Rgb565Canvas, Rgba8888Canvas, Viewport};
+pub use canvas::{
+    BasicCanvas, Canvas, CanvasBuilder, Mono8Canvas, Rgb565Canvas, Rgba8888Canvas, Viewport,
+};
 pub use circle::Circle;
 pub use corner_highlight::CornerHighlight;
 pub use display::render_on_display;
@@ -32,4 +34,4 @@ pub use qrcode::QrImage;
 pub use render::{DirectRenderer, ProgressiveRenderer, Renderer};
 pub use text::Text;
 pub use toif::ToifImage;
-pub use utils::PI4;
+pub use utils::ImageBuffer;
