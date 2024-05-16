@@ -1432,10 +1432,10 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
         let title = if dry_run {
             TR::recovery__title_dry_run
         } else if unlock_repeated_backup {
-            TR::recovery__title_unlock_repeated_backup.try_into()?
+            TR::recovery__title_unlock_repeated_backup
         } else {
             TR::recovery__title
-        };
+        }.try_into()?;
 
         content_in_button_page(
             title.try_into()?,

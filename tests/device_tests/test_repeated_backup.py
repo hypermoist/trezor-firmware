@@ -47,7 +47,9 @@ def test_repeated_backup(client: Client):
 
     # unlock repeated backup by entering 3 of the 5 shares we have got
     with client:
-        IF = InputFlowSlip39BasicRecoveryDryRun(client, mnemonics[:3])
+        IF = InputFlowSlip39BasicRecoveryDryRun(
+            client, mnemonics[:3], unlock_repeated_backup=True
+        )
         client.set_input_flow(IF.get())
         ret = device.recover(
             client, recovery_kind=messages.RecoveryKind.UnlockRepeatedBackup

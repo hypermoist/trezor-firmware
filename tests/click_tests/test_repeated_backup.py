@@ -107,12 +107,12 @@ def test_repeated_backup(
 
     recovery.confirm_recovery(debug, "recovery__title_unlock_repeated_backup")
 
-    recovery.select_number_of_words(debug, num_of_words=20)
+    recovery.select_number_of_words(debug, num_of_words=20, unlock_repeated_backup=True)
     recovery.enter_seed(
         debug,
         initial_backup_1_of_1,
         True,
-        "recovery__enter_any_share",
+        "recovery__enter_backup",
         "recovery__unlock_repeated_backup",
     )
 
@@ -184,9 +184,13 @@ def test_repeated_backup(
     recovery.confirm_recovery(debug, "recovery__title_unlock_repeated_backup")
 
     # ... this time with the 2 shares from the *new* backup, which was a 2-of-3!
-    recovery.select_number_of_words(debug, num_of_words=20)
+    recovery.select_number_of_words(debug, num_of_words=20, unlock_repeated_backup=True)
     recovery.enter_shares(
-        debug, second_backup_2_of_3[-2:], "recovery__unlock_repeated_backup"
+        debug,
+        second_backup_2_of_3[-2:],
+        "recovery__title_unlock_repeated_backup",
+        "recovery__enter_backup",
+        "recovery__unlock_repeated_backup",
     )
 
     assert device_handler.result().message == "Backup unlocked"

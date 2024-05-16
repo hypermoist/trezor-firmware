@@ -57,7 +57,10 @@ def confirm_recovery(debug: "DebugLink", title: str = "recovery__title") -> None
 
 
 def select_number_of_words(
-    debug: "DebugLink", num_of_words: int = 20, wait: bool = True
+    debug: "DebugLink",
+    num_of_words: int = 20,
+    wait: bool = True,
+    unlock_repeated_backup=False,
 ) -> None:
     if wait:
         debug.wait_layout()
@@ -84,16 +87,21 @@ def select_number_of_words(
     else:
         raise ValueError("Unknown model")
 
-    if num_of_words in (20, 33):
+    if unlock_repeated_backup:
+        TR.assert_in(layout.text_content(), "recovery__enter_backup")
+    elif num_of_words in (20, 33):
         TR.assert_in(layout.text_content(), "recovery__enter_any_share")
-    else:
+    else:  # BIP-39
         TR.assert_in(layout.text_content(), "recovery__enter_backup")
 
 
 def enter_share(
-    debug: "DebugLink", share: str, is_first: bool = True
+    debug: "DebugLink",
+    share: str,
+    is_first: bool = True,
+    before_title: str = "recovery__title_recover",
 ) -> "LayoutContent":
-    TR.assert_in(debug.read_layout().title(), "recovery__title_recover")
+    TR.assert_in(debug.read_layout().title(), before_title)
     if debug.model in (models.T2B1,):
         layout = debug.wait_layout()
         for _ in range(layout.page_count()):
@@ -112,11 +120,15 @@ def enter_share(
 def enter_shares(
     debug: "DebugLink",
     shares: list[str],
+    enter_share_before_title: str = "recovery__title_recover",
+    text: str = "recovery__enter_any_share",
     after_layout_text: str = "recovery__wallet_recovered",
 ) -> None:
-    TR.assert_in(debug.read_layout().text_content(), "recovery__enter_any_share")
+    TR.assert_in(debug.read_layout().text_content(), text)
     for index, share in enumerate(shares):
-        enter_share(debug, share, is_first=index == 0)
+        enter_share(
+            debug, share, is_first=index == 0, before_title=enter_share_before_title
+        )
         if index < len(shares) - 1:
             TR.assert_in(
                 debug.read_layout().text_content(),
