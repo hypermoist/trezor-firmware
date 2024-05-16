@@ -11,7 +11,7 @@ from .. import backup_types
 from . import layout, recover
 
 if TYPE_CHECKING:
-    from trezor.enums import BackupType
+    from trezor.enums import BackupType, RecoveryKind
 
 
 async def recovery_homescreen() -> None:
@@ -108,7 +108,7 @@ async def _continue_recovery_process() -> Success:
     if not is_first_step:
         assert word_count is not None
         # If we continue recovery, show starting screen with word count immediately.
-        await _request_share_first_screen(word_count)
+        await _request_share_first_screen(word_count, kind)
 
     secret = None
     while secret is None:
@@ -123,7 +123,7 @@ async def _continue_recovery_process() -> Success:
             # ask for the number of words
             word_count = await layout.request_word_count(kind == RecoveryKind.DryRun)
             # ...and only then show the starting screen with word count.
-            await _request_share_first_screen(word_count)
+            await _request_share_first_screen(word_count, kind)
         assert word_count is not None
 
         # ask for mnemonic words one by one
@@ -262,15 +262,23 @@ async def _process_words(words: str) -> tuple[bytes | None, BackupType]:
     return secret, backup_type
 
 
-async def _request_share_first_screen(word_count: int) -> None:
+async def _request_share_first_screen(word_count: int, kind: RecoveryKind) -> None:
+    from trezor.enums import RecoveryKind
+
     if backup_types.is_slip39_word_count(word_count):
         remaining = storage_recovery.fetch_slip39_remaining_shares()
         if remaining:
             await _request_share_next_screen()
         else:
+            if kind == RecoveryKind.UnlockRepeatedBackup:
+                text = TR.recovery__enter_backup
+                button_label = TR.buttons__continue
+            else:
+                text = TR.recovery__enter_any_share
+                button_label = TR.buttons__enter_share
             await layout.homescreen_dialog(
-                TR.buttons__enter_share,
-                TR.recovery__enter_any_share,
+                button_label,
+                text,
                 TR.recovery__word_count_template.format(word_count),
                 show_info=True,
             )
