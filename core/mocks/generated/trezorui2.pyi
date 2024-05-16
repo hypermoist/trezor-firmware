@@ -374,6 +374,7 @@ def confirm_recovery(
     description: str,
     button: str,
     dry_run: bool,
+    unlock_repeated_backup: bool,
     info_button: bool,  # unused on TR
     show_info: bool,
 ) -> LayoutObj[UiResult]:
@@ -885,6 +886,7 @@ def confirm_recovery(
     description: str,
     button: str,
     dry_run: bool,
+    unlock_repeated_backup: bool,
     info_button: bool = False,
 ) -> LayoutObj[UiResult]:
     """Device recovery homescreen."""

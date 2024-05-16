@@ -534,7 +534,7 @@ class TR:
     recovery__title_dry_run: str = "Backup check"
     recovery__title_recover: str = "Recover wallet"
     recovery__title_remaining_shares: str = "Remaining shares"
-    recovery__title_unlock_repeated_backup: str = "Unlock backup"
+    recovery__title_unlock_repeated_backup: str = "Multi-share backup"
     recovery__type_word_x_of_y_template: str = "Type word {0} of {1}"
     recovery__unlock_repeated_backup: str = "Do you want to unlock the seed for repeated backup?"
     recovery__unlock_repeated_backup_verb: str = "Unlock backup"

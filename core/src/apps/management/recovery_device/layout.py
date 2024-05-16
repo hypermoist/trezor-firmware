@@ -154,16 +154,17 @@ async def homescreen_dialog(
 
     from .recover import RecoveryAborted
 
+    kind = storage_recovery.get_kind()
+
     while True:
-        dry_run = storage_recovery.get_kind() == RecoveryKind.DryRun
         if await continue_recovery(
-            button_label, text, subtext, info_func, dry_run, show_info
+            button_label, text, subtext, info_func, kind, show_info
         ):
             # go forward in the recovery process
             break
         # user has chosen to abort, confirm the choice
         try:
-            await _confirm_abort(dry_run)
+            await _confirm_abort(kind == RecoveryKind.DryRun)
         except ActionCancelled:
             pass
         else:

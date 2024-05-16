@@ -574,6 +574,7 @@ static void _librust_qstrs(void) {
   MP_QSTR_tutorial__welcome_press_right;
   MP_QSTR_type_for_name;
   MP_QSTR_type_for_wire;
+  MP_QSTR_unlock_repeated_backup;
   MP_QSTR_usb_event;
   MP_QSTR_user_fee_change;
   MP_QSTR_value;
