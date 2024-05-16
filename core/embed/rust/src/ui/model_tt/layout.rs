@@ -1390,7 +1390,9 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
         let description: TString = kwargs.get(Qstr::MP_QSTR_description)?.try_into()?;
         let button: TString = kwargs.get(Qstr::MP_QSTR_button)?.try_into()?;
         let dry_run: bool = kwargs.get(Qstr::MP_QSTR_dry_run)?.try_into()?;
-        let unlock_repeated_backup: bool = kwargs.get(Qstr::MP_QSTR_unlock_repeated_backup)?.try_into()?;
+        let unlock_repeated_backup: bool = kwargs
+            .get(Qstr::MP_QSTR_unlock_repeated_backup)?
+            .try_into()?;
         let info_button: bool = kwargs.get_or(Qstr::MP_QSTR_info_button, false)?;
 
         let paragraphs = Paragraphs::new([
@@ -1400,12 +1402,12 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
         .with_spacing(theme::RECOVERY_SPACING);
 
         let notification: TString = if dry_run {
-            TR::recovery__title_dry_run.try_into()?
+            TR::recovery__title_dry_run
         } else if unlock_repeated_backup {
-            TR::recovery__title_unlock_repeated_backup.try_into()?
+            TR::recovery__title_unlock_repeated_backup
         } else {
-            TR::recovery__title.try_into()?
-        };
+            TR::recovery__title
+        }.try_into()?;
 
         let obj = if info_button {
             LayoutObj::new(Frame::left_aligned(
