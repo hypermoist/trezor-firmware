@@ -1,7 +1,7 @@
 use crate::ui::{
     display::Color,
     geometry::Offset,
-    shape::{BasicCanvas, Canvas, DirectRenderer, DrawingCache, Rgb565Canvas, Viewport},
+    shape::{BasicCanvas, DirectRenderer, DrawingCache, Rgb565Canvas, Viewport},
 };
 
 use super::bumps;

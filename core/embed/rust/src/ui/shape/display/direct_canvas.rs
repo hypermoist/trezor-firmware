@@ -5,8 +5,8 @@ use crate::ui::{
 
 use super::bumps::run_with_bumps;
 
-/// Creates the `Renderer` object for drawing on a the specified and invokes a
-/// user-defined function that takes a single argument `target`. The user's
+/// Creates the `Renderer` object for drawing on a specified canvas and invokes
+/// a user-defined function that takes a single argument `target`. The user's
 /// function can utilize the `target` for drawing on the canvas.
 ///
 /// `bg_color` specifies a background color with which the canvas is filled
