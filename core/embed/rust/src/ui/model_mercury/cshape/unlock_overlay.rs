@@ -1,9 +1,8 @@
 use crate::ui::{
     display::Color,
     geometry::{Offset, Point, Rect},
+    shape::{Canvas, DrawingCache, Mono8Canvas, Renderer, Shape, ShapeClone},
 };
-
-use super::{Canvas, DrawingCache, Mono8Canvas, Renderer, Shape, ShapeClone};
 
 use without_alloc::alloc::LocalAllocLeakExt;
 

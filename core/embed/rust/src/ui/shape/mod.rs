@@ -15,7 +15,6 @@ mod rawimage;
 mod render;
 mod text;
 mod toif;
-mod unlock_overlay;
 mod utils;
 
 pub use bar::Bar;
@@ -37,5 +36,4 @@ pub use rawimage::RawImage;
 pub use render::{DirectRenderer, ProgressiveRenderer, Renderer};
 pub use text::Text;
 pub use toif::ToifImage;
-pub use unlock_overlay::UnlockOverlay;
 pub use utils::ImageBuffer;
