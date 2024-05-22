@@ -361,7 +361,7 @@ def get_thp_secret() -> bytes:
     if not thp_secret:
         from trezor.crypto import random
 
-        thp_secret = random.bytes(16, strong=True)
+        thp_secret = random.bytes(16, True)
         common.set(
             _NAMESPACE, _THP_SECRET, thp_secret
         )  # TODO should be public? (consider with PIN unlocking flow)
