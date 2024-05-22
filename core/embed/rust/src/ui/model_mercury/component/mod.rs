@@ -12,6 +12,7 @@ mod vertical_menu;
 mod fido_icons;
 mod error;
 mod frame;
+#[cfg(feature = "translations")]
 mod hold_to_confirm;
 #[cfg(feature = "micropython")]
 mod homescreen;
@@ -24,6 +25,7 @@ pub mod number_input_slider;
 #[cfg(feature = "translations")]
 mod page;
 mod progress;
+#[cfg(feature = "translations")]
 mod prompt_screen;
 mod result;
 mod scroll;
@@ -50,6 +52,7 @@ pub use error::ErrorScreen;
 pub use fido::{FidoConfirm, FidoMsg};
 pub use footer::Footer;
 pub use frame::{Frame, FrameMsg};
+#[cfg(feature = "translations")]
 pub use hold_to_confirm::HoldToConfirm;
 #[cfg(feature = "micropython")]
 pub use homescreen::{check_homescreen_format, Homescreen, HomescreenMsg, Lockscreen};
@@ -70,6 +73,7 @@ pub use number_input_slider::NumberInputSliderDialog;
 #[cfg(feature = "translations")]
 pub use page::ButtonPage;
 pub use progress::Progress;
+#[cfg(feature = "translations")]
 pub use prompt_screen::PromptScreen;
 pub use result::{ResultFooter, ResultScreen, ResultStyle};
 pub use scroll::ScrollBar;

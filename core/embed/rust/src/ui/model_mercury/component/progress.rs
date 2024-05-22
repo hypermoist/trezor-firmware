@@ -13,9 +13,8 @@ use crate::{
         geometry::{Insets, Offset, Rect},
         model_mercury::{
             constant,
-            shapes::{render_loader, LoaderRange},
+            cshape::{render_loader, LoaderRange},
         },
-        shape,
         shape::Renderer,
         util::animation_disabled,
     },
@@ -122,15 +121,15 @@ impl Component for Progress {
         let range = if self.indeterminate {
             let start = (self.value - 100) % 1000;
             let end = (self.value + 100) % 1000;
-            let start = ((start as i32 * 8 * shape::PI4 as i32) / 1000) as i16;
-            let end = ((end as i32 * 8 * shape::PI4 as i32) / 1000) as i16;
+            let start = 360.0 * start as f32 / 1000.0;
+            let end = 360.0 * end as f32 / 1000.0;
             LoaderRange::FromTo(start, end)
         } else {
-            let end = ((self.value as i32 * 8 * shape::PI4 as i32) / 1000) as i16;
+            let end = 360.0 * self.value as f32 / 1000.0;
             if self.value >= LOADER_MAX {
                 LoaderRange::Full
             } else {
-                LoaderRange::FromTo(0, end)
+                LoaderRange::FromTo(0.0, end)
             }
         };
 

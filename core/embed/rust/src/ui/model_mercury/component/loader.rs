@@ -7,7 +7,7 @@ use crate::{
         component::{Component, Event, EventCtx, Pad},
         display::{self, toif::Icon, Color, LOADER_MAX},
         geometry::{Alignment2D, Offset, Rect},
-        model_mercury::shapes::{render_loader, LoaderRange},
+        model_mercury::cshape::{render_loader, LoaderRange},
         shape::{self, Renderer},
         util::animation_disabled,
     },
@@ -223,8 +223,8 @@ impl Component for Loader {
             let active_color = style.active;
             let background_color = style.background_color;
 
-            let end = ((progress as i32 * 8 * shape::PI4 as i32) / 1000) as i16;
-            let start = 0;
+            let end = 360.0 * progress as f32 / 1000.0;
+            let start = 0.0;
 
             render_loader(
                 center,

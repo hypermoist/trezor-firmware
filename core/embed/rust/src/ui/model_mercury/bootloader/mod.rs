@@ -39,7 +39,7 @@ use crate::ui::{
     constant,
     display::{toif::Toif, LOADER_MAX},
     geometry::{Alignment, Alignment2D},
-    model_mercury::shapes::{render_loader, LoaderRange},
+    model_mercury::cshape::{render_loader, LoaderRange},
     shape,
     shape::render_on_display,
 };
@@ -124,7 +124,7 @@ impl ModelMercuryFeatures {
             let center_text_offset: i16 = 10;
             let center = SCREEN.center() + Offset::y(loader_offset);
             let inactive_color = bg_color.blend(fg_color, 85);
-            let end = ((progress as i32 * 8 * shape::PI4 as i32) / 1000) as i16;
+            let end = 360.0 * progress as f32 / 1000.0;
 
             render_loader(
                 center,
