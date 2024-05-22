@@ -171,9 +171,11 @@ impl Component for TapToConfirm {
             Some(ButtonMsg::Clicked) => {}
             _ => (),
         }
-        if self.anim.is_active() {
-            ctx.request_anim_frame();
-            ctx.request_paint();
+        if let Event::Timer(EventCtx::ANIM_FRAME_TIMER) = event {
+            if self.anim.is_active() {
+                ctx.request_anim_frame();
+                ctx.request_paint();
+            }
         }
         if self.anim.is_finished() {
             return Some(());
