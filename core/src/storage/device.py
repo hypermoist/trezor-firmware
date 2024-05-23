@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from storage import common
 from storage.cache_common import STORAGE_DEVICE_EXPERIMENTAL_FEATURES
+from trezor.utils import USE_THP
 from trezor.wire import context
 
 from apps.common import cache
@@ -38,8 +39,10 @@ INITIALIZED                = const(0x13)  # bool (0x01 or empty)
 _SAFETY_CHECK_LEVEL        = const(0x14)  # int
 _EXPERIMENTAL_FEATURES     = const(0x15)  # bool (0x01 or empty)
 _HIDE_PASSPHRASE_FROM_HOST = const(0x16)  # bool (0x01 or empty)
-_THP_SECRET                = const(0x17)  # bytes
-_CRED_AUTH_KEY_COUNTER     = const(0x18)  # bytes
+
+if USE_THP:
+    _THP_SECRET                = const(0x17)  # bytes
+    _CRED_AUTH_KEY_COUNTER     = const(0x18)  # bytes
 
 SAFETY_CHECK_LEVEL_STRICT  : Literal[0] = const(0)
 SAFETY_CHECK_LEVEL_PROMPT  : Literal[1] = const(1)
@@ -351,33 +354,33 @@ def get_hide_passphrase_from_host() -> bool:
     return common.get_bool(_NAMESPACE, _HIDE_PASSPHRASE_FROM_HOST)
 
 
-def get_thp_secret() -> bytes:
-    """
-    THP Secret is used to derive:
-      - static key pair for encrypted communication
-      - symmetric mac-ing key for issuing/validating pairing credentials
-    """
-    thp_secret = common.get(_NAMESPACE, _THP_SECRET)
-    if not thp_secret:
-        from trezor.crypto import random
+if USE_THP:
 
-        thp_secret = random.bytes(16, True)
-        common.set(
-            _NAMESPACE, _THP_SECRET, thp_secret
-        )  # TODO should be public? (consider with PIN unlocking flow)
-    return thp_secret
+    def get_thp_secret() -> bytes:
+        """
+        THP Secret is used to derive:
+        - static key pair for encrypted communication
+        - symmetric mac-ing key for issuing/validating pairing credentials
+        """
+        thp_secret = common.get(_NAMESPACE, _THP_SECRET)
+        if not thp_secret:
+            from trezor.crypto import random
 
+            thp_secret = random.bytes(16, True)
+            common.set(
+                _NAMESPACE, _THP_SECRET, thp_secret
+            )  # TODO should be public? (consider with PIN unlocking flow)
+        return thp_secret
 
-def get_cred_auth_key_counter() -> bytes:
-    counter = common.get(_NAMESPACE, _CRED_AUTH_KEY_COUNTER)
-    if counter is None:
-        counter = (0).to_bytes(4, "big")
-        common.set(
-            _NAMESPACE, _CRED_AUTH_KEY_COUNTER, counter
-        )  # TODO should be public? (consider with PIN unlocking flow)
-    return counter
+    def get_cred_auth_key_counter() -> bytes:
+        counter = common.get(_NAMESPACE, _CRED_AUTH_KEY_COUNTER)
+        if counter is None:
+            counter = (0).to_bytes(4, "big")
+            common.set(
+                _NAMESPACE, _CRED_AUTH_KEY_COUNTER, counter
+            )  # TODO should be public? (consider with PIN unlocking flow)
+        return counter
 
-
-def increment_cred_auth_key_counter() -> None:
-    counter = int.from_bytes(get_cred_auth_key_counter(), "big")
-    common.set(_NAMESPACE, _CRED_AUTH_KEY_COUNTER, (counter + 1).to_bytes(4, "big"))
+    def increment_cred_auth_key_counter() -> None:
+        counter = int.from_bytes(get_cred_auth_key_counter(), "big")
+        common.set(_NAMESPACE, _CRED_AUTH_KEY_COUNTER, (counter + 1).to_bytes(4, "big"))
