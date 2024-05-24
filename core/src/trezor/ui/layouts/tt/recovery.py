@@ -2,7 +2,7 @@ from typing import Callable, Iterable
 
 import trezorui2
 from trezor import TR
-from trezor.enums import ButtonRequestType, RecoveryKind
+from trezor.enums import ButtonRequestType, RecoveryType
 
 from ..common import interact
 from . import RustLayout, raise_if_not_confirmed
@@ -116,7 +116,7 @@ async def continue_recovery(
     text: str,
     subtext: str | None,
     info_func: Callable | None,
-    kind: RecoveryKind,
+    recovery_type: RecoveryType,
     show_info: bool = False,  # unused on TT
 ) -> bool:
     from ..common import button_request
@@ -132,7 +132,7 @@ async def continue_recovery(
             title=text,
             description=description,
             button=button_label,
-            kind=kind,
+            recovery_type=recovery_type,
             info_button=info_func is not None,
         )
     )
