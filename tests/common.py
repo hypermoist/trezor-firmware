@@ -250,11 +250,15 @@ def read_mnemonic_from_screen_mercury(
     assert br.pages is not None
 
     debug.wait_layout()
+    debug.swipe_up()
 
-    for _ in range(br.pages):
+    for _ in range(br.pages - 2):
         words = debug.wait_layout().seed_words()
         mnemonic.extend(words)
         debug.swipe_up()
+
+    debug.wait_layout()
+    debug.press_yes()
 
     return mnemonic
 

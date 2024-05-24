@@ -139,8 +139,10 @@ def terminal_summary(
         println(f"{len(missing_tests)} expected UI tests did not run.")
         if check_missing:
             println("-------- List of missing tests follows: --------")
-            for test in missing_tests:
-                println("\t" + test)
+            for test in list(missing_tests)[:5]:
+                println(f"\t{test}")
+            if len(missing_tests) > 5:
+                println("\t...")
 
             if ui_option == "test":
                 println("UI test failed.")

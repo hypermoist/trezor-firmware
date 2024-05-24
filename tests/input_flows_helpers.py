@@ -84,7 +84,10 @@ class RecoveryFlow:
 
     def enter_your_backup(self) -> BRGeneratorType:
         yield
-        TR.assert_in(self._text_content(), "recovery__enter_backup")
+        if self.debug.model is models.T3T1:
+            TR.assert_in(self._text_content(), "recovery__only_first_n_letters")
+        else:
+            TR.assert_in(self._text_content(), "recovery__enter_backup")
         is_dry_run = any(
             title in self.debug.wait_layout().title().lower()
             for title in TR.translate("recovery__title_dry_run", lower=True)
@@ -137,7 +140,12 @@ class RecoveryFlow:
     def warning_invalid_recovery_seed(self) -> BRGeneratorType:
         br = yield
         assert br.code == B.Warning
-        TR.assert_in(self._text_content(), "recovery__invalid_wallet_backup_entered")
+        if self.debug.model is models.T3T1:
+            TR.assert_in(self._text_content(), "buttons__try_again")
+        else:
+            TR.assert_in(
+                self._text_content(), "recovery__invalid_wallet_backup_entered"
+            )
         self.debug.press_yes()
 
     def warning_invalid_recovery_share(self) -> BRGeneratorType:

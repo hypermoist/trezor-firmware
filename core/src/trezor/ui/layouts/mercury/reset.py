@@ -35,17 +35,13 @@ async def show_share_words(
     text_info = TR.reset__write_down_words_template.format(words_count)
     text_confirm = TR.reset__words_written_down_template.format(words_count)
 
-    result = await interact(
-        RustLayout(
-            trezorui2.flow_show_share_words(
-                title=title,
-                words=share_words,
-                text_info=text_info,
-                text_confirm=text_confirm,
-            )
-        ),
-        "backup_words",
-        ButtonRequestType.ResetDevice,
+    result = await RustLayout(
+        trezorui2.flow_show_share_words(
+            title=title,
+            words=share_words,
+            text_info=text_info,
+            text_confirm=text_confirm,
+        )
     )
 
     if result != CONFIRMED:

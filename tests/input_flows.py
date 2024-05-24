@@ -1307,7 +1307,7 @@ class InputFlowBip39ResetBackup(InputFlowBase):
         # 1. Confirm Reset x3
         # 2. Backup your seed
         # 3. Confirm warning
-        yield from click_through(self.debug, screens=3, code=B.ResetDevice)
+        yield from click_through(self.debug, screens=4, code=B.ResetDevice)
 
         # mnemonic phrases and rest
         self.mnemonic = yield from get_mnemonic_and_confirm_success(self.debug)
@@ -1328,6 +1328,11 @@ class InputFlowBip39ResetPIN(InputFlowBase):
         br = yield  # Confirm entropy
         assert br.code == B.ResetDevice
         self.debug.press_yes()
+
+        if self.debug.model is models.T3T1:
+            br = yield  # Wallet created
+            assert br.code == B.ResetDevice
+            self.debug.press_yes()
 
         br = yield  # Backup your seed
         assert br.code == B.ResetDevice
@@ -1355,10 +1360,12 @@ class InputFlowBip39ResetFailedCheck(InputFlowBase):
         self.mnemonic = None
 
     def input_flow_common(self) -> BRGeneratorType:
+        screens = 4 if self.debug.model is models.T3T1 else 3
         # 1. Confirm Reset
+        # 1a. (T3T1) done
         # 2. Backup your seed
         # 3. Confirm warning
-        yield from click_through(self.debug, screens=3, code=B.ResetDevice)
+        yield from click_through(self.debug, screens=screens, code=B.ResetDevice)
 
         # mnemonic phrases, wrong answer
         self.mnemonic = yield from read_and_confirm_mnemonic(
@@ -2119,21 +2126,37 @@ class InputFlowResetSkipBackup(InputFlowBase):
     def __init__(self, client: Client):
         super().__init__(client)
 
-    def input_flow_common(self) -> BRGeneratorType:
+    def input_flow_tt(self) -> BRGeneratorType:
         yield from self.BAK.confirm_new_wallet()
         yield  # Skip Backup
-        info_path = (
-            "backup__new_wallet_created"
-            if self.model() is models.T2B1
-            else "backup__new_wallet_successfully_created"
-        )
-        TR.assert_in(self.text_content(), info_path)
-        if self.model() is models.T2B1:
-            self.debug.press_right()
+        TR.assert_in(self.text_content(), "backup__new_wallet_successfully_created")
         self.debug.press_no()
         yield  # Confirm skip backup
         TR.assert_in(self.text_content(), "backup__want_to_skip")
         self.debug.press_no()
+
+    def input_flow_tr(self) -> BRGeneratorType:
+        yield from self.BAK.confirm_new_wallet()
+        yield  # Skip Backup
+        TR.assert_in(self.text_content(), "backup__new_wallet_created")
+        self.debug.press_right()
+        self.debug.press_no()
+        yield  # Confirm skip backup
+        TR.assert_in(self.text_content(), "backup__want_to_skip")
+        self.debug.press_no()
+
+    def input_flow_common(self) -> BRGeneratorType:
+        yield from self.BAK.confirm_new_wallet()
+        yield  # Skip Backup
+        TR.assert_in(self.text_content(), "backup__new_wallet_created")
+        self.debug.swipe_up()
+        yield
+        self.debug.click(buttons.CORNER_BUTTON)
+        self.debug.synchronize_at("VerticalMenu")
+        self.debug.click(buttons.VERTICAL_MENU[0])
+        self.debug.swipe_up()
+        self.debug.synchronize_at("PromptScreen")
+        self.debug.click(buttons.TAP_TO_CONFIRM)
 
 
 class InputFlowConfirmAllWarnings(InputFlowBase):
