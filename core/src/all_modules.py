@@ -195,6 +195,8 @@ trezor.wire.context
 import trezor.wire.context
 trezor.wire.errors
 import trezor.wire.errors
+trezor.wire.thp.credential_manager
+import trezor.wire.thp.credential_manager
 trezor.workflow
 import trezor.workflow
 apps
