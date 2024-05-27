@@ -36,6 +36,17 @@ class TestConfig(unittest.TestCase):
                 device.get_cred_auth_key_counter(), rounds.to_bytes(4, "big")
             )
 
+        def test_cred_auth_key_counter_overflow(self):
+            from storage import common
+            from storage.device import _NAMESPACE, _CRED_AUTH_KEY_COUNTER
+
+            common.set(_NAMESPACE, _CRED_AUTH_KEY_COUNTER, b"\xff\xff\xff\xfe")
+            device.increment_cred_auth_key_counter()
+            self.assertEqual(device.get_cred_auth_key_counter(), b"\xff\xff\xff\xff")
+            with self.assertRaises(AssertionError) as e:
+                device.increment_cred_auth_key_counter()
+            self.assertEqual(e.value.value, "Overflow of cred_auth_key_counter")
+
         def test_device_secret(self):
             secret1 = device.get_device_secret()
             self.assertEqual(len(secret1), 16)
