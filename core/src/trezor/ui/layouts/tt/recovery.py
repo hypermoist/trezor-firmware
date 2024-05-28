@@ -25,8 +25,8 @@ async def _is_confirmed_info(
             return result is CONFIRMED
 
 
-async def request_word_count(dry_run: bool) -> int:
-    selector = RustLayout(trezorui2.select_word_count(dry_run=dry_run))
+async def request_word_count(recovery_type: RecoveryType) -> int:
+    selector = RustLayout(trezorui2.select_word_count(recovery_type=recovery_type))
     count = await interact(selector, "word_count", ButtonRequestType.MnemonicWordCount)
     return int(count)
 

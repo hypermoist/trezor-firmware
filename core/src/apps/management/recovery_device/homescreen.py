@@ -122,9 +122,7 @@ async def _continue_recovery_process() -> Success:
                     TR.buttons__continue, TR.recovery__num_of_words
                 )
             # ask for the number of words
-            word_count = await layout.request_word_count(
-                recovery_type == RecoveryType.DryRun
-            )
+            word_count = await layout.request_word_count(recovery_type)
             # ...and only then show the starting screen with word count.
             await _request_share_first_screen(word_count, recovery_type)
         assert word_count is not None

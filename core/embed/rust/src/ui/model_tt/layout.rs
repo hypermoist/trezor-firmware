@@ -1391,9 +1391,7 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
 
         let notification = match recovery_type {
             RECOVERY_TYPE_DRY_RUN => TR::recovery__title_dry_run.into(),
-            RECOVERY_TYPE_UNLOCK_REPEATED_BACKUP => {
-                TR::recovery__title_unlock_repeated_backup.into()
-            }
+            RECOVERY_TYPE_UNLOCK_REPEATED_BACKUP => TR::recovery__title_dry_run.into(),
             _ => TR::recovery__title.into(),
         };
 
@@ -1423,11 +1421,11 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
 
 extern "C" fn new_select_word_count(n_args: usize, args: *const Obj, kwargs: *mut Map) -> Obj {
     let block = move |_args: &[Obj], kwargs: &Map| {
-        let dry_run: bool = kwargs.get(Qstr::MP_QSTR_dry_run)?.try_into()?;
-        let title: TString = if dry_run {
-            TR::recovery__title_dry_run.into()
-        } else {
-            TR::recovery__title.into()
+        let recovery_type: u32 = kwargs.get(Qstr::MP_QSTR_recovery_type)?.try_into()?;
+        let title: TString = match recovery_type {
+            RECOVERY_TYPE_DRY_RUN => TR::recovery__title_dry_run.into(),
+            RECOVERY_TYPE_UNLOCK_REPEATED_BACKUP => TR::recovery__title_dry_run.into(),
+            _ => TR::recovery__title.into(),
         };
 
         let paragraphs = Paragraphs::new(Paragraph::new(
@@ -2055,7 +2053,7 @@ pub static mp_module_trezorui2: Module = obj_module! {
 
     /// def select_word_count(
     ///     *,
-    ///     dry_run: bool,
+    ///     recovery_type: int,  # RecoveryType enum, passed as an int
     /// ) -> LayoutObj[int | str]:  # TT returns int
     ///     """Select mnemonic word count from (12, 18, 20, 24, 33)."""
     Qstr::MP_QSTR_select_word_count => obj_fn_kw!(0, new_select_word_count).as_obj(),

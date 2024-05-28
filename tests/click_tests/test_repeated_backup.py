@@ -185,7 +185,7 @@ def test_repeated_backup(
     recovery.enter_shares(
         debug,
         second_backup_2_of_3[-2:],
-        "recovery__title_unlock_repeated_backup",
+        "recovery__title_dry_run",
         "recovery__enter_backup",
         "recovery__unlock_repeated_backup",
     )

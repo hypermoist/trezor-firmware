@@ -8,9 +8,9 @@ from ..common import interact
 from . import RustLayout, raise_if_not_confirmed, show_warning
 
 
-async def request_word_count(dry_run: bool) -> int:
+async def request_word_count(recovery_type: RecoveryType) -> int:
     count = await interact(
-        RustLayout(trezorui2.select_word_count(dry_run=dry_run)),
+        RustLayout(trezorui2.select_word_count(recovery_type=recovery_type)),
         "word_count",
         ButtonRequestType.MnemonicWordCount,
     )

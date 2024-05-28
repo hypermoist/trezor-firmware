@@ -463,7 +463,7 @@ pub struct Features {
     // @@protoc_insertion_point(field:hw.trezor.messages.management.Features.unit_packaging)
     pub unit_packaging: ::std::option::Option<u32>,
     // @@protoc_insertion_point(field:hw.trezor.messages.management.Features.recovery_type)
-    pub recovery_type: ::std::option::Option<::protobuf::EnumOrUnknown<recovery_device::RecoveryType>>,
+    pub recovery_type: ::std::option::Option<::protobuf::EnumOrUnknown<RecoveryType>>,
     // special fields
     // @@protoc_insertion_point(special_field:hw.trezor.messages.management.Features.special_fields)
     pub special_fields: ::protobuf::SpecialFields,
@@ -1577,12 +1577,12 @@ impl Features {
         self.unit_packaging = ::std::option::Option::Some(v);
     }
 
-    // optional .hw.trezor.messages.management.RecoveryDevice.RecoveryType recovery_type = 52;
+    // optional .hw.trezor.messages.management.RecoveryType recovery_type = 52;
 
-    pub fn recovery_type(&self) -> recovery_device::RecoveryType {
+    pub fn recovery_type(&self) -> RecoveryType {
         match self.recovery_type {
-            Some(e) => e.enum_value_or(recovery_device::RecoveryType::NormalRecovery),
-            None => recovery_device::RecoveryType::NormalRecovery,
+            Some(e) => e.enum_value_or(RecoveryType::NormalRecovery),
+            None => RecoveryType::NormalRecovery,
         }
     }
 
@@ -1595,7 +1595,7 @@ impl Features {
     }
 
     // Param is passed by value, moved
-    pub fn set_recovery_type(&mut self, v: recovery_device::RecoveryType) {
+    pub fn set_recovery_type(&mut self, v: RecoveryType) {
         self.recovery_type = ::std::option::Option::Some(::protobuf::EnumOrUnknown::new(v));
     }
 
@@ -7863,7 +7863,7 @@ pub struct RecoveryDevice {
     // @@protoc_insertion_point(field:hw.trezor.messages.management.RecoveryDevice.u2f_counter)
     pub u2f_counter: ::std::option::Option<u32>,
     // @@protoc_insertion_point(field:hw.trezor.messages.management.RecoveryDevice.type)
-    pub type_: ::std::option::Option<::protobuf::EnumOrUnknown<recovery_device::RecoveryType>>,
+    pub type_: ::std::option::Option<::protobuf::EnumOrUnknown<RecoveryType>>,
     // special fields
     // @@protoc_insertion_point(special_field:hw.trezor.messages.management.RecoveryDevice.special_fields)
     pub special_fields: ::protobuf::SpecialFields,
@@ -8069,12 +8069,12 @@ impl RecoveryDevice {
         self.u2f_counter = ::std::option::Option::Some(v);
     }
 
-    // optional .hw.trezor.messages.management.RecoveryDevice.RecoveryType type = 10;
+    // optional .hw.trezor.messages.management.RecoveryType type = 10;
 
-    pub fn type_(&self) -> recovery_device::RecoveryType {
+    pub fn type_(&self) -> RecoveryType {
         match self.type_ {
-            Some(e) => e.enum_value_or(recovery_device::RecoveryType::NormalRecovery),
-            None => recovery_device::RecoveryType::NormalRecovery,
+            Some(e) => e.enum_value_or(RecoveryType::NormalRecovery),
+            None => RecoveryType::NormalRecovery,
         }
     }
 
@@ -8087,7 +8087,7 @@ impl RecoveryDevice {
     }
 
     // Param is passed by value, moved
-    pub fn set_type(&mut self, v: recovery_device::RecoveryType) {
+    pub fn set_type(&mut self, v: RecoveryType) {
         self.type_ = ::std::option::Option::Some(::protobuf::EnumOrUnknown::new(v));
     }
 
@@ -8380,73 +8380,6 @@ pub mod recovery_device {
     impl RecoveryDeviceInputMethod {
         pub(in super) fn generated_enum_descriptor_data() -> ::protobuf::reflect::GeneratedEnumDescriptorData {
             ::protobuf::reflect::GeneratedEnumDescriptorData::new::<RecoveryDeviceInputMethod>("RecoveryDevice.RecoveryDeviceInputMethod")
-        }
-    }
-
-    #[derive(Clone,Copy,PartialEq,Eq,Debug,Hash)]
-    // @@protoc_insertion_point(enum:hw.trezor.messages.management.RecoveryDevice.RecoveryType)
-    pub enum RecoveryType {
-        // @@protoc_insertion_point(enum_value:hw.trezor.messages.management.RecoveryDevice.RecoveryType.NormalRecovery)
-        NormalRecovery = 0,
-        // @@protoc_insertion_point(enum_value:hw.trezor.messages.management.RecoveryDevice.RecoveryType.DryRun)
-        DryRun = 1,
-        // @@protoc_insertion_point(enum_value:hw.trezor.messages.management.RecoveryDevice.RecoveryType.UnlockRepeatedBackup)
-        UnlockRepeatedBackup = 2,
-    }
-
-    impl ::protobuf::Enum for RecoveryType {
-        const NAME: &'static str = "RecoveryType";
-
-        fn value(&self) -> i32 {
-            *self as i32
-        }
-
-        fn from_i32(value: i32) -> ::std::option::Option<RecoveryType> {
-            match value {
-                0 => ::std::option::Option::Some(RecoveryType::NormalRecovery),
-                1 => ::std::option::Option::Some(RecoveryType::DryRun),
-                2 => ::std::option::Option::Some(RecoveryType::UnlockRepeatedBackup),
-                _ => ::std::option::Option::None
-            }
-        }
-
-        fn from_str(str: &str) -> ::std::option::Option<RecoveryType> {
-            match str {
-                "NormalRecovery" => ::std::option::Option::Some(RecoveryType::NormalRecovery),
-                "DryRun" => ::std::option::Option::Some(RecoveryType::DryRun),
-                "UnlockRepeatedBackup" => ::std::option::Option::Some(RecoveryType::UnlockRepeatedBackup),
-                _ => ::std::option::Option::None
-            }
-        }
-
-        const VALUES: &'static [RecoveryType] = &[
-            RecoveryType::NormalRecovery,
-            RecoveryType::DryRun,
-            RecoveryType::UnlockRepeatedBackup,
-        ];
-    }
-
-    impl ::protobuf::EnumFull for RecoveryType {
-        fn enum_descriptor() -> ::protobuf::reflect::EnumDescriptor {
-            static descriptor: ::protobuf::rt::Lazy<::protobuf::reflect::EnumDescriptor> = ::protobuf::rt::Lazy::new();
-            descriptor.get(|| super::file_descriptor().enum_by_package_relative_name("RecoveryDevice.RecoveryType").unwrap()).clone()
-        }
-
-        fn descriptor(&self) -> ::protobuf::reflect::EnumValueDescriptor {
-            let index = *self as usize;
-            Self::enum_descriptor().value_by_index(index)
-        }
-    }
-
-    impl ::std::default::Default for RecoveryType {
-        fn default() -> Self {
-            RecoveryType::NormalRecovery
-        }
-    }
-
-    impl RecoveryType {
-        pub(in super) fn generated_enum_descriptor_data() -> ::protobuf::reflect::GeneratedEnumDescriptorData {
-            ::protobuf::reflect::GeneratedEnumDescriptorData::new::<RecoveryType>("RecoveryDevice.RecoveryType")
         }
     }
 }
@@ -10857,12 +10790,79 @@ impl HomescreenFormat {
     }
 }
 
+#[derive(Clone,Copy,PartialEq,Eq,Debug,Hash)]
+// @@protoc_insertion_point(enum:hw.trezor.messages.management.RecoveryType)
+pub enum RecoveryType {
+    // @@protoc_insertion_point(enum_value:hw.trezor.messages.management.RecoveryType.NormalRecovery)
+    NormalRecovery = 0,
+    // @@protoc_insertion_point(enum_value:hw.trezor.messages.management.RecoveryType.DryRun)
+    DryRun = 1,
+    // @@protoc_insertion_point(enum_value:hw.trezor.messages.management.RecoveryType.UnlockRepeatedBackup)
+    UnlockRepeatedBackup = 2,
+}
+
+impl ::protobuf::Enum for RecoveryType {
+    const NAME: &'static str = "RecoveryType";
+
+    fn value(&self) -> i32 {
+        *self as i32
+    }
+
+    fn from_i32(value: i32) -> ::std::option::Option<RecoveryType> {
+        match value {
+            0 => ::std::option::Option::Some(RecoveryType::NormalRecovery),
+            1 => ::std::option::Option::Some(RecoveryType::DryRun),
+            2 => ::std::option::Option::Some(RecoveryType::UnlockRepeatedBackup),
+            _ => ::std::option::Option::None
+        }
+    }
+
+    fn from_str(str: &str) -> ::std::option::Option<RecoveryType> {
+        match str {
+            "NormalRecovery" => ::std::option::Option::Some(RecoveryType::NormalRecovery),
+            "DryRun" => ::std::option::Option::Some(RecoveryType::DryRun),
+            "UnlockRepeatedBackup" => ::std::option::Option::Some(RecoveryType::UnlockRepeatedBackup),
+            _ => ::std::option::Option::None
+        }
+    }
+
+    const VALUES: &'static [RecoveryType] = &[
+        RecoveryType::NormalRecovery,
+        RecoveryType::DryRun,
+        RecoveryType::UnlockRepeatedBackup,
+    ];
+}
+
+impl ::protobuf::EnumFull for RecoveryType {
+    fn enum_descriptor() -> ::protobuf::reflect::EnumDescriptor {
+        static descriptor: ::protobuf::rt::Lazy<::protobuf::reflect::EnumDescriptor> = ::protobuf::rt::Lazy::new();
+        descriptor.get(|| file_descriptor().enum_by_package_relative_name("RecoveryType").unwrap()).clone()
+    }
+
+    fn descriptor(&self) -> ::protobuf::reflect::EnumValueDescriptor {
+        let index = *self as usize;
+        Self::enum_descriptor().value_by_index(index)
+    }
+}
+
+impl ::std::default::Default for RecoveryType {
+    fn default() -> Self {
+        RecoveryType::NormalRecovery
+    }
+}
+
+impl RecoveryType {
+    fn generated_enum_descriptor_data() -> ::protobuf::reflect::GeneratedEnumDescriptorData {
+        ::protobuf::reflect::GeneratedEnumDescriptorData::new::<RecoveryType>("RecoveryType")
+    }
+}
+
 static file_descriptor_proto_data: &'static [u8] = b"\
     \n\x19messages-management.proto\x12\x1dhw.trezor.messages.management\x1a\
     \x0emessages.proto\"\x80\x01\n\nInitialize\x12\x1d\n\nsession_id\x18\x01\
     \x20\x01(\x0cR\tsessionId\x12,\n\x10_skip_passphrase\x18\x02\x20\x01(\
     \x08R\x0eSkipPassphraseB\x02\x18\x01\x12%\n\x0ederive_cardano\x18\x03\
-    \x20\x01(\x08R\rderiveCardano\"\r\n\x0bGetFeatures\"\xdf\x16\n\x08Featur\
+    \x20\x01(\x08R\rderiveCardano\"\r\n\x0bGetFeatures\"\xd0\x16\n\x08Featur\
     es\x12\x16\n\x06vendor\x18\x01\x20\x01(\tR\x06vendor\x12#\n\rmajor_versi\
     on\x18\x02\x20\x02(\rR\x0cmajorVersion\x12#\n\rminor_version\x18\x03\x20\
     \x02(\rR\x0cminorVersion\x12#\n\rpatch_version\x18\x04\x20\x02(\rR\x0cpa\
@@ -10909,71 +10909,71 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x180\x20\x01(\rR\x10homescreenHeight\x12+\n\x11bootloader_locked\x181\
     \x20\x01(\x08R\x10bootloaderLocked\x12>\n\x18language_version_matches\
     \x182\x20\x01(\x08:\x04trueR\x16languageVersionMatches\x12%\n\x0eunit_pa\
-    ckaging\x183\x20\x01(\rR\runitPackaging\x12_\n\rrecovery_type\x184\x20\
-    \x01(\x0e2:.hw.trezor.messages.management.RecoveryDevice.RecoveryTypeR\
-    \x0crecoveryType\"C\n\x12BackupAvailability\x12\x10\n\x0cNotAvailable\
-    \x10\0\x12\x0c\n\x08Required\x10\x01\x12\r\n\tAvailable\x10\x02\"7\n\x0e\
-    RecoveryStatus\x12\x0b\n\x07Nothing\x10\0\x12\x0c\n\x08Recovery\x10\x01\
-    \x12\n\n\x06Backup\x10\x02\"\x84\x04\n\nCapability\x12\x1c\n\x12Capabili\
-    ty_Bitcoin\x10\x01\x1a\x04\x80\xa6\x1d\x01\x12\x1b\n\x17Capability_Bitco\
-    in_like\x10\x02\x12\x16\n\x12Capability_Binance\x10\x03\x12\x16\n\x12Cap\
-    ability_Cardano\x10\x04\x12\x1b\n\x11Capability_Crypto\x10\x05\x1a\x04\
-    \x80\xa6\x1d\x01\x12\x12\n\x0eCapability_EOS\x10\x06\x12\x17\n\x13Capabi\
-    lity_Ethereum\x10\x07\x12\x17\n\x0fCapability_Lisk\x10\x08\x1a\x02\x08\
-    \x01\x12\x15\n\x11Capability_Monero\x10\t\x12\x12\n\x0eCapability_NEM\
-    \x10\n\x12\x15\n\x11Capability_Ripple\x10\x0b\x12\x16\n\x12Capability_St\
-    ellar\x10\x0c\x12\x14\n\x10Capability_Tezos\x10\r\x12\x12\n\x0eCapabilit\
-    y_U2F\x10\x0e\x12\x1b\n\x11Capability_Shamir\x10\x0f\x1a\x04\x80\xa6\x1d\
-    \x01\x12!\n\x17Capability_ShamirGroups\x10\x10\x1a\x04\x80\xa6\x1d\x01\
-    \x12$\n\x1aCapability_PassphraseEntry\x10\x11\x1a\x04\x80\xa6\x1d\x01\
-    \x12\x15\n\x11Capability_Solana\x10\x12\x12!\n\x17Capability_Translation\
-    s\x10\x13\x1a\x04\x80\xa6\x1d\x01\x1a\x04\xc8\xf3\x18\x01\"\x0c\n\nLockD\
-    evice\"&\n\x07SetBusy\x12\x1b\n\texpiry_ms\x18\x01\x20\x01(\rR\x08expiry\
-    Ms\"\x0c\n\nEndSession\"\x9b\x04\n\rApplySettings\x12\x1e\n\x08language\
-    \x18\x01\x20\x01(\tR\x08languageB\x02\x18\x01\x12\x14\n\x05label\x18\x02\
-    \x20\x01(\tR\x05label\x12%\n\x0euse_passphrase\x18\x03\x20\x01(\x08R\rus\
-    ePassphrase\x12\x1e\n\nhomescreen\x18\x04\x20\x01(\x0cR\nhomescreen\x120\
-    \n\x12_passphrase_source\x18\x05\x20\x01(\rR\x10PassphraseSourceB\x02\
-    \x18\x01\x12+\n\x12auto_lock_delay_ms\x18\x06\x20\x01(\rR\x0fautoLockDel\
-    ayMs\x12)\n\x10display_rotation\x18\x07\x20\x01(\rR\x0fdisplayRotation\
-    \x12=\n\x1bpassphrase_always_on_device\x18\x08\x20\x01(\x08R\x18passphra\
-    seAlwaysOnDevice\x12T\n\rsafety_checks\x18\t\x20\x01(\x0e2/.hw.trezor.me\
-    ssages.management.SafetyCheckLevelR\x0csafetyChecks\x123\n\x15experiment\
-    al_features\x18\n\x20\x01(\x08R\x14experimentalFeatures\x129\n\x19hide_p\
-    assphrase_from_host\x18\x0b\x20\x01(\x08R\x16hidePassphraseFromHost\"T\n\
-    \x0eChangeLanguage\x12\x1f\n\x0bdata_length\x18\x01\x20\x02(\rR\ndataLen\
-    gth\x12!\n\x0cshow_display\x18\x02\x20\x01(\x08R\x0bshowDisplay\"Z\n\x16\
-    TranslationDataRequest\x12\x1f\n\x0bdata_length\x18\x01\x20\x02(\rR\ndat\
-    aLength\x12\x1f\n\x0bdata_offset\x18\x02\x20\x02(\rR\ndataOffset\"3\n\
-    \x12TranslationDataAck\x12\x1d\n\ndata_chunk\x18\x01\x20\x02(\x0cR\tdata\
-    Chunk\"\"\n\nApplyFlags\x12\x14\n\x05flags\x18\x01\x20\x02(\rR\x05flags\
-    \"#\n\tChangePin\x12\x16\n\x06remove\x18\x01\x20\x01(\x08R\x06remove\"(\
-    \n\x0eChangeWipeCode\x12\x16\n\x06remove\x18\x01\x20\x01(\x08R\x06remove\
-    \"\xaa\x01\n\tSdProtect\x12]\n\toperation\x18\x01\x20\x02(\x0e2?.hw.trez\
-    or.messages.management.SdProtect.SdProtectOperationTypeR\toperation\">\n\
-    \x16SdProtectOperationType\x12\x0b\n\x07DISABLE\x10\0\x12\n\n\x06ENABLE\
-    \x10\x01\x12\x0b\n\x07REFRESH\x10\x02\"O\n\x04Ping\x12\x1a\n\x07message\
-    \x18\x01\x20\x01(\t:\0R\x07message\x12+\n\x11button_protection\x18\x02\
-    \x20\x01(\x08R\x10buttonProtection\"\x08\n\x06Cancel\"\x20\n\nGetEntropy\
-    \x12\x12\n\x04size\x18\x01\x20\x02(\rR\x04size\"#\n\x07Entropy\x12\x18\n\
-    \x07entropy\x18\x01\x20\x02(\x0cR\x07entropy\"/\n\x0fGetFirmwareHash\x12\
-    \x1c\n\tchallenge\x18\x01\x20\x01(\x0cR\tchallenge\"\"\n\x0cFirmwareHash\
-    \x12\x12\n\x04hash\x18\x01\x20\x02(\x0cR\x04hash\"2\n\x12AuthenticateDev\
-    ice\x12\x1c\n\tchallenge\x18\x01\x20\x02(\x0cR\tchallenge\"U\n\x11Authen\
-    ticityProof\x12\"\n\x0ccertificates\x18\x01\x20\x03(\x0cR\x0ccertificate\
-    s\x12\x1c\n\tsignature\x18\x02\x20\x02(\x0cR\tsignature\"\x0c\n\nWipeDev\
-    ice\"\xad\x02\n\nLoadDevice\x12\x1c\n\tmnemonics\x18\x01\x20\x03(\tR\tmn\
-    emonics\x12\x10\n\x03pin\x18\x03\x20\x01(\tR\x03pin\x123\n\x15passphrase\
-    _protection\x18\x04\x20\x01(\x08R\x14passphraseProtection\x12\x1e\n\x08l\
-    anguage\x18\x05\x20\x01(\tR\x08languageB\x02\x18\x01\x12\x14\n\x05label\
-    \x18\x06\x20\x01(\tR\x05label\x12#\n\rskip_checksum\x18\x07\x20\x01(\x08\
-    R\x0cskipChecksum\x12\x1f\n\x0bu2f_counter\x18\x08\x20\x01(\rR\nu2fCount\
-    er\x12!\n\x0cneeds_backup\x18\t\x20\x01(\x08R\x0bneedsBackup\x12\x1b\n\t\
-    no_backup\x18\n\x20\x01(\x08R\x08noBackup\"\x99\x03\n\x0bResetDevice\x12\
-    %\n\x0edisplay_random\x18\x01\x20\x01(\x08R\rdisplayRandom\x12\x1f\n\x08\
-    strength\x18\x02\x20\x01(\r:\x03256R\x08strength\x123\n\x15passphrase_pr\
-    otection\x18\x03\x20\x01(\x08R\x14passphraseProtection\x12%\n\x0epin_pro\
-    tection\x18\x04\x20\x01(\x08R\rpinProtection\x12\x1e\n\x08language\x18\
+    ckaging\x183\x20\x01(\rR\runitPackaging\x12P\n\rrecovery_type\x184\x20\
+    \x01(\x0e2+.hw.trezor.messages.management.RecoveryTypeR\x0crecoveryType\
+    \"C\n\x12BackupAvailability\x12\x10\n\x0cNotAvailable\x10\0\x12\x0c\n\
+    \x08Required\x10\x01\x12\r\n\tAvailable\x10\x02\"7\n\x0eRecoveryStatus\
+    \x12\x0b\n\x07Nothing\x10\0\x12\x0c\n\x08Recovery\x10\x01\x12\n\n\x06Bac\
+    kup\x10\x02\"\x84\x04\n\nCapability\x12\x1c\n\x12Capability_Bitcoin\x10\
+    \x01\x1a\x04\x80\xa6\x1d\x01\x12\x1b\n\x17Capability_Bitcoin_like\x10\
+    \x02\x12\x16\n\x12Capability_Binance\x10\x03\x12\x16\n\x12Capability_Car\
+    dano\x10\x04\x12\x1b\n\x11Capability_Crypto\x10\x05\x1a\x04\x80\xa6\x1d\
+    \x01\x12\x12\n\x0eCapability_EOS\x10\x06\x12\x17\n\x13Capability_Ethereu\
+    m\x10\x07\x12\x17\n\x0fCapability_Lisk\x10\x08\x1a\x02\x08\x01\x12\x15\n\
+    \x11Capability_Monero\x10\t\x12\x12\n\x0eCapability_NEM\x10\n\x12\x15\n\
+    \x11Capability_Ripple\x10\x0b\x12\x16\n\x12Capability_Stellar\x10\x0c\
+    \x12\x14\n\x10Capability_Tezos\x10\r\x12\x12\n\x0eCapability_U2F\x10\x0e\
+    \x12\x1b\n\x11Capability_Shamir\x10\x0f\x1a\x04\x80\xa6\x1d\x01\x12!\n\
+    \x17Capability_ShamirGroups\x10\x10\x1a\x04\x80\xa6\x1d\x01\x12$\n\x1aCa\
+    pability_PassphraseEntry\x10\x11\x1a\x04\x80\xa6\x1d\x01\x12\x15\n\x11Ca\
+    pability_Solana\x10\x12\x12!\n\x17Capability_Translations\x10\x13\x1a\
+    \x04\x80\xa6\x1d\x01\x1a\x04\xc8\xf3\x18\x01\"\x0c\n\nLockDevice\"&\n\
+    \x07SetBusy\x12\x1b\n\texpiry_ms\x18\x01\x20\x01(\rR\x08expiryMs\"\x0c\n\
+    \nEndSession\"\x9b\x04\n\rApplySettings\x12\x1e\n\x08language\x18\x01\
+    \x20\x01(\tR\x08languageB\x02\x18\x01\x12\x14\n\x05label\x18\x02\x20\x01\
+    (\tR\x05label\x12%\n\x0euse_passphrase\x18\x03\x20\x01(\x08R\rusePassphr\
+    ase\x12\x1e\n\nhomescreen\x18\x04\x20\x01(\x0cR\nhomescreen\x120\n\x12_p\
+    assphrase_source\x18\x05\x20\x01(\rR\x10PassphraseSourceB\x02\x18\x01\
+    \x12+\n\x12auto_lock_delay_ms\x18\x06\x20\x01(\rR\x0fautoLockDelayMs\x12\
+    )\n\x10display_rotation\x18\x07\x20\x01(\rR\x0fdisplayRotation\x12=\n\
+    \x1bpassphrase_always_on_device\x18\x08\x20\x01(\x08R\x18passphraseAlway\
+    sOnDevice\x12T\n\rsafety_checks\x18\t\x20\x01(\x0e2/.hw.trezor.messages.\
+    management.SafetyCheckLevelR\x0csafetyChecks\x123\n\x15experimental_feat\
+    ures\x18\n\x20\x01(\x08R\x14experimentalFeatures\x129\n\x19hide_passphra\
+    se_from_host\x18\x0b\x20\x01(\x08R\x16hidePassphraseFromHost\"T\n\x0eCha\
+    ngeLanguage\x12\x1f\n\x0bdata_length\x18\x01\x20\x02(\rR\ndataLength\x12\
+    !\n\x0cshow_display\x18\x02\x20\x01(\x08R\x0bshowDisplay\"Z\n\x16Transla\
+    tionDataRequest\x12\x1f\n\x0bdata_length\x18\x01\x20\x02(\rR\ndataLength\
+    \x12\x1f\n\x0bdata_offset\x18\x02\x20\x02(\rR\ndataOffset\"3\n\x12Transl\
+    ationDataAck\x12\x1d\n\ndata_chunk\x18\x01\x20\x02(\x0cR\tdataChunk\"\"\
+    \n\nApplyFlags\x12\x14\n\x05flags\x18\x01\x20\x02(\rR\x05flags\"#\n\tCha\
+    ngePin\x12\x16\n\x06remove\x18\x01\x20\x01(\x08R\x06remove\"(\n\x0eChang\
+    eWipeCode\x12\x16\n\x06remove\x18\x01\x20\x01(\x08R\x06remove\"\xaa\x01\
+    \n\tSdProtect\x12]\n\toperation\x18\x01\x20\x02(\x0e2?.hw.trezor.message\
+    s.management.SdProtect.SdProtectOperationTypeR\toperation\">\n\x16SdProt\
+    ectOperationType\x12\x0b\n\x07DISABLE\x10\0\x12\n\n\x06ENABLE\x10\x01\
+    \x12\x0b\n\x07REFRESH\x10\x02\"O\n\x04Ping\x12\x1a\n\x07message\x18\x01\
+    \x20\x01(\t:\0R\x07message\x12+\n\x11button_protection\x18\x02\x20\x01(\
+    \x08R\x10buttonProtection\"\x08\n\x06Cancel\"\x20\n\nGetEntropy\x12\x12\
+    \n\x04size\x18\x01\x20\x02(\rR\x04size\"#\n\x07Entropy\x12\x18\n\x07entr\
+    opy\x18\x01\x20\x02(\x0cR\x07entropy\"/\n\x0fGetFirmwareHash\x12\x1c\n\t\
+    challenge\x18\x01\x20\x01(\x0cR\tchallenge\"\"\n\x0cFirmwareHash\x12\x12\
+    \n\x04hash\x18\x01\x20\x02(\x0cR\x04hash\"2\n\x12AuthenticateDevice\x12\
+    \x1c\n\tchallenge\x18\x01\x20\x02(\x0cR\tchallenge\"U\n\x11AuthenticityP\
+    roof\x12\"\n\x0ccertificates\x18\x01\x20\x03(\x0cR\x0ccertificates\x12\
+    \x1c\n\tsignature\x18\x02\x20\x02(\x0cR\tsignature\"\x0c\n\nWipeDevice\"\
+    \xad\x02\n\nLoadDevice\x12\x1c\n\tmnemonics\x18\x01\x20\x03(\tR\tmnemoni\
+    cs\x12\x10\n\x03pin\x18\x03\x20\x01(\tR\x03pin\x123\n\x15passphrase_prot\
+    ection\x18\x04\x20\x01(\x08R\x14passphraseProtection\x12\x1e\n\x08langua\
+    ge\x18\x05\x20\x01(\tR\x08languageB\x02\x18\x01\x12\x14\n\x05label\x18\
+    \x06\x20\x01(\tR\x05label\x12#\n\rskip_checksum\x18\x07\x20\x01(\x08R\
+    \x0cskipChecksum\x12\x1f\n\x0bu2f_counter\x18\x08\x20\x01(\rR\nu2fCounte\
+    r\x12!\n\x0cneeds_backup\x18\t\x20\x01(\x08R\x0bneedsBackup\x12\x1b\n\tn\
+    o_backup\x18\n\x20\x01(\x08R\x08noBackup\"\x99\x03\n\x0bResetDevice\x12%\
+    \n\x0edisplay_random\x18\x01\x20\x01(\x08R\rdisplayRandom\x12\x1f\n\x08s\
+    trength\x18\x02\x20\x01(\r:\x03256R\x08strength\x123\n\x15passphrase_pro\
+    tection\x18\x03\x20\x01(\x08R\x14passphraseProtection\x12%\n\x0epin_prot\
+    ection\x18\x04\x20\x01(\x08R\rpinProtection\x12\x1e\n\x08language\x18\
     \x05\x20\x01(\tR\x08languageB\x02\x18\x01\x12\x14\n\x05label\x18\x06\x20\
     \x01(\tR\x05label\x12\x1f\n\x0bu2f_counter\x18\x07\x20\x01(\rR\nu2fCount\
     er\x12\x1f\n\x0bskip_backup\x18\x08\x20\x01(\x08R\nskipBackup\x12\x1b\n\
@@ -10985,7 +10985,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x0bSlip39Group\x12)\n\x10member_threshold\x18\x01\x20\x02(\rR\x0fmember\
     Threshold\x12!\n\x0cmember_count\x18\x02\x20\x02(\rR\x0bmemberCount\"\
     \x10\n\x0eEntropyRequest\"&\n\nEntropyAck\x12\x18\n\x07entropy\x18\x01\
-    \x20\x02(\x0cR\x07entropy\"\xe6\x04\n\x0eRecoveryDevice\x12\x1d\n\nword_\
+    \x20\x02(\x0cR\x07entropy\"\x8d\x04\n\x0eRecoveryDevice\x12\x1d\n\nword_\
     count\x18\x01\x20\x01(\rR\twordCount\x123\n\x15passphrase_protection\x18\
     \x02\x20\x01(\x08R\x14passphraseProtection\x12%\n\x0epin_protection\x18\
     \x03\x20\x01(\x08R\rpinProtection\x12\x1e\n\x08language\x18\x04\x20\x01(\
@@ -10993,12 +10993,10 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     abel\x12)\n\x10enforce_wordlist\x18\x06\x20\x01(\x08R\x0fenforceWordlist\
     \x12j\n\x0cinput_method\x18\x08\x20\x01(\x0e2G.hw.trezor.messages.manage\
     ment.RecoveryDevice.RecoveryDeviceInputMethodR\x0binputMethod\x12\x1f\n\
-    \x0bu2f_counter\x18\t\x20\x01(\rR\nu2fCounter\x12^\n\x04type\x18\n\x20\
-    \x01(\x0e2:.hw.trezor.messages.management.RecoveryDevice.RecoveryType:\
-    \x0eNormalRecoveryR\x04type\";\n\x19RecoveryDeviceInputMethod\x12\x12\n\
-    \x0eScrambledWords\x10\0\x12\n\n\x06Matrix\x10\x01\"H\n\x0cRecoveryType\
-    \x12\x12\n\x0eNormalRecovery\x10\0\x12\n\n\x06DryRun\x10\x01\x12\x18\n\
-    \x14UnlockRepeatedBackup\x10\x02J\x04\x08\x07\x10\x08\"\xc5\x01\n\x0bWor\
+    \x0bu2f_counter\x18\t\x20\x01(\rR\nu2fCounter\x12O\n\x04type\x18\n\x20\
+    \x01(\x0e2+.hw.trezor.messages.management.RecoveryType:\x0eNormalRecover\
+    yR\x04type\";\n\x19RecoveryDeviceInputMethod\x12\x12\n\x0eScrambledWords\
+    \x10\0\x12\n\n\x06Matrix\x10\x01J\x04\x08\x07\x10\x08\"\xc5\x01\n\x0bWor\
     dRequest\x12N\n\x04type\x18\x01\x20\x02(\x0e2:.hw.trezor.messages.manage\
     ment.WordRequest.WordRequestTypeR\x04type\"f\n\x0fWordRequestType\x12\
     \x19\n\x15WordRequestType_Plain\x10\0\x12\x1b\n\x17WordRequestType_Matri\
@@ -11025,8 +11023,10 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x05*G\n\x10SafetyCheckLevel\x12\n\n\x06Strict\x10\0\x12\x10\n\x0cPrompt\
     Always\x10\x01\x12\x15\n\x11PromptTemporarily\x10\x02*0\n\x10HomescreenF\
     ormat\x12\x08\n\x04Toif\x10\x01\x12\x08\n\x04Jpeg\x10\x02\x12\x08\n\x04T\
-    oiG\x10\x03BB\n#com.satoshilabs.trezor.lib.protobufB\x17TrezorMessageMan\
-    agement\x80\xa6\x1d\x01\
+    oiG\x10\x03*H\n\x0cRecoveryType\x12\x12\n\x0eNormalRecovery\x10\0\x12\n\
+    \n\x06DryRun\x10\x01\x12\x18\n\x14UnlockRepeatedBackup\x10\x02BB\n#com.s\
+    atoshilabs.trezor.lib.protobufB\x17TrezorMessageManagement\x80\xa6\x1d\
+    \x01\
 ";
 
 /// `FileDescriptorProto` object which was a source for this generated file
@@ -11095,12 +11095,12 @@ pub fn file_descriptor() -> &'static ::protobuf::reflect::FileDescriptor {
             enums.push(BackupType::generated_enum_descriptor_data());
             enums.push(SafetyCheckLevel::generated_enum_descriptor_data());
             enums.push(HomescreenFormat::generated_enum_descriptor_data());
+            enums.push(RecoveryType::generated_enum_descriptor_data());
             enums.push(features::BackupAvailability::generated_enum_descriptor_data());
             enums.push(features::RecoveryStatus::generated_enum_descriptor_data());
             enums.push(features::Capability::generated_enum_descriptor_data());
             enums.push(sd_protect::SdProtectOperationType::generated_enum_descriptor_data());
             enums.push(recovery_device::RecoveryDeviceInputMethod::generated_enum_descriptor_data());
-            enums.push(recovery_device::RecoveryType::generated_enum_descriptor_data());
             enums.push(word_request::WordRequestType::generated_enum_descriptor_data());
             enums.push(reboot_to_bootloader::BootCommand::generated_enum_descriptor_data());
             ::protobuf::reflect::GeneratedFileDescriptor::new_generated(

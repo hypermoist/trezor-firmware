@@ -1416,7 +1416,7 @@ extern "C" fn new_confirm_recovery(n_args: usize, args: *const Obj, kwargs: *mut
 
         let title = match recovery_type {
             RECOVERY_TYPE_DRY_RUN => TR::recovery__title_dry_run,
-            RECOVERY_TYPE_UNLOCK_REPEATED_BACKUP => TR::recovery__title_unlock_repeated_backup,
+            RECOVERY_TYPE_UNLOCK_REPEATED_BACKUP => TR::recovery__title_dry_run,
             _ => TR::recovery__title,
         };
 
@@ -1974,7 +1974,7 @@ pub static mp_module_trezorui2: Module = obj_module! {
 
     /// def select_word_count(
     ///     *,
-    ///     dry_run: bool,  # unused on TR
+    ///     recovery_type: int,  # unused on TR
     /// ) -> LayoutObj[int | str]:
     ///    """Select mnemonic word count from (12, 18, 20, 24, 33)."""
     Qstr::MP_QSTR_select_word_count => obj_fn_kw!(0, new_select_word_count).as_obj(),

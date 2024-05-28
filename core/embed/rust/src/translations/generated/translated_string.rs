@@ -1252,7 +1252,7 @@ pub enum TranslatedString {
     #[cfg(feature = "universal_fw")]
     cardano__vote_delegation = 852,  // "Vote delegation"
     recovery__title_unlock_repeated_backup = 853,  // "Multi-share backup"
-    recovery__unlock_repeated_backup = 854,  // "Do you want to unlock the seed for repeated backup?"
+    recovery__unlock_repeated_backup = 854,  // "Create additional backup?"
     recovery__unlock_repeated_backup_verb = 855,  // "Unlock backup"
 }
 
@@ -2501,7 +2501,7 @@ impl TranslatedString {
             #[cfg(feature = "universal_fw")]
             Self::cardano__vote_delegation => "Vote delegation",
             Self::recovery__title_unlock_repeated_backup => "Multi-share backup",
-            Self::recovery__unlock_repeated_backup => "Do you want to unlock the seed for repeated backup?",
+            Self::recovery__unlock_repeated_backup => "Create additional backup?",
             Self::recovery__unlock_repeated_backup_verb => "Unlock backup",
         }
     }

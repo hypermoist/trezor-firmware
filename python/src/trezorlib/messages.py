@@ -471,6 +471,12 @@ class HomescreenFormat(IntEnum):
     ToiG = 3
 
 
+class RecoveryType(IntEnum):
+    NormalRecovery = 0
+    DryRun = 1
+    UnlockRepeatedBackup = 2
+
+
 class BackupAvailability(IntEnum):
     NotAvailable = 0
     Required = 1
@@ -514,12 +520,6 @@ class SdProtectOperationType(IntEnum):
 class RecoveryDeviceInputMethod(IntEnum):
     ScrambledWords = 0
     Matrix = 1
-
-
-class RecoveryType(IntEnum):
-    NormalRecovery = 0
-    DryRun = 1
-    UnlockRepeatedBackup = 2
 
 
 class WordRequestType(IntEnum):

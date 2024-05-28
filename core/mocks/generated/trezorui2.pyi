@@ -383,7 +383,7 @@ def confirm_recovery(
 # rust/src/ui/model_tr/layout.rs
 def select_word_count(
     *,
-    dry_run: bool,  # unused on TR
+    recovery_type: int,  # unused on TR
 ) -> LayoutObj[int | str]:
    """Select mnemonic word count from (12, 18, 20, 24, 33)."""
 
@@ -895,7 +895,7 @@ def confirm_recovery(
 # rust/src/ui/model_tt/layout.rs
 def select_word_count(
     *,
-    dry_run: bool,
+    recovery_type: int,  # RecoveryType enum, passed as an int
 ) -> LayoutObj[int | str]:  # TT returns int
     """Select mnemonic word count from (12, 18, 20, 24, 33)."""
 
