@@ -778,6 +778,24 @@
                 }
             ]
         },
+        "bitcoin:HMS": {
+            "links": {
+                "Github": "https://github.com/Hemis-Blockchain/Hemis",
+                "Homepage": "https://hemis.tech"
+            },
+            "marketcap_usd": 600000,
+            "name": "Hemis",
+            "shortcut": "HMS",
+            "t1_enabled": "yes",
+            "t2_enabled": "yes",
+            "type": "coin",
+            "wallet": [
+                {
+                    "name": "Electrum-Hemis",
+                    "url": "https://github.com/Hemis-Blockchain/electrum-hemis"
+                }
+            ]
+        },
         "erc20:avax:USDT": {
             "address": "0xde3A24028580884448a5397872046a019649b084",
             "links": {

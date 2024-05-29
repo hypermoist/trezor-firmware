@@ -2709,6 +2709,35 @@ def by_name(name: str) -> CoinInfo:
                     False,  # overwintered
                     None,  # confidential_assets
                 )
+            if name == "Hemis":
+                return CoinInfo(
+                    name,  # coin_name
+                    "HMS",  # coin_shortcut
+                    8,  # decimals
+                    40,  # address_type
+                    13,  # address_type_p2sh
+                    8100000000,  # maxfee_kb
+                    "Darknet Signed Message:\n",  # signed_message_header
+                    0xa0f2f5f3,  # xpub_magic
+                    None,  # xpub_magic_segwit_p2sh
+                    None,  # xpub_magic_segwit_native
+                    None,  # xpub_magic_multisig_segwit_p2sh
+                    None,  # xpub_magic_multisig_segwit_native
+                    None,  # bech32_prefix
+                    None,  # cashaddr_prefix
+                    684,  # slip44
+                    False,  # segwit
+                    False,  # taproot
+                    None,  # fork_id
+                    False,  # force_bip143
+                    False,  # decred
+                    False,  # negative_fee
+                    'secp256k1',  # curve_name
+                    False,  # extra_data
+                    False,  # timestamp
+                    False,  # overwintered
+                    None,  # confidential_assets
+                )
         raise ValueError  # Unknown coin name
     if utils.INTERNAL_MODEL == "T2T1":
         if name == "Bitcoin":
