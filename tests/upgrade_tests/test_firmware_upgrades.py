@@ -379,7 +379,9 @@ def test_upgrade_shamir_backup(gen: str, tag: Optional[str]):
             IF = InputFlowSlip39BasicBackup(emu.client, False)
             emu.client.set_input_flow(IF.get())
             device.backup(emu.client)
-        assert emu.client.features.backup_availability == BackupAvailability.NotAvailable
+        assert (
+            emu.client.features.backup_availability == BackupAvailability.NotAvailable
+        )
 
         # Check the backup type.
         assert emu.client.features.backup_type == backup_type
