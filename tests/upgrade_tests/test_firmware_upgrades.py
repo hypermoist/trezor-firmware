@@ -367,19 +367,19 @@ def test_upgrade_shamir_backup(gen: str, tag: Optional[str]):
         emu.client.use_passphrase("TREZOR")
         address_passphrase = btc.get_address(emu.client, "Bitcoin", PATH)
 
-        assert emu.client.features.needs_backup
+        assert emu.client.features.backup_availability == BackupAvailability.Required
         storage = emu.get_storage()
 
     with EmulatorWrapper(gen, storage=storage) as emu:
         assert emu.client.features.device_id == device_id
 
         # Create a backup of the encrypted master secret.
-        assert emu.client.features.needs_backup
+        assert emu.client.features.backup_availability == BackupAvailability.Required
         with emu.client:
             IF = InputFlowSlip39BasicBackup(emu.client, False)
             emu.client.set_input_flow(IF.get())
             device.backup(emu.client)
-        assert not emu.client.features.needs_backup
+        assert emu.client.features.backup_availability == BackupAvailability.NotAvailable
 
         # Check the backup type.
         assert emu.client.features.backup_type == backup_type
