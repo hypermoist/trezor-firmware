@@ -471,7 +471,7 @@ def boot() -> None:
     reload_settings_from_storage()
 
     if backup.repeated_backup_enabled():
-        backup.add_repeated_backup_filter()
+        backup.activate_repeated_backup()
     if not config.is_unlocked():
         # pinlocked handler should always be the last one
         wire.filters.append(_pinlock_filter)

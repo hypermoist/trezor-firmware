@@ -10,7 +10,6 @@ BAK_T_BIP39 = BackupType.Bip39  # global_import_cache
 
 
 async def backup_device(msg: BackupDevice) -> Success:
-    import storage.cache as storage_cache
     import storage.device as storage_device
     from trezor import wire
     from trezor.messages import Success
@@ -48,7 +47,7 @@ async def backup_device(msg: BackupDevice) -> Success:
     if not repeated_backup_enabled:
         storage_device.set_unfinished_backup(True)
 
-    backup.disable_repeated_backup()
+    backup.deactivate_repeated_backup()
     storage_device.set_backed_up()
 
     if group_threshold is not None:

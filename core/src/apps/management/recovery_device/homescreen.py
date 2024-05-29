@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-import storage.cache as storage_cache
 import storage.device as storage_device
 import storage.recovery as storage_recovery
 import storage.recovery_shares as storage_recovery_shares
@@ -46,20 +45,17 @@ async def recovery_process() -> Success:
         return await _continue_recovery_process()
     except recover.RecoveryAborted:
         storage_recovery.end_progress()
-        backup.disable_repeated_backup()
+        backup.deactivate_repeated_backup()
         if recovery_type == RecoveryType.NormalRecovery:
             storage.wipe()
         raise wire.ActionCancelled
 
 
 async def _continue_repeated_backup() -> None:
-    from trezor import workflow
     from trezor.enums import ButtonRequestType, MessageType
     from trezor.ui.layouts import confirm_action
-    from trezor.wire import ActionCancelled
 
     from apps.common import backup, mnemonic
-    from apps.homescreen import homescreen
     from apps.management.reset_device import backup_seed
 
     wire.AVOID_RESTARTING_FOR = (
@@ -83,7 +79,7 @@ async def _continue_repeated_backup() -> None:
 
         await backup_seed(backup_type, mnemonic_secret)
     finally:
-        backup.disable_repeated_backup()
+        backup.deactivate_repeated_backup()
         storage_recovery.end_progress()
 
 
@@ -211,7 +207,7 @@ async def _finish_recovery_unlock_repeated_backup(
     result = _check_secret_against_stored_secret(secret, is_slip39, backup_type)
 
     if result:
-        backup.enable_repeated_backup()
+        backup.activate_repeated_backup()
         return Success(message="Backup unlocked")
     else:
         raise wire.ProcessError("The seed does not match the one in the device")
