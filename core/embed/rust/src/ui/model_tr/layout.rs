@@ -1965,7 +1965,7 @@ pub static mp_module_trezorui2: Module = obj_module! {
     ///     title: str,  # unused on TR
     ///     description: str,
     ///     button: str,
-    ///     recovery_type: int,  # RecoveryType enum, passed as an int
+    ///     recovery_type: RecoveryType,
     ///     info_button: bool,  # unused on TR
     ///     show_info: bool,
     /// ) -> LayoutObj[UiResult]:
@@ -1974,7 +1974,7 @@ pub static mp_module_trezorui2: Module = obj_module! {
 
     /// def select_word_count(
     ///     *,
-    ///     recovery_type: int,  # unused on TR
+    ///     recovery_type: RecoveryType,  # unused on TR
     /// ) -> LayoutObj[int | str]:
     ///    """Select mnemonic word count from (12, 18, 20, 24, 33)."""
     Qstr::MP_QSTR_select_word_count => obj_fn_kw!(0, new_select_word_count).as_obj(),

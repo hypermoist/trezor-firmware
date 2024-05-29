@@ -18,9 +18,10 @@ if TYPE_CHECKING:
 async def recovery_homescreen() -> None:
     from trezor import workflow
 
+    from apps.common import backup
     from apps.homescreen import homescreen
 
-    if storage_cache.get_bool(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED):
+    if backup.repeated_backup_enabled():
         await _continue_repeated_backup()
     elif not storage_recovery.is_in_progress():
         workflow.set_default(homescreen)
@@ -44,12 +45,9 @@ async def recovery_process() -> Success:
     try:
         return await _continue_recovery_process()
     except recover.RecoveryAborted:
-        if recovery_type == RecoveryType.DryRun:
-            storage_recovery.end_progress()
-        elif recovery_type == RecoveryType.UnlockRepeatedBackup:
-            backup.disable_repeated_backup()
-            storage_recovery.end_progress()
-        else:
+        storage_recovery.end_progress()
+        backup.disable_repeated_backup()
+        if recovery_type == RecoveryType.NormalRecovery:
             storage.wipe()
         raise wire.ActionCancelled
 
@@ -84,8 +82,6 @@ async def _continue_repeated_backup() -> None:
             raise RuntimeError
 
         await backup_seed(backup_type, mnemonic_secret)
-    except ActionCancelled:
-        workflow.set_default(homescreen)
     finally:
         backup.disable_repeated_backup()
         storage_recovery.end_progress()
@@ -205,7 +201,7 @@ async def _finish_recovery_dry_run(secret: bytes, backup_type: BackupType) -> Su
 async def _finish_recovery_unlock_repeated_backup(
     secret: bytes, backup_type: BackupType
 ) -> Success:
-    import storage.cache as storage_cache
+    from apps.common import backup
 
     if backup_type is None:
         raise RuntimeError
@@ -215,9 +211,7 @@ async def _finish_recovery_unlock_repeated_backup(
     result = _check_secret_against_stored_secret(secret, is_slip39, backup_type)
 
     if result:
-        storage_cache.set_bool(
-            storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED, True
-        )
+        backup.enable_repeated_backup()
         return Success(message="Backup unlocked")
     else:
         raise wire.ProcessError("The seed does not match the one in the device")

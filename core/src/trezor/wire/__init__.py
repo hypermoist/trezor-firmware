@@ -298,7 +298,20 @@ filter "wins" and the latest behavior triggers first.
 Please note that this behavior is really unsuited to anything other than what we are
 using it for now. It might be necessary to modify the semantics if we need more complex
 usecases.
+
+NB: `filters` is currently public so callers can have control over where they insert
+new filters, but removal should be done using `remove_filter`!
+We should, however, change it such that filters must be added using an `add_filter`
+and `filters` becomes private!
 """
+
+
+def remove_filter(filter):
+    try:
+        filters.remove(filter)
+    except ValueError:
+        pass
+
 
 AVOID_RESTARTING_FOR: Container[int] = ()
 

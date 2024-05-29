@@ -150,7 +150,8 @@ def load(
 @click.option(
     "-i",
     "--input_method",
-    "input_method",
+    "-t",
+    "--type",
     type=ChoiceType(RECOVERY_DEVICE_INPUT_METHOD),
     default="scrambled",
 )

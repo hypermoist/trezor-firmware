@@ -2045,7 +2045,7 @@ pub static mp_module_trezorui2: Module = obj_module! {
     ///     title: str,
     ///     description: str,
     ///     button: str,
-    ///     recovery_type: int,  # RecoveryType enum, passed as an int
+    ///     recovery_type: RecoveryType,
     ///     info_button: bool = False,
     /// ) -> LayoutObj[UiResult]:
     ///     """Device recovery homescreen."""
@@ -2053,7 +2053,7 @@ pub static mp_module_trezorui2: Module = obj_module! {
 
     /// def select_word_count(
     ///     *,
-    ///     recovery_type: int,  # RecoveryType enum, passed as an int
+    ///     recovery_type: RecoveryType,
     /// ) -> LayoutObj[int | str]:  # TT returns int
     ///     """Select mnemonic word count from (12, 18, 20, 24, 33)."""
     Qstr::MP_QSTR_select_word_count => obj_fn_kw!(0, new_select_word_count).as_obj(),

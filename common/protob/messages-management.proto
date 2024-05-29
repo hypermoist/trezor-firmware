@@ -117,15 +117,18 @@ message Features {
     optional RecoveryType recovery_type = 52;   // what type of recovery we are in. NB: this works in conjunction with recovery_status
 
     enum BackupAvailability {
-        NotAvailable = 0;   // backup of the device has been done
-        Required = 1;       // device has never been backed up
-        Available = 2;      // "repeated backup" is currently unlocked
+        /// Device is already backed up, or a previous backup has failed.
+        NotAvailable = 0;
+        /// Device is not backed up. Backup is required.
+        Required = 1;
+        /// Device is already backed up and can be backed up again.
+        Available = 2;
     }
 
     enum RecoveryStatus {
         Nothing = 0;    // we are not in recovery mode
         Recovery = 1;   // we are in "Normal" or "DryRun" recovery
-        Backup = 2;     // we are in "UnlockRepeatedBackup" recovery kind
+        Backup = 2;     // we are in repeated backup mode
     }
 
     enum Capability {
