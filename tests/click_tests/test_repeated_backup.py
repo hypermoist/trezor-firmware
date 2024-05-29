@@ -93,7 +93,7 @@ def test_repeated_backup(
     # great ... device is initialized, backup done, and we are not in recovery mode!
     assert device_handler.result() == "Initialized"
     features = device_handler.features()
-    assert features.backup_type is messages.BackupType.Slip39_Basic
+    assert features.backup_type is messages.BackupType.Slip39_Basic_Extendable
     assert features.initialized is True
     assert features.backup_availability == messages.BackupAvailability.NotAvailable
     assert features.no_backup is False
@@ -123,7 +123,7 @@ def test_repeated_backup(
 
     # we are now in recovery mode
     features = device_handler.features()
-    assert features.backup_type is messages.BackupType.Slip39_Basic
+    assert features.backup_type is messages.BackupType.Slip39_Basic_Extendable
     assert features.initialized is True
     assert features.backup_availability == messages.BackupAvailability.Available
     assert features.no_backup is False
@@ -166,7 +166,7 @@ def test_repeated_backup(
 
     # we are not in recovery mode anymore, because we finished the backup process!
     features = device_handler.features()
-    assert features.backup_type is messages.BackupType.Slip39_Basic
+    assert features.backup_type is messages.BackupType.Slip39_Basic_Extendable
     assert features.initialized is True
     assert features.backup_availability == messages.BackupAvailability.NotAvailable
     assert features.no_backup is False
@@ -194,7 +194,7 @@ def test_repeated_backup(
 
     # we are now in recovery mode again!
     features = device_handler.features()
-    assert features.backup_type is messages.BackupType.Slip39_Basic
+    assert features.backup_type is messages.BackupType.Slip39_Basic_Extendable
     assert features.initialized is True
     assert features.backup_availability == messages.BackupAvailability.Available
     assert features.no_backup is False
@@ -205,7 +205,7 @@ def test_repeated_backup(
 
     # ...we are out of recovery mode!
     features = device_handler.features()
-    assert features.backup_type is messages.BackupType.Slip39_Basic
+    assert features.backup_type is messages.BackupType.Slip39_Basic_Extendable
     assert features.initialized is True
     assert features.backup_availability == messages.BackupAvailability.NotAvailable
     assert features.no_backup is False

@@ -21,7 +21,13 @@ import pytest
 from shamir_mnemonic import shamir
 
 from trezorlib import btc, debuglink, device, exceptions, fido, models
-from trezorlib.messages import ApplySettings, BackupAvailability, BackupType, RecoveryStatus, Success
+from trezorlib.messages import (
+    ApplySettings,
+    BackupAvailability,
+    BackupType,
+    RecoveryStatus,
+    Success,
+)
 from trezorlib.tools import H_
 
 from ..common import MNEMONIC_SLIP39_BASIC_20_3of6, MNEMONIC_SLIP39_BASIC_20_3of6_SECRET

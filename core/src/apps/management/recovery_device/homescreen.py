@@ -146,7 +146,9 @@ async def _continue_recovery_process() -> Success:
     return result
 
 
-def _check_secret_against_stored_secret(secret: bytes, is_slip39: bool, backup_type: BackupType) -> bool:
+def _check_secret_against_stored_secret(
+    secret: bytes, is_slip39: bool, backup_type: BackupType
+) -> bool:
     from trezor import utils
     from trezor.crypto.hashlib import sha256
 
