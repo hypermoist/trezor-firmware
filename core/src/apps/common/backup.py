@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 def repeated_backup_enabled() -> bool:
     import storage.cache as storage_cache
 
-    storage_cache.get_bool(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
+    return storage_cache.get_bool(storage_cache.APP_RECOVERY_REPEATED_BACKUP_UNLOCKED)
 
 
 def enable_repeated_backup():
