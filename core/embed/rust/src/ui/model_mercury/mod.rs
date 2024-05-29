@@ -7,12 +7,12 @@ pub mod component;
 pub mod constant;
 pub mod theme;
 
+pub mod cshape;
 #[cfg(feature = "micropython")]
 pub mod flow;
 #[cfg(feature = "micropython")]
 pub mod layout;
 pub mod screens;
-pub mod cshape;
 pub mod shapes;
 
 pub struct ModelMercuryFeatures;

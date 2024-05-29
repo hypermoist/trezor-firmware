@@ -22,9 +22,8 @@ use crate::ui::{
         cshape,
         theme::{GREY_LIGHT, ICON_KEY, TITLE_HEIGHT},
     },
-    shape::{render_on_canvas, ImageBuffer, Rgb565Canvas},
+    shape::{render_on_canvas, ImageBuffer, RawImage, Rgb565Canvas},
 };
-use crate::ui::shape::RawImage;
 
 use super::{theme, Loader, LoaderMsg};
 
@@ -108,7 +107,7 @@ impl Homescreen {
         }
     }
 
-    fn render_loader<'s>(&self, target: &mut impl Renderer<'s>) {
+    fn render_loader<'s>(&'s self, target: &mut impl Renderer<'s>) {
         TR::progress__locking_device.map_translated(|t| {
             shape::Text::new(TOP_CENTER + Offset::y(HOLD_Y), t)
                 .with_align(Alignment::Center)
@@ -188,7 +187,7 @@ impl Component for Homescreen {
         todo!()
     }
 
-    fn render<'s>(&self, target: &mut impl Renderer<'s>) {
+    fn render<'s>(&'s self, target: &mut impl Renderer<'s>) {
         if self.loader.is_animating() || self.loader.is_completely_grown(Instant::now()) {
             self.render_loader(target);
         } else {
@@ -301,15 +300,15 @@ pub struct Lockscreen {
 impl Lockscreen {
     pub fn new(label: TString<'static>, bootscreen: bool, coinjoin_authorized: bool) -> Self {
         let image = get_homescreen_image();
-        let mut buf = unwrap!( ImageBuffer::new(AREA.size()), "no image buf");
+        let mut buf = unwrap!(ImageBuffer::new(AREA.size()), "no image buf");
 
         render_on_canvas(buf.canvas(), None, |target| {
             shape::JpegImage::new_image(Point::zero(), image).render(target);
         });
 
         //
-        // let raw_image = shape::RawImage::new(AREA, bg_image.as_ref().expect("no bg img").view());
-
+        // let raw_image = shape::RawImage::new(AREA, bg_image.as_ref().expect("no bg
+        // img").view());
 
         Lockscreen {
             anim: LockscreenAnim::default(),
@@ -356,15 +355,14 @@ impl Component for Lockscreen {
         todo!()
     }
 
-    fn render<'s>(&self, target: &mut impl Renderer<'s>) {
+    fn render<'s>(&'s self, target: &mut impl Renderer<'s>) {
         const OVERLAY_SIZE: i16 = 170;
         const OVERLAY_BORDER: i16 = (AREA.height() - OVERLAY_SIZE) / 2;
         const OVERLAY_OFFSET: i16 = 9;
 
         let center = AREA.center();
 
-        shape::RawImage::new(AREA, self.bg_image.view())
-            .render(target);
+        shape::RawImage::new(AREA, self.bg_image.view()).render(target);
 
         cshape::UnlockOverlay::new(center + Offset::y(OVERLAY_OFFSET), self.anim.eval())
             .render(target);
